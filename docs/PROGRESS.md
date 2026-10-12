@@ -1,15 +1,15 @@
 # Progress
 
-**Current feature:** F02 Patient home + GameShell + difficulty engine (`feat/f02-patient-home-gameshell`). Implemented and waiting for user test.
-**Next:** F03 Memory card match.
+**Current feature:** F03 Memory card match (`feat/f03-memory-match`). Implemented and waiting for user test.
+**Next:** F04 Daily routine sequencing.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
 |---|---|---|---|---|
 | F00 | Scaffold, theme, i18n EN/HI, TTS, docs, jest, lint, tunnel | ✅ done | feat/f00-foundation | aefaec4 |
 | F01 | SQLite schema/migrations/repos, demo seed, role picker + PIN, role route groups | ✅ done | feat/f01-data-roles | a8713b1 |
-| F02 | Patient home, GameShell, difficulty engine (+ "Find the object" game as the first real game) | 🧪 testing | feat/f02-patient-home-gameshell | — |
-| F03 | Game: memory card match | ⏳ | | |
+| F02 | Patient home, GameShell, difficulty engine (+ "Find the object" game as the first real game) | ✅ done | feat/f02-patient-home-gameshell | 6b4aed5 |
+| F03 | Game: memory card match | 🧪 testing | feat/f03-memory-match | — |
 | F04 | Game: daily routine sequencing | ⏳ | | |
 | F05 | Game: family photo recall | ⏳ | | |
 | F06 | Reminders (local notifications, ack screen, adherence) | ⏳ | | |

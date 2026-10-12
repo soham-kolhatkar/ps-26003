@@ -52,3 +52,12 @@ A big date and time card plus a time-of-day greeting ("Good morning, Aita! Today
 
 ### D17: Time via `nowMs()` (src/engine/clock.ts)
 The React Compiler purity lint rejects `Date.now()` in component bodies, even inside handlers. A tiny helper keeps lint clean and makes time fakeable in tests.
+
+### D18: Memory match counts only *memory errors*
+A wrong pair counts against accuracy only if the first card's partner had already been revealed during play, i.e. the patient had the information. Exploring an unknown board is never penalised. The preview (all cards face-up at the start) doesn't count as "seen". After 3 memory errors in a row, all cards are shown again for 2.5 s ("Let me show you the cards again"). Levels: 2/3/4/6/8 pairs, with the preview shrinking from 4 s to 3 s.
+
+### D19: Games may report their own progress
+`GameProps.onProgress(done, total)` overrides the shell's default dots (trials vs `trialsPerSession`). Memory match reports pairs found and sets `trialsPerSession: 0`.
+
+### D20: Shared item set
+`src/games/items.ts` (24 NE-familiar objects plus `items.*` names in packs) is used by object recognition and memory match, so new items benefit every game.
