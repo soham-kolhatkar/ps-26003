@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
 
+import type { DbClient } from '@/db/types';
 import type { Trial } from '@/engine/scoring';
 
 export type GameId =
@@ -7,6 +8,8 @@ export type GameId =
 
 /** Props every game component receives from GameShell. */
 export type GameProps = {
+  /** Patient playing (for games with personal content, e.g. family photos). */
+  patientId: string;
   /** Difficulty level chosen by the adaptive engine (1..maxLevel). */
   level: number;
   /** Number of trials (rounds) to play this session. */
@@ -37,4 +40,6 @@ export type GameDefinition = {
   /** Comfortable answer time used by scoring (ms). */
   targetReactionMs: number;
   Component: ComponentType<GameProps>;
+  /** Optional: hide the game until it can be played (e.g. needs family photos). */
+  isAvailable?: (db: DbClient, patientId: string) => Promise<boolean>;
 };

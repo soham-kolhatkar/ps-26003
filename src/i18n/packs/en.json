@@ -71,7 +71,18 @@
     "son": "Son",
     "spouse": "Spouse",
     "asha": "ASHA visits",
-    "doctor": "Under care"
+    "doctor": "Under care",
+    "husband": "Husband",
+    "wife": "Wife",
+    "granddaughter": "Granddaughter",
+    "grandson": "Grandson",
+    "sister": "Sister",
+    "brother": "Brother",
+    "daughter_in_law": "Daughter-in-law",
+    "son_in_law": "Son-in-law",
+    "friend": "Friend",
+    "neighbour": "Neighbour",
+    "other": "Other"
   },
   "game": {
     "start": "Start",
@@ -118,6 +129,16 @@
       "hint": "Next is: {{step}}",
       "done": "{{routine}} is complete!",
       "yourOrder": "Your order"
+    },
+    "photo_recall": {
+      "title": "Who is this?",
+      "description": "Recognise your family",
+      "instruction": "I will show a photo of someone you know. Tap their name.",
+      "whoIsThis": "Who is this?",
+      "findPerson": "Where is {{name}}?",
+      "confirm": "Yes! This is {{name}}.",
+      "confirmRelation": "Yes! This is {{name}}, your {{relation}}.",
+      "hint": "This is {{name}}."
     }
   },
   "items": {
@@ -210,5 +231,26 @@
         "fold": "Fold the clothes"
       }
     }
+  },
+  "photos": {
+    "button": "Family photos ({{count}})",
+    "title": "Family photos",
+    "subtitle": "Photos of people {{name}} knows",
+    "privacy": "🔒 Photos stay only on this phone. They are never uploaded.",
+    "unlockHint": "Add photos of at least 2 different people to unlock “Who is this?” for {{name}}.",
+    "unlocked": "✅ “Who is this?” is ready for {{name}} ({{count}} people).",
+    "takePhoto": "Take photo",
+    "choose": "Choose from gallery",
+    "empty": "No photos yet.",
+    "deleteTitle": "Delete this photo?",
+    "deleteBody": "Photo of {{name}} will be removed from this phone.",
+    "delete": "Delete",
+    "cameraDenied": "Please allow camera access to take photos.",
+    "addTitle": "Who is in this photo?",
+    "nameLabel": "Name",
+    "namePlaceholder": "e.g. Rimjhim",
+    "relationLabel": "Relation to {{name}}",
+    "save": "Save photo",
+    "saveFailed": "Could not save the photo. Please try again."
   }
 }
