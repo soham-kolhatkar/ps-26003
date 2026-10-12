@@ -28,9 +28,7 @@ export function detectDeviceLanguage(): LanguageCode {
   return isLanguageCode(code) ? code : DEFAULT_LANGUAGE;
 }
 
-const resources = Object.fromEntries(
-  LANGUAGE_CODES.map((code) => [code, { translation: LANGUAGES[code].pack }]),
-);
+const resources = Object.fromEntries(LANGUAGE_CODES.map((code) => [code, { translation: LANGUAGES[code].pack }]));
 
 // eslint-disable-next-line import/no-named-as-default-member -- i18next's documented init pattern
 i18n.use(initReactI18next).init({
