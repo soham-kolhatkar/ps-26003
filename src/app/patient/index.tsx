@@ -1,17 +1,31 @@
 import { router } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { GameTile } from '@/components/GameTile';
 import { HoldButton } from '@/components/HoldButton';
 import { Screen } from '@/components/Screen';
 import { displayName, getPatient } from '@/db/repos/patients';
 import { useDbQuery } from '@/db/useDbQuery';
+import { GAMES } from '@/games/registry';
+import { dayPart, formatLongDate, formatTime, GREETING_KEY } from '@/services/datetime';
 import { speak } from '@/services/tts';
 import { useSession } from '@/store/session';
 import { useSettings } from '@/store/settings';
 import { colors, radius, space } from '@/theme/tokens';
+
+/** Re-renders every minute so the clock and greeting stay current. */
+function useNow(): Date {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+  return now;
+}
 
 export default function PatientHome() {
   const { t } = useTranslation();
@@ -19,38 +33,57 @@ export default function PatientHome() {
   const signOut = useSession((s) => s.signOut);
   const language = useSettings((s) => s.language);
   const { data: patient } = useDbQuery((db) => getPatient(db, patientId ?? ''), [patientId]);
+  const now = useNow();
 
   const name = patient ? displayName(patient) : '';
+  const greeting = t(GREETING_KEY[dayPart(now)], { name });
+  const date = formatLongDate(now, language);
 
   return (
     <Screen>
       <View style={styles.header}>
         <View style={styles.avatar}>
-          <AppText variant="hero" importantForAccessibility="no">
+          <AppText style={styles.avatarEmoji} importantForAccessibility="no">
             {patient?.avatar ?? '🙂'}
           </AppText>
         </View>
-        <AppText variant="hero" center>
-          {t('patient.greeting', { name })}
+        <View style={styles.headerText}>
+          <AppText variant="title">{greeting}</AppText>
+        </View>
+      </View>
+
+      <View
+        style={styles.dateCard}
+        accessible
+        accessibilityLabel={`${t('patient.todayIs', { date })}, ${formatTime(now, language)}`}
+      >
+        <AppText variant="large" tone="onPrimary" bold>
+          📅 {date}
+        </AppText>
+        <AppText variant="title" tone="onPrimary">
+          🕰️ {formatTime(now, language)}
         </AppText>
       </View>
 
       <BigButton
         kind="secondary"
-        size="large"
         icon="🔊"
         label={t('common.speak')}
-        onPress={() => speak(t('patient.greetingSpoken', { name }), language)}
+        onPress={() => speak(t('patient.greetingSpoken', { greeting, date }), language)}
       />
 
-      <View style={styles.placeholder}>
-        <AppText variant="hero" importantForAccessibility="no">
-          🎲
-        </AppText>
-        <AppText variant="large" tone="muted" center>
-          {t('patient.gamesSoon')}
-        </AppText>
-      </View>
+      <AppText variant="large" bold>
+        {t('patient.chooseGame')}
+      </AppText>
+      {GAMES.map((game) => (
+        <GameTile
+          key={game.id}
+          icon={game.icon}
+          title={t(`games.${game.id}.title`)}
+          description={t(`games.${game.id}.description`)}
+          onPress={() => router.push({ pathname: '/patient/game/[id]', params: { id: game.id } })}
+        />
+      ))}
 
       <View style={styles.spacer} />
 
@@ -67,23 +100,22 @@ export default function PatientHome() {
 }
 
 const styles = StyleSheet.create({
-  header: { alignItems: 'center', gap: space.md, marginTop: space.lg },
+  header: { flexDirection: 'row', alignItems: 'center', gap: space.md, marginTop: space.sm },
+  headerText: { flex: 1 },
   avatar: {
-    width: 128,
-    height: 128,
+    width: 88,
+    height: 88,
     borderRadius: radius.pill,
     backgroundColor: colors.primarySoft,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  placeholder: {
-    alignItems: 'center',
-    gap: space.sm,
-    padding: space.xl,
+  avatarEmoji: { fontSize: 52, lineHeight: 62 },
+  dateCard: {
+    backgroundColor: colors.primary,
     borderRadius: radius.lg,
-    borderWidth: 2,
-    borderStyle: 'dashed',
-    borderColor: colors.border,
+    padding: space.lg,
+    gap: space.xs,
   },
   spacer: { flex: 1 },
 });
