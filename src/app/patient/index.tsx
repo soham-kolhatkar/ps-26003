@@ -34,6 +34,15 @@ export default function PatientHome() {
   const language = useSettings((s) => s.language);
   const { data: patient } = useDbQuery((db) => getPatient(db, patientId ?? ''), [patientId]);
   const now = useNow();
+  const { data: availableIds } = useDbQuery(
+    async (db) => {
+      const ids: string[] = [];
+      for (const g of GAMES) if (!g.isAvailable || (await g.isAvailable(db, patientId ?? ''))) ids.push(g.id);
+      return ids;
+    },
+    [patientId],
+  );
+  const games = GAMES.filter((g) => (availableIds ? availableIds.includes(g.id) : !g.isAvailable));
 
   const name = patient ? displayName(patient) : '';
   const greeting = t(GREETING_KEY[dayPart(now)], { name });
@@ -75,7 +84,7 @@ export default function PatientHome() {
       <AppText variant="large" bold>
         {t('patient.chooseGame')}
       </AppText>
-      {GAMES.map((game) => (
+      {games.map((game) => (
         <GameTile
           key={game.id}
           icon={game.icon}
