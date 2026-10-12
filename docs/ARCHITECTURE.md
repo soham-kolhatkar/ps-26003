@@ -11,6 +11,7 @@ src/app/            Routes (expo-router). Thin: compose components, call stores/
   roles.tsx         Role picker: device patient (no PIN) + staff users
   pin/[userId].tsx  PIN pad → signInStaff → /<role>
   patient/ caregiver/ asha/ doctor/   Role folders; _layout = RoleStack guard
+  patient/game/[id].tsx               GameShell for a registry game
 src/components/     Shared elder-friendly UI primitives
 src/theme/          Design tokens (colors, type scale, spacing, touch sizes)
 src/i18n/           i18next init + LANGUAGES registry + packs/*.json
@@ -19,7 +20,9 @@ src/services/       Device services: tts, auth (PINs), notifications (F06), phot
 src/db/             client (setDb/getDb), types (DbClient), migrations (PRAGMA user_version), models,
                     repos/*, seed/demo (DEMO story + resetDemo), useDbQuery hook, testing/nodeDb
 src/engine/         (F02+) pure, unit-tested logic: difficulty, scoring, trends
-src/games/          (F02+) GameShell + one folder per game + registry
+src/games/          types (GameDefinition/GameProps), registry (GAMES list), GameShell (intro→play→done),
+                    session.finishSession (save + next level), feedback (praise, haptics, stars),
+                    <game>/ (content.ts, rounds.ts pure + tested, <Game>.tsx)
 ```
 
 ## Data flow
@@ -31,3 +34,6 @@ Planned migrations: v2 `photo` (F05), v3 `reminder` + `reminder_event` (F06), v4
 
 ## Demo story (src/db/seed/demo.ts)
 Device patient **Hemoprova Bora "Aita"** (72, Cinnamara, Jorhat). Caregiver daughter **Rimjhim Bora**. ASHA **Pranita Das** (Aita, Lakhi Gogoi, Dhaniram Saikia). Doctor **Dr. Anjali Sharma** (all three). PIN 1234.
+
+## Game session flow
+Patient home tile → `/patient/game/[id]` → GameShell loads `game_level` → intro (spoken instruction) → game component calls `onTrial` once per round (first try) and `onComplete` → `finishSession`: computeSessionStats → insert `game_session` → `recentOutcomes` → `nextLevel` → upsert `game_level` → celebration (stars, "new level" if up).

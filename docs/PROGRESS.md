@@ -1,14 +1,14 @@
 # Progress
 
-**Current feature:** F01 Data layer + roles (`feat/f01-data-roles`). Implemented and waiting for user test.
-**Next:** F02 Patient home + GameShell + difficulty engine.
+**Current feature:** F02 Patient home + GameShell + difficulty engine (`feat/f02-patient-home-gameshell`). Implemented and waiting for user test.
+**Next:** F03 Memory card match.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
 |---|---|---|---|---|
 | F00 | Scaffold, theme, i18n EN/HI, TTS, docs, jest, lint, tunnel | ✅ done | feat/f00-foundation | aefaec4 |
-| F01 | SQLite schema/migrations/repos, demo seed, role picker + PIN, role route groups | 🧪 testing | feat/f01-data-roles | — |
-| F02 | Patient home, GameShell, difficulty engine | ⏳ | | |
+| F01 | SQLite schema/migrations/repos, demo seed, role picker + PIN, role route groups | ✅ done | feat/f01-data-roles | a8713b1 |
+| F02 | Patient home, GameShell, difficulty engine (+ "Find the object" game as the first real game) | 🧪 testing | feat/f02-patient-home-gameshell | — |
 | F03 | Game: memory card match | ⏳ | | |
 | F04 | Game: daily routine sequencing | ⏳ | | |
 | F05 | Game: family photo recall | ⏳ | | |
@@ -19,7 +19,7 @@
 ## Tier 2: complete platform
 | ID | Feature | Status |
 |---|---|---|
-| F08 | Game: object/pattern recognition | ⏳ |
+| F08 | Object recognition: add odd-one-out + pattern modes (basic "Find the object" shipped in F02) | ⏳ |
 | F09 | Game: attention/reaction tap | ⏳ |
 | F10 | Game: word recall | ⏳ |
 | F11 | Trend detection + alerts | ⏳ |

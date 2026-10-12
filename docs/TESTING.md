@@ -37,3 +37,19 @@
 8. **Sign out** → role picker. Tap **Pranita** → 1234 → "Your patients (3)": Aita, Dhaniram Saikia (Middle stage), Lakhi Gogoi.
 9. Sign out → **Dr. Anjali** → 1234 → the same 3 patients, with a "reports in Tier 2" note.
 10. **Airplane mode on**, kill and reopen the app, and repeat steps 3–6: everything works offline.
+
+---
+
+## F02 Patient home + game framework checklist
+1. Roles → **Aita**. The home shows a greeting for the time of day ("Good morning/afternoon/evening, Aita!"), a green card with **today's date and the time**, a Read aloud button and **Choose a game** with one tile: 🔍 **Find the object**.
+2. **Read aloud** speaks the greeting plus today's date ("…Today is Monday, 12 October. Shall we play a game?"). Try it in Hindi too.
+3. Tap the tile → intro: big 🔍, title, instruction spoken automatically, "⭐ Level 1", and the Start button.
+4. **Start**. Level 1 shows **2 pictures**, with the target's picture also shown in the prompt. The prompt is spoken ("Find the banana").
+5. Tap the **wrong** picture: it dims, the right one glows **orange**, and you hear "Here it is — the banana. Tap it." Tap the right one: it goes green with ✓ and you hear praise, then the next round. (No red, no buzzer: errorless design.)
+6. Progress dots fill at the top (6 rounds). After round 6: 🎉 "Well done, Aita!" with 1–3 stars.
+7. **Adaptive difficulty:** play 2 sessions with every answer right the first time. On the 2nd celebration you see 🌟 "Next time: a new level!". Play again: the intro says **Level 2**, and the game shows **3 pictures**.
+8. Keep going to **Level 3**: 4 pictures, and the prompt shows only the **name** (no picture).
+9. **Level down:** at Level 3, get 4+ of 6 wrong on purpose. Play again: back to Level 2, with no "level down" message shown.
+10. Tap **✖ Stop** mid-game: back to home, no crash.
+11. Kill and reopen the app: the level is remembered. (Caregiver → Reset demo data resets levels to 1.)
+12. Airplane mode: all of the above still works.
