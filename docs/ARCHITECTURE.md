@@ -23,7 +23,7 @@ src/engine/         (F02+) pure, unit-tested logic: difficulty, scoring, trends
 src/games/          types (GameDefinition/GameProps), registry (GAMES list), GameShell (intro→play→done),
                     session.finishSession (save + next level), feedback (praise, haptics, stars),
                     items.ts (shared objects), <game>/ (pure rules file + tested, <Game>.tsx)
-                    games: object-recognition/, memory-match/
+                    games: object-recognition/, memory-match/, routine-sequence/
 ```
 
 ## Data flow
