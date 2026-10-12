@@ -75,8 +75,12 @@
 2. Open Daily routines → intro → **Start**. You see a routine header (e.g. ☕ "Making tea"), a row of numbered slots and step cards (emoji + text).
 3. **Level 1:** 3 slots, with the **first step already filled** (green). You hear "Making tea. What comes next?". Two cards remain.
 4. Tap the **wrong** card: it dims, the right card glows orange, and you hear "Next is: Add tea leaves". Tap the right one: it fills the next slot (green) and is spoken.
-5. When one card remains it **fills in automatically**, followed by "Making tea is complete! Very good!". Then the 2nd routine starts. The progress dots count real choices only.
+5. When one card remains, you first hear the step you just placed **in full**, then the last card drops in and is spoken, then "Making tea is complete! Very good!", and then the 2nd routine starts. **No sentence is cut off.** The progress dots count real choices only.
 6. After 2 routines → 🎉 celebration.
 7. **Levels:** 2 perfect sessions → Level 2 (3 steps, no anchor, "What do we do first?"), Level 3 = 4 steps … Level 5 = 6 steps (morning / planting / washing clothes). The cards scroll if needed on small phones.
 8. Check the routines read naturally in Hindi (text and speech). Tell me about any step whose order feels debatable.
 9. ✖ Stop works; the other games still work.
+
+### F04 fix: speech pacing (all games)
+- Find the object: the praise ("Wonderful!") is heard in full before the next prompt.
+- Memory pairs: the praise after the last pair finishes before the 🎉 screen speaks.

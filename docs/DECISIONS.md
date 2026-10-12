@@ -64,3 +64,6 @@ A wrong pair counts against accuracy only if the first card's partner had alread
 
 ### D21: Routine sequencing uses only causal routines, tap-to-place, and counts real decisions only
 Six routines (making tea, morning, cooking rice, market, planting a seed, washing clothes) were chosen so the order is genuinely fixed and never a matter of personal habit. Patients tap the next step instead of dragging (easier for elderly hands). A round uses a contiguous slice of the routine. Level 1 gives the first step as an anchor; the last card is placed automatically. Neither counts as a trial. Levels: 3 (anchored) → 3 → 4 → 5 → 6 steps, 2 routines per session.
+
+### D22: Game speech is awaited, never cut off (user feedback on F04)
+`speak()` returns a promise that resolves on done, stopped or error, with a length-based safety timeout so it can never hang. `GameProps.say` returns it. Any automatic step (next round, auto-placed last card, end of game) waits for the sentence to finish (`afterSpeech(speech, minMs)` in `src/games/pacing.ts`) and checks `useAlive()` before touching state. Speech the patient interrupts by tapping is still allowed to be cut.
