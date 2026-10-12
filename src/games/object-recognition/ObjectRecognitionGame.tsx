@@ -8,11 +8,13 @@ import { nowMs } from '@/engine/clock';
 import { colors, radius, space } from '@/theme/tokens';
 
 import { hapticGentle, hapticSuccess, randomPraise } from '../feedback';
+import { afterSpeech, useAlive } from '../pacing';
 import type { GameProps } from '../types';
 import type { Item } from '../items';
 import { levelParams, makeRounds } from './rounds';
 
-const NEXT_ROUND_DELAY_MS = 1400;
+/** Minimum time the solved round stays on screen (praise is always heard in full). */
+const NEXT_ROUND_DELAY_MS = 1200;
 
 /**
  * "Find the object": the app names an everyday object; the patient taps it.
@@ -27,7 +29,7 @@ export function ObjectRecognitionGame({ level, totalTrials, onTrial, onComplete,
   const [wrongId, setWrongId] = useState<string | null>(null);
   const [solved, setSolved] = useState(false);
   const shownAt = useRef(0);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const alive = useAlive();
 
   const round = rounds[index];
   const { showTargetPicture } = levelParams(level);
@@ -40,9 +42,7 @@ export function ObjectRecognitionGame({ level, totalTrials, onTrial, onComplete,
     // eslint-disable-next-line react-hooks/exhaustive-deps -- speak once per round
   }, [index]);
 
-  useEffect(() => () => void (timer.current && clearTimeout(timer.current)), []);
-
-  const onPick = (item: Item) => {
+  const onPick = async (item: Item) => {
     if (solved) return;
     const reactionMs = nowMs() - shownAt.current;
 
@@ -60,17 +60,16 @@ export function ObjectRecognitionGame({ level, totalTrials, onTrial, onComplete,
     if (!missed) onTrial({ correct: true, reactionMs });
     hapticSuccess();
     setSolved(true);
-    say(randomPraise(t));
-    timer.current = setTimeout(() => {
-      if (index + 1 >= rounds.length) {
-        onComplete();
-        return;
-      }
-      setIndex(index + 1);
-      setMissed(false);
-      setWrongId(null);
-      setSolved(false);
-    }, NEXT_ROUND_DELAY_MS);
+    await afterSpeech(say(randomPraise(t)), NEXT_ROUND_DELAY_MS);
+    if (!alive.current) return;
+    if (index + 1 >= rounds.length) {
+      onComplete();
+      return;
+    }
+    setIndex(index + 1);
+    setMissed(false);
+    setWrongId(null);
+    setSolved(false);
   };
 
   const columns = round.options.length > 4 ? 3 : 2;

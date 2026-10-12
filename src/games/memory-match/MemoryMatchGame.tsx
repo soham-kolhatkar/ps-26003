@@ -7,6 +7,7 @@ import { nowMs } from '@/engine/clock';
 import { colors, radius, space } from '@/theme/tokens';
 
 import { hapticGentle, hapticSuccess, randomPraise } from '../feedback';
+import { afterSpeech, useAlive } from '../pacing';
 import type { GameProps } from '../types';
 import { classifyAttempt, levelParams, makeDeck } from './board';
 
@@ -41,6 +42,7 @@ export function MemoryMatchGame({ level, onTrial, onProgress, onComplete, say }:
   const firstFlipAt = useRef(0);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const later = (fn: () => void, ms: number) => timers.current.push(setTimeout(fn, ms));
+  const alive = useAlive();
 
   useEffect(() => {
     onProgress(0, pairs);
@@ -78,11 +80,12 @@ export function MemoryMatchGame({ level, onTrial, onProgress, onComplete, say }:
       setOpen([]);
       const found = next.size / 2;
       onProgress(found, pairs);
+      const praise = say(randomPraise(t));
       if (found === pairs) {
         setPhase('finishing');
-        later(onComplete, FINISH_DELAY_MS);
+        // Let the praise finish before the celebration screen speaks.
+        afterSpeech(praise, FINISH_DELAY_MS).then(() => alive.current && onComplete());
       }
-      say(randomPraise(t));
       return;
     }
 

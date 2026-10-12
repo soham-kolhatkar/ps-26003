@@ -7,12 +7,15 @@ import { nowMs } from '@/engine/clock';
 import { colors, radius, space } from '@/theme/tokens';
 
 import { hapticGentle, hapticSuccess, randomPraise } from '../feedback';
+import { afterSpeech, useAlive, wait } from '../pacing';
 import type { GameProps } from '../types';
 import type { RoutineStep } from './content';
 import { decisionsIn, makeRounds } from './rounds';
 
-const AUTO_PLACE_LAST_MS = 700;
-const NEXT_ROUND_MS = 2200;
+/** Pause after a step is spoken before the last card drops in. */
+const BEFORE_LAST_CARD_MS = 400;
+/** Minimum time the finished routine stays on screen. */
+const SHOW_COMPLETE_MS = 1500;
 
 /**
  * Daily routine sequencing: tap the steps of a familiar task in order.
@@ -34,8 +37,7 @@ export function RoutineSequenceGame({ level, onTrial, onProgress, onComplete, sa
 
   const decisionsDone = useRef(0);
   const shownAt = useRef(0);
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const later = (fn: () => void, ms: number) => timers.current.push(setTimeout(fn, ms));
+  const alive = useAlive();
 
   const stepText = (s: RoutineStep) => t(`routines.${round.routine.id}.steps.${s.id}`);
   const title = t(`routines.${round.routine.id}.title`);
@@ -47,35 +49,46 @@ export function RoutineSequenceGame({ level, onTrial, onProgress, onComplete, sa
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once per round
   }, [roundIdx]);
 
-  useEffect(() => {
-    const pending = timers.current;
-    return () => pending.forEach(clearTimeout);
-  }, []);
-
   const recordDecision = (correct: boolean) => {
     onTrial({ correct, reactionMs: nowMs() - shownAt.current });
     decisionsDone.current += 1;
     onProgress(decisionsDone.current, totalDecisions);
   };
 
-  const finishRound = (all: RoutineStep[]) => {
-    setPlaced(all);
+  /**
+   * Runs after the second-to-last card is placed. Each sentence finishes
+   * before the next starts: step just placed → last card drops in and is
+   * spoken → "…is complete!" → next routine.
+   */
+  const finishRound = async (justPlaced: RoutineStep) => {
     setBusy(true);
+    await say(stepText(justPlaced));
+    await wait(BEFORE_LAST_CARD_MS);
+    if (!alive.current) return;
+
+    const last = round.steps[round.steps.length - 1];
+    setPlaced(round.steps);
+    await say(stepText(last));
+    if (!alive.current) return;
+
     hapticSuccess();
-    say(`${t('games.routine_sequence.done', { routine: title })} ${randomPraise(t)}`);
-    later(() => {
-      if (roundIdx + 1 >= rounds.length) {
-        onComplete();
-        return;
-      }
-      const next = rounds[roundIdx + 1];
-      setPlaced(next.anchored ? [next.steps[0]] : []);
-      setMissed(false);
-      setHintId(null);
-      setWrongId(null);
-      setBusy(false);
-      setRoundIdx(roundIdx + 1);
-    }, NEXT_ROUND_MS);
+    await afterSpeech(
+      say(`${t('games.routine_sequence.done', { routine: title })} ${randomPraise(t)}`),
+      SHOW_COMPLETE_MS,
+    );
+    if (!alive.current) return;
+
+    if (roundIdx + 1 >= rounds.length) {
+      onComplete();
+      return;
+    }
+    const next = rounds[roundIdx + 1];
+    setPlaced(next.anchored ? [next.steps[0]] : []);
+    setMissed(false);
+    setHintId(null);
+    setWrongId(null);
+    setBusy(false);
+    setRoundIdx(roundIdx + 1);
   };
 
   const onPick = (step: RoutineStep) => {
@@ -103,10 +116,8 @@ export function RoutineSequenceGame({ level, onTrial, onProgress, onComplete, sa
     shownAt.current = nowMs();
 
     if (round.steps.length - nextPlaced.length === 1) {
-      // Only one card left: place it for the patient.
-      setBusy(true);
-      say(stepText(step));
-      later(() => finishRound(round.steps), AUTO_PLACE_LAST_MS);
+      // Only one card left: place it for the patient, after this step is heard.
+      finishRound(step);
     } else {
       say(`${stepText(step)}. ${t('games.routine_sequence.whatNext')}`);
     }
