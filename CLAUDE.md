@@ -15,6 +15,7 @@ AI-based cognitive gaming + memory assistance app for elderly dementia patients 
 - Add packages with `npx expo install <pkg>` (dev deps: `npx expo install -- --save-dev <pkg>`, or plain `npm i -D` if that misbehaves).
 - **Git remote:** SSH over port 443 (`ssh://git@ssh.github.com:443/soham-kolhatkar/ps-26003.git`), because port 22 is blocked. `core.sshCommand` is set in the local git config.
 - **WSL2 NAT:** the phone can't reach LAN IPs, so use the tunnel: `npm run tunnel` (uses `@expo/ngrok`).
+  The corporate network sometimes blocks ngrok's TLS (seen 2026-10-12: "session closed" / "remote gone away", ngrok status green). Fallbacks, in order: retry later; **USB**: `adb reverse tcp:8081 tcp:8081` on Windows (WSL `localhostForwarding=true`), then `npx expo start --localhost` and open `exp://localhost:8081` in Expo Go; Cloudflare quick tunnel; Windows `netsh portproxy` (needs admin).
 - TypeScript 6: global types must be listed in `tsconfig.json` `compilerOptions.types` (currently `["jest", "node"]`).
 - Typed routes are generated into `.expo/types` by the dev server. After adding a route, keep the server running (or start it once) before `tsc`.
 - Formatting: Prettier (`npm run format`; single quotes, width 120).
