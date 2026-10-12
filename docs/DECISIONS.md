@@ -67,3 +67,9 @@ Six routines (making tea, morning, cooking rice, market, planting a seed, washin
 
 ### D22: Game speech is awaited, never cut off (user feedback on F04)
 `speak()` returns a promise that resolves on done, stopped or error, with a length-based safety timeout so it can never hang. `GameProps.say` returns it. Any automatic step (next round, auto-placed last card, end of game) waits for the sentence to finish (`afterSpeech(speech, minMs)` in `src/games/pacing.ts`) and checks `useAlive()` before touching state. Speech the patient interrupts by tapping is still allowed to be cut.
+
+### D23: Family photos: no seeded photos, only real family as choices, hidden until playable
+No stock photos of "family" are shipped. The demo shows the caregiver taking or choosing photos live. Photos are cropped square, copied into the app's document directory (`services/photos.ts`) and referenced by `photo.uri` (migration v2). The game only offers **real people from the patient's photos** as options (never invented names) and is hidden from the patient home until photos of ≥2 different people exist (`GameDefinition.isAvailable`). Levels: 2 names + relation cue → 3 + cue → 3 → 4 → reverse mode ("Where is Rimjhim?", pick the photo). Options are capped by the number of people. Hindi confirmation avoids gendered possessives ("यह रिमझिम हैं — बेटी").
+
+### D24: Games receive `patientId`
+Personal-content games load their own data (e.g. photos) through `useDbQuery`, then build rounds once the data is loaded.
