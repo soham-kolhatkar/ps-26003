@@ -99,6 +99,15 @@
       "instruction": "I will name something. Find it and tap it.",
       "prompt": "Find the {{item}}",
       "hint": "Here it is — the {{item}}. Tap it."
+    },
+    "memory_match": {
+      "title": "Memory pairs",
+      "description": "Find the matching pictures",
+      "instruction": "Look at the cards and remember them. Then find the pairs of matching pictures.",
+      "remember": "Remember the pictures…",
+      "findPairs": "Now find the pairs",
+      "peek": "Let me show you the cards again",
+      "hiddenCard": "Hidden card"
     }
   },
   "items": {
