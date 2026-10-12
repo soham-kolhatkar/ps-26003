@@ -7,7 +7,11 @@
     "continue": "Continue",
     "back": "Back",
     "speak": "Read aloud",
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "signOut": "Sign out",
+    "cancel": "Cancel",
+    "loading": "Loading…",
+    "error": "Something went wrong. Please try again."
   },
   "language": {
     "title": "Choose language",
@@ -17,5 +21,52 @@
   "welcome": {
     "greeting": "Namaskar! Welcome to Smriti.",
     "speakSample": "Namaskar! Welcome to Smriti. Let us play and remember together."
+  },
+  "roles": {
+    "title": "Who is using Smriti?",
+    "patient": "Patient",
+    "caregiver": "Family caregiver",
+    "asha": "ASHA worker",
+    "doctor": "Doctor",
+    "patientHint": "Tap to start playing",
+    "staffHint": "PIN required"
+  },
+  "pin": {
+    "title": "Enter your PIN",
+    "subtitle": "4-digit PIN for {{name}}",
+    "wrong": "That PIN is not correct. Please try again.",
+    "demoHint": "Demo PIN: {{pin}}",
+    "delete": "Delete"
+  },
+  "patient": {
+    "greeting": "Namaskar, {{name}}!",
+    "greetingSpoken": "Namaskar {{name}}. Shall we play a game today?",
+    "gamesSoon": "Your games will appear here soon.",
+    "holdToExit": "Hold to exit",
+    "holdToExitHint": "Press and hold for 2 seconds"
+  },
+  "staff": {
+    "hello": "Hello, {{name}}",
+    "yourPatients": "Your patients ({{count}})",
+    "noPatients": "No patients linked yet.",
+    "years": "{{count}} years",
+    "resetDemo": "Reset demo data",
+    "resetConfirmTitle": "Reset demo data?",
+    "resetConfirmBody": "This restores the demo patients and clears all played games and changes.",
+    "resetDone": "Demo data restored.",
+    "dashboardSoon": "Progress charts and reminders arrive in the next updates.",
+    "reportsSoon": "Cognitive trend reports arrive in Tier 2."
+  },
+  "stage": {
+    "mild": "Early stage",
+    "moderate": "Middle stage",
+    "severe": "Advanced stage"
+  },
+  "relation": {
+    "daughter": "Daughter",
+    "son": "Son",
+    "spouse": "Spouse",
+    "asha": "ASHA visits",
+    "doctor": "Under care"
   }
 }

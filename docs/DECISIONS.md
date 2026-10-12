@@ -28,3 +28,15 @@ WSL2 runs in NAT mode, so the phone can't reach the dev server by LAN IP. `@expo
 
 ### D9: Light theme only
 Consistent high contrast for elderly users. `userInterfaceStyle: light`.
+
+### D10: Staff PINs hashed (salted SHA-256) in SecureStore; patients need no PIN
+Patients with dementia must never be blocked by a login. Caregiver/ASHA/doctor screens are behind a 4-digit PIN; only `{salt, hash}` is stored, in the OS keystore. Demo PIN 1234 is set on first launch and never overwrites an existing PIN.
+
+### D11: Repos take a `DbClient`; tests run real SQL on node:sqlite
+`src/db/types.ts` defines a minimal interface that expo-sqlite's `SQLiteDatabase` satisfies. Jest uses `src/db/testing/nodeDb.ts` (Node 24 built-in SQLite, in-memory), so migrations, seed and queries are exercised in CI, not just on the phone.
+
+### D12: Role areas are plain route folders (`/patient`, `/caregiver`, `/asha`, `/doctor`)
+Expo-router groups `(x)` don't add a URL segment, so four `index` routes would collide. Each folder's `_layout` uses `RoleStack`, which redirects to `/roles` unless the session has that role.
+
+### D13: Stable readable ids for demo rows, UUIDv4 for new rows
+`p-aita`, `u-rimjhim`, … keep docs, tests and the demo script stable. New rows use `newId()`.

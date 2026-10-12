@@ -15,7 +15,9 @@ AI-based cognitive gaming + memory assistance app for elderly dementia patients 
 - Add packages with `npx expo install <pkg>` (dev deps: `npx expo install -- --save-dev <pkg>`, or plain `npm i -D` if that misbehaves).
 - **Git remote:** SSH over port 443 (`ssh://git@ssh.github.com:443/soham-kolhatkar/ps-26003.git`), because port 22 is blocked. `core.sshCommand` is set in the local git config.
 - **WSL2 NAT:** the phone can't reach LAN IPs, so use the tunnel: `npm run tunnel` (uses `@expo/ngrok`).
-- TypeScript 6: global types must be listed in `tsconfig.json` `compilerOptions.types` (currently `["jest"]`).
+- TypeScript 6: global types must be listed in `tsconfig.json` `compilerOptions.types` (currently `["jest", "node"]`).
+- Typed routes are generated into `.expo/types` by the dev server. After adding a route, keep the server running (or start it once) before `tsc`.
+- Formatting: Prettier (`npm run format`; single quotes, width 120).
 - Expo SDK **57** (RN 0.86, React 19.2, React Compiler on, typed routes on). Check versioned docs before using any Expo API: https://docs.expo.dev/versions/v57.0.0/
 
 ## Commands
@@ -40,4 +42,6 @@ npx expo export --platform android --output-dir <scratch>   # bundle smoke test
 - `src/i18n/`: i18next setup + language packs. Add a language = pack + an entry in `LANGUAGES`.
 - `src/services/`: device services (tts, notifications, photos, sync).
 - `src/store/`: zustand stores.
-- `src/db/`, `src/engine/`, `src/games/`: arrive in F01/F02 (see ARCHITECTURE).
+- `src/db/`: SQLite. Repos take a `DbClient` argument; screens read with `useDbQuery`; stores use `getDb()`. New tables = a new migration in `migrations.ts` (append-only) + add the table to `ALL_TABLES` in `seed/demo.ts`.
+- `src/engine/`, `src/games/`: arrive in F02.
+- DB tests: add `/** @jest-environment node */` and use `createTestDb()` from `src/db/testing/nodeDb.ts`.

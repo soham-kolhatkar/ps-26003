@@ -20,24 +20,11 @@ const toneColor: Record<Tone, string> = {
   onPrimary: colors.textOnPrimary,
 };
 
-export function AppText({
-  variant = 'body',
-  tone = 'default',
-  bold,
-  center,
-  style,
-  ...rest
-}: AppTextProps) {
+export function AppText({ variant = 'body', tone = 'default', bold, center, style, ...rest }: AppTextProps) {
   return (
     <Text
       maxFontSizeMultiplier={1.6}
-      style={[
-        styles[variant],
-        { color: toneColor[tone] },
-        bold && styles.bold,
-        center && styles.center,
-        style,
-      ]}
+      style={[styles[variant], { color: toneColor[tone] }, bold && styles.bold, center && styles.center, style]}
       {...rest}
     />
   );

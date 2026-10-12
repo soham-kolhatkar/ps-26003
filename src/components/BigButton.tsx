@@ -48,11 +48,7 @@ export function BigButton({
             {icon}
           </AppText>
         ) : null}
-        <AppText
-          variant={size === 'large' ? 'large' : 'body'}
-          bold
-          tone={isPrimary ? 'onPrimary' : 'primary'}
-        >
+        <AppText variant={size === 'large' ? 'large' : 'body'} bold tone={isPrimary ? 'onPrimary' : 'primary'}>
           {label}
         </AppText>
       </View>
