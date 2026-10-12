@@ -61,3 +61,6 @@ A wrong pair counts against accuracy only if the first card's partner had alread
 
 ### D20: Shared item set
 `src/games/items.ts` (24 NE-familiar objects plus `items.*` names in packs) is used by object recognition and memory match, so new items benefit every game.
+
+### D21: Routine sequencing uses only causal routines, tap-to-place, and counts real decisions only
+Six routines (making tea, morning, cooking rice, market, planting a seed, washing clothes) were chosen so the order is genuinely fixed and never a matter of personal habit. Patients tap the next step instead of dragging (easier for elderly hands). A round uses a contiguous slice of the routine. Level 1 gives the first step as an anchor; the last card is placed automatically. Neither counts as a trial. Levels: 3 (anchored) → 3 → 4 → 5 → 6 steps, 2 routines per session.
