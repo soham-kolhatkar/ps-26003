@@ -6,15 +6,18 @@ Expo SDK 57 · React Native 0.86 · React 19.2 (React Compiler) · TypeScript 6 
 ## Layers
 ```
 src/app/            Routes (expo-router). Thin: compose components, call stores/repos.
-  _layout.tsx       Root providers (SafeArea, i18n init, StatusBar)
-  index.tsx         Welcome / language (F00) → role picker (F01)
-  (patient)/ (caregiver)/ (asha)/ (doctor)/    Role groups (F01+)
+  _layout.tsx       Root providers: SafeArea, SQLiteProvider(onInit: migrate → seed → language → PINs)
+  index.tsx         Welcome + language → /roles
+  roles.tsx         Role picker: device patient (no PIN) + staff users
+  pin/[userId].tsx  PIN pad → signInStaff → /<role>
+  patient/ caregiver/ asha/ doctor/   Role folders; _layout = RoleStack guard
 src/components/     Shared elder-friendly UI primitives
 src/theme/          Design tokens (colors, type scale, spacing, touch sizes)
 src/i18n/           i18next init + LANGUAGES registry + packs/*.json
-src/store/          zustand stores (settings; session/role from F01)
-src/services/       Device services: tts (F00), notifications (F06), photos (F05), sync (F15)
-src/db/             (F01) schema, migrations (PRAGMA user_version), typed repos, demo seed
+src/store/          zustand: settings (language, persisted), session (role/user/patient, in-memory)
+src/services/       Device services: tts, auth (PINs), notifications (F06), photos (F05), sync (F15)
+src/db/             client (setDb/getDb), types (DbClient), migrations (PRAGMA user_version), models,
+                    repos/*, seed/demo (DEMO story + resetDemo), useDbQuery hook, testing/nodeDb
 src/engine/         (F02+) pure, unit-tested logic: difficulty, scoring, trends
 src/games/          (F02+) GameShell + one folder per game + registry
 ```
@@ -22,5 +25,9 @@ src/games/          (F02+) GameShell + one folder per game + registry
 ## Data flow
 UI → store/repo → SQLite (sync, local). Engines are pure functions over session rows. The sync service (F15) reads the outbox and pushes to Firestore. The patient flow never awaits the network.
 
-## Data model (planned, F01)
-`household`, `patient`, `user` (caregiver/asha/doctor + pin_hash), `patient_user`, `game_session`, `game_level`, `reminder`, `reminder_event`, `photo`, `alert`, `sync_outbox`, `setting`.
+## Data model
+Schema v1 (F01): `setting(key,value)`, `household`, `patient` (→household), `app_user` (role caregiver|asha|doctor), `patient_user` (patient↔staff + relation), `game_session`, `game_level`.
+Planned migrations: v2 `photo` (F05), v3 `reminder` + `reminder_event` (F06), v4 `alert` (F11), v5 `sync_outbox` (F15).
+
+## Demo story (src/db/seed/demo.ts)
+Device patient **Hemoprova Bora "Aita"** (72, Cinnamara, Jorhat). Caregiver daughter **Rimjhim Bora**. ASHA **Pranita Das** (Aita, Lakhi Gogoi, Dhaniram Saikia). Doctor **Dr. Anjali Sharma** (all three). PIN 1234.
