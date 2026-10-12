@@ -40,10 +40,14 @@
   },
   "patient": {
     "greeting": "नमस्कार, {{name}}!",
-    "greetingSpoken": "नमस्कार {{name}}। क्या आज हम एक खेल खेलें?",
-    "gamesSoon": "आपके खेल जल्द ही यहाँ दिखेंगे।",
+    "greetingSpoken": "{{greeting}} आज {{date}} है। क्या हम एक खेल खेलें?",
     "holdToExit": "बाहर जाने के लिए दबाए रखें",
-    "holdToExitHint": "2 सेकंड तक दबाए रखें"
+    "holdToExitHint": "2 सेकंड तक दबाए रखें",
+    "greetMorning": "सुप्रभात, {{name}}!",
+    "greetAfternoon": "नमस्ते, {{name}}!",
+    "greetEvening": "शुभ संध्या, {{name}}!",
+    "todayIs": "आज {{date}} है",
+    "chooseGame": "एक खेल चुनें"
   },
   "staff": {
     "hello": "नमस्ते, {{name}}",
@@ -68,5 +72,59 @@
     "spouse": "जीवनसाथी",
     "asha": "आशा देखरेख",
     "doctor": "इलाज जारी"
+  },
+  "game": {
+    "start": "शुरू करें",
+    "hearAgain": "फिर से सुनें",
+    "level": "स्तर {{level}}",
+    "stop": "रोकें",
+    "progress": "{{total}} में से {{done}}",
+    "doneTitle": "बहुत बढ़िया, {{name}}!",
+    "doneSpoken": "बहुत बढ़िया {{name}}! आपने बहुत अच्छा खेला।",
+    "levelUp": "अगली बार: नया स्तर!",
+    "playAgain": "फिर से खेलें",
+    "home": "होम",
+    "notFound": "यह खेल उपलब्ध नहीं है।"
+  },
+  "feedback": {
+    "praise1": "बहुत अच्छे!",
+    "praise2": "शाबाश!",
+    "praise3": "बहुत बढ़िया!",
+    "praise4": "बिल्कुल सही!"
+  },
+  "games": {
+    "object_recognition": {
+      "title": "चीज़ पहचानें",
+      "description": "जिस चित्र का नाम लूँ, उसे छुएँ",
+      "instruction": "मैं किसी चीज़ का नाम बोलूँगी। उसे ढूँढकर छुएँ।",
+      "prompt": "{{item}} ढूँढें",
+      "hint": "यह रहा — {{item}}। इसे छुएँ।"
+    }
+  },
+  "items": {
+    "tea": "चाय का कप",
+    "banana": "केला",
+    "fish": "मछली",
+    "rice": "चावल",
+    "umbrella": "छाता",
+    "flower": "फूल",
+    "cow": "गाय",
+    "house": "घर",
+    "clock": "घड़ी",
+    "glasses": "चश्मा",
+    "key": "चाबी",
+    "book": "किताब",
+    "chair": "कुर्सी",
+    "bicycle": "साइकिल",
+    "mango": "आम",
+    "lamp": "दीया",
+    "bell": "घंटी",
+    "drum": "ढोल",
+    "rhino": "गैंडा",
+    "orange": "संतरा",
+    "elephant": "हाथी",
+    "boat": "नाव",
+    "goat": "बकरी",
+    "apple": "सेब"
   }
 }

@@ -40,10 +40,14 @@
   },
   "patient": {
     "greeting": "Namaskar, {{name}}!",
-    "greetingSpoken": "Namaskar {{name}}. Shall we play a game today?",
-    "gamesSoon": "Your games will appear here soon.",
+    "greetingSpoken": "{{greeting}} Today is {{date}}. Shall we play a game?",
     "holdToExit": "Hold to exit",
-    "holdToExitHint": "Press and hold for 2 seconds"
+    "holdToExitHint": "Press and hold for 2 seconds",
+    "greetMorning": "Good morning, {{name}}!",
+    "greetAfternoon": "Good afternoon, {{name}}!",
+    "greetEvening": "Good evening, {{name}}!",
+    "todayIs": "Today is {{date}}",
+    "chooseGame": "Choose a game"
   },
   "staff": {
     "hello": "Hello, {{name}}",
@@ -68,5 +72,59 @@
     "spouse": "Spouse",
     "asha": "ASHA visits",
     "doctor": "Under care"
+  },
+  "game": {
+    "start": "Start",
+    "hearAgain": "Hear again",
+    "level": "Level {{level}}",
+    "stop": "Stop",
+    "progress": "{{done}} of {{total}}",
+    "doneTitle": "Well done, {{name}}!",
+    "doneSpoken": "Well done {{name}}! You played very nicely.",
+    "levelUp": "Next time: a new level!",
+    "playAgain": "Play again",
+    "home": "Home",
+    "notFound": "This game is not available."
+  },
+  "feedback": {
+    "praise1": "Very good!",
+    "praise2": "Wonderful!",
+    "praise3": "Well done!",
+    "praise4": "That's right!"
+  },
+  "games": {
+    "object_recognition": {
+      "title": "Find the object",
+      "description": "Tap the picture I name",
+      "instruction": "I will name something. Find it and tap it.",
+      "prompt": "Find the {{item}}",
+      "hint": "Here it is — the {{item}}. Tap it."
+    }
+  },
+  "items": {
+    "tea": "tea cup",
+    "banana": "banana",
+    "fish": "fish",
+    "rice": "rice",
+    "umbrella": "umbrella",
+    "flower": "flower",
+    "cow": "cow",
+    "house": "house",
+    "clock": "clock",
+    "glasses": "glasses",
+    "key": "key",
+    "book": "book",
+    "chair": "chair",
+    "bicycle": "bicycle",
+    "mango": "mango",
+    "lamp": "oil lamp",
+    "bell": "bell",
+    "drum": "drum",
+    "rhino": "rhino",
+    "orange": "orange",
+    "elephant": "elephant",
+    "boat": "boat",
+    "goat": "goat",
+    "apple": "apple"
   }
 }

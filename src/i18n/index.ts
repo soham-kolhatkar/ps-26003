@@ -7,11 +7,11 @@ import hi from './packs/hi.json';
 
 /**
  * Language registry. Adding a language = add a pack JSON + one entry here.
- * `ttsLocale` is the BCP-47 tag passed to the device text-to-speech engine.
+ * `locale` formats dates/numbers; `ttsLocale` is passed to the device text-to-speech engine.
  */
 export const LANGUAGES = {
-  en: { label: 'English', ttsLocale: 'en-IN', pack: en },
-  hi: { label: 'हिन्दी', ttsLocale: 'hi-IN', pack: hi },
+  en: { label: 'English', locale: 'en-IN', ttsLocale: 'en-IN', pack: en },
+  hi: { label: 'हिन्दी', locale: 'hi-IN', ttsLocale: 'hi-IN', pack: hi },
 } as const;
 
 export type LanguageCode = keyof typeof LANGUAGES;
