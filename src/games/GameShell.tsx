@@ -38,6 +38,8 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
   const [run, setRun] = useState(0);
   const [phase, setPhase] = useState<Phase>('intro');
   const [done, setDone] = useState(0);
+  /** Set when the game reports its own progress (e.g. pairs found); else trials vs trialsPerSession. */
+  const [custom, setCustom] = useState<{ done: number; total: number } | null>(null);
   const [result, setResult] = useState<FinishedSession | null>(null);
   const trials = useRef<Trial[]>([]);
   const startedAt = useRef(0);
@@ -58,6 +60,7 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
     trials.current = [];
     startedAt.current = nowMs();
     setDone(0);
+    setCustom(null);
     setResult(null);
     setPhase('play');
   };
@@ -66,6 +69,8 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
     trials.current.push(trial);
     setDone(trials.current.length);
   }, []);
+
+  const onProgress = useCallback((d: number, total: number) => setCustom({ done: d, total }), []);
 
   const onComplete = useCallback(async () => {
     if (level == null) return;
@@ -142,23 +147,21 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
 
   if (phase === 'play' || phase === 'saving') {
     const Game = game.Component;
+    const progress = custom ?? { done, total: game.trialsPerSession };
     return (
       <Screen scroll={false}>
         <View style={styles.topBar}>
           <View style={styles.stop}>
             <BigButton kind="secondary" icon="✖️" label={t('game.stop')} onPress={stop} />
           </View>
-          <Progress
-            done={done}
-            total={game.trialsPerSession}
-            label={t('game.progress', { done, total: game.trialsPerSession })}
-          />
+          <Progress done={progress.done} total={progress.total} label={t('game.progress', progress)} />
         </View>
         <Game
           key={run}
           level={level}
           totalTrials={game.trialsPerSession}
           onTrial={onTrial}
+          onProgress={onProgress}
           onComplete={onComplete}
           say={say}
         />
