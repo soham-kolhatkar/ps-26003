@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
@@ -61,7 +62,7 @@ export default function Welcome() {
 
       <View style={styles.spacer} />
 
-      <BigButton size="large" label={`${t('common.continue')} · ${t('common.comingSoon')}`} disabled />
+      <BigButton size="large" label={t('common.continue')} onPress={() => router.push('/roles')} />
     </Screen>
   );
 }

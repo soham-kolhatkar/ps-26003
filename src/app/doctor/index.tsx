@@ -1,0 +1,8 @@
+import { useTranslation } from 'react-i18next';
+
+import { StaffPatientList } from '@/components/StaffPatientList';
+
+export default function DoctorHome() {
+  const { t } = useTranslation();
+  return <StaffPatientList footer={t('staff.reportsSoon')} />;
+}
