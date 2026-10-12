@@ -108,6 +108,16 @@
       "findPairs": "Now find the pairs",
       "peek": "Let me show you the cards again",
       "hiddenCard": "Hidden card"
+    },
+    "routine_sequence": {
+      "title": "Daily routines",
+      "description": "Put the steps in the right order",
+      "instruction": "I will show the steps of a daily task. Tap them in the order you do them.",
+      "whatFirst": "What do we do first?",
+      "whatNext": "What comes next?",
+      "hint": "Next is: {{step}}",
+      "done": "{{routine}} is complete!",
+      "yourOrder": "Your order"
     }
   },
   "items": {
@@ -135,5 +145,70 @@
     "boat": "boat",
     "goat": "goat",
     "apple": "apple"
+  },
+  "routines": {
+    "make_tea": {
+      "title": "Making tea",
+      "steps": {
+        "boil_water": "Boil water",
+        "add_leaves": "Add tea leaves",
+        "add_milk": "Add milk and sugar",
+        "pour": "Pour into the cup",
+        "drink": "Drink and enjoy"
+      }
+    },
+    "morning": {
+      "title": "Morning routine",
+      "steps": {
+        "wake_up": "Wake up",
+        "brush": "Brush teeth",
+        "bath": "Take a bath",
+        "dress": "Wear clean clothes",
+        "breakfast": "Eat breakfast",
+        "medicine": "Take medicine"
+      }
+    },
+    "cook_rice": {
+      "title": "Cooking rice",
+      "steps": {
+        "wash_rice": "Wash the rice",
+        "into_pot": "Put rice and water in the pot",
+        "cook": "Cook on the stove",
+        "serve": "Serve on a plate",
+        "eat": "Eat"
+      }
+    },
+    "market": {
+      "title": "Going to the market",
+      "steps": {
+        "take_bag": "Take a bag",
+        "walk": "Walk to the market",
+        "buy": "Buy vegetables",
+        "pay": "Pay the money",
+        "come_home": "Come back home"
+      }
+    },
+    "garden": {
+      "title": "Planting a seed",
+      "steps": {
+        "dig": "Dig the soil",
+        "seed": "Put in the seed",
+        "cover": "Cover with soil",
+        "water": "Water it",
+        "sprout": "It sprouts",
+        "flower": "It flowers"
+      }
+    },
+    "wash_clothes": {
+      "title": "Washing clothes",
+      "steps": {
+        "soak": "Soak clothes in water",
+        "soap": "Apply soap",
+        "scrub": "Scrub",
+        "rinse": "Rinse in clean water",
+        "dry": "Dry in the sun",
+        "fold": "Fold the clothes"
+      }
+    }
   }
 }
