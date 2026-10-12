@@ -1,6 +1,6 @@
 import { defaultRng, sample, shuffle, type Rng } from '@/engine/random';
 
-import { ITEMS, type Item } from './content';
+import { ITEMS, type Item } from '../items';
 
 export const MAX_LEVEL = 5;
 

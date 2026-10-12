@@ -9,7 +9,7 @@ import { colors, radius, space } from '@/theme/tokens';
 
 import { hapticGentle, hapticSuccess, randomPraise } from '../feedback';
 import type { GameProps } from '../types';
-import type { Item } from './content';
+import type { Item } from '../items';
 import { levelParams, makeRounds } from './rounds';
 
 const NEXT_ROUND_DELAY_MS = 1400;
