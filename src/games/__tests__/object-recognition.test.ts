@@ -1,6 +1,6 @@
 import { seededRng } from '@/engine/random';
 
-import { ITEMS } from '../object-recognition/content';
+import { ITEMS } from '../items';
 import { levelParams, makeRounds, MAX_LEVEL } from '../object-recognition/rounds';
 import en from '@/i18n/packs/en.json';
 import hi from '@/i18n/packs/hi.json';

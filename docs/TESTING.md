@@ -53,3 +53,17 @@
 10. Tap **✖ Stop** mid-game: back to home, no crash.
 11. Kill and reopen the app: the level is remembered. (Caregiver → Reset demo data resets levels to 1.)
 12. Airplane mode: all of the above still works.
+
+---
+
+## F03 Memory pairs checklist
+1. Aita's home now has two tiles: 🃏 **Memory pairs** (first) and 🔍 Find the object.
+2. Open Memory pairs → intro spoken → **Start**. Level 1: **4 cards** (2 pairs), shown **face-up** with "👀 Remember the pictures…" (orange banner) for about 4 s, then they turn over (cream with a red border and ✿ motif, like a gamosa) and you hear "Now find the pairs".
+3. Tap two cards that match: they stay face-up in **green**, you hear praise, and a progress dot fills (dots = pairs).
+4. Tap two that don't match: both show for about 1 s, then turn back. No sound or penalty.
+5. Find all pairs → 🎉 celebration with stars.
+6. **Memory errors only:** play a session where you deliberately mismatch only cards you haven't seen yet. It still gets 3 stars. Mismatching when you *had* seen the partner lowers the stars.
+7. **Help peek:** make 3 "known" mistakes in a row → "💡 Let me show you the cards again" and all cards show for about 2.5 s.
+8. **Levels:** 2 perfect sessions → 🌟 new level → Level 2 = **6 cards** (3 columns), Level 3 = 8 cards (4 columns), Level 4 = 12, Level 5 = 16. Cards stay square and fit the screen without scrolling.
+9. Hindi: all memory-game text and speech is in Hindi.
+10. ✖ Stop mid-game works. Find the object still works as before.

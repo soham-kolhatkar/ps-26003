@@ -13,6 +13,11 @@ export type GameProps = {
   totalTrials: number;
   /** Report one trial (first-try result). The shell tracks progress from this. */
   onTrial: (trial: Trial) => void;
+  /**
+   * Optional: report progress when it isn't one-trial-per-round
+   * (e.g. memory match reports pairs found / total pairs).
+   */
+  onProgress: (done: number, total: number) => void;
   /** All rounds finished. */
   onComplete: () => void;
   /** Speak text in the current language (stops any previous speech). */

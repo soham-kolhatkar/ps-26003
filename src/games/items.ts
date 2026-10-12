@@ -1,5 +1,5 @@
 /**
- * Everyday, familiar objects for Assam / North East households.
+ * Everyday, familiar objects for Assam / North East households, shared by games.
  * Names live in the language packs under `items.<id>`.
  */
 export type Item = { id: string; emoji: string };
