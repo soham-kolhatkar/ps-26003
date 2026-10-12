@@ -40,3 +40,15 @@ Expo-router groups `(x)` don't add a URL segment, so four `index` routes would c
 
 ### D13: Stable readable ids for demo rows, UUIDv4 for new rows
 `p-aita`, `u-rimjhim`, … keep docs, tests and the demo script stable. New rows use `newId()`.
+
+### D14: "Find the object" ships in F02 as the GameShell's first real game
+Rather than a throwaway placeholder, F02 ships the basic mode of the Tier 2 object-recognition game. F08 adds odd-one-out and pattern modes. Levels: 2→6 options; levels 1–2 show the picture next to the name (matching), levels 3+ show the name only (recall).
+
+### D15: Sessions are short and errorless
+6 trials per session, about 1–2 minutes. A wrong tap highlights the correct answer and the patient taps it to continue. Accuracy = first-try correct / trials. Score = 80% accuracy + 20% speed versus the game's `targetReactionMs`. Every finished session gets ≥1 star; level-downs are never announced to the patient.
+
+### D16: Reality orientation on the patient home
+A big date and time card plus a time-of-day greeting ("Good morning, Aita! Today is Monday, 12 October"). This is a standard dementia-care aid, and cheap to provide.
+
+### D17: Time via `nowMs()` (src/engine/clock.ts)
+The React Compiler purity lint rejects `Date.now()` in component bodies, even inside handlers. A tiny helper keeps lint clean and makes time fakeable in tests.
