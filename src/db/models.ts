@@ -42,3 +42,32 @@ export type AppUser = {
 
 /** A patient as seen from a linked staff user, with the relationship label. */
 export type LinkedPatient = Patient & { relation: string | null };
+
+/** Relations a caregiver can pick for a family photo (labels: `relation.<key>`). */
+export const FAMILY_RELATIONS = [
+  'daughter',
+  'son',
+  'husband',
+  'wife',
+  'granddaughter',
+  'grandson',
+  'sister',
+  'brother',
+  'daughter_in_law',
+  'son_in_law',
+  'friend',
+  'neighbour',
+  'other',
+] as const;
+export type FamilyRelation = (typeof FAMILY_RELATIONS)[number];
+
+export type Photo = {
+  id: string;
+  patientId: string;
+  /** file:// uri inside the app's document directory. */
+  uri: string;
+  personName: string;
+  relation: string | null;
+  addedBy: string | null;
+  createdAt: number;
+};

@@ -82,7 +82,16 @@ export const DEMO = {
 } as const;
 
 /** Tables in child → parent order, for clearing. */
-const ALL_TABLES = ['game_level', 'game_session', 'patient_user', 'app_user', 'patient', 'household', 'setting'];
+const ALL_TABLES = [
+  'photo',
+  'game_level',
+  'game_session',
+  'patient_user',
+  'app_user',
+  'patient',
+  'household',
+  'setting',
+];
 
 export async function isSeeded(db: DbClient): Promise<boolean> {
   const row = await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM household', []);
