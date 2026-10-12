@@ -20,8 +20,12 @@ export type GameProps = {
   onProgress: (done: number, total: number) => void;
   /** All rounds finished. */
   onComplete: () => void;
-  /** Speak text in the current language (stops any previous speech). */
-  say: (text: string) => void;
+  /**
+   * Speak text in the current language (stops any previous speech).
+   * Resolves when the speech has finished — await it before auto-advancing
+   * so sentences are never cut off.
+   */
+  say: (text: string) => Promise<void>;
 };
 
 export type GameDefinition = {
