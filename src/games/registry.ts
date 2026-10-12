@@ -2,6 +2,8 @@ import { MAX_LEVEL as MEMORY_MAX_LEVEL } from './memory-match/board';
 import { MemoryMatchGame } from './memory-match/MemoryMatchGame';
 import { MAX_LEVEL as OBJECT_MAX_LEVEL } from './object-recognition/rounds';
 import { ObjectRecognitionGame } from './object-recognition/ObjectRecognitionGame';
+import { MAX_LEVEL as ROUTINE_MAX_LEVEL } from './routine-sequence/rounds';
+import { RoutineSequenceGame } from './routine-sequence/RoutineSequenceGame';
 import type { GameDefinition, GameId } from './types';
 
 /**
@@ -17,6 +19,15 @@ export const GAMES: readonly GameDefinition[] = [
     trialsPerSession: 0,
     targetReactionMs: 3000,
     Component: MemoryMatchGame,
+  },
+  {
+    id: 'routine_sequence',
+    icon: '📋',
+    maxLevel: ROUTINE_MAX_LEVEL,
+    // Progress = real decisions across 2 routines, reported via onProgress.
+    trialsPerSession: 0,
+    targetReactionMs: 6000,
+    Component: RoutineSequenceGame,
   },
   {
     id: 'object_recognition',
