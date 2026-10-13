@@ -210,6 +210,10 @@ export async function seedDemo(db: DbClient, now: number = Date.now()): Promise<
       [DEMO.devicePatientId],
     );
     await seedReminders(db, now);
+    await db.runAsync(
+      "INSERT INTO setting (key, value) VALUES ('demo_reminders_seeded', '1') ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+      [],
+    );
   });
 }
 
@@ -277,13 +281,21 @@ export async function resetDemo(db: DbClient, now: number = Date.now()): Promise
 }
 
 /**
- * Installs seeded before reminders existed (schema < v3) get the demo
- * reminders once, without a full reset (which would also wipe photos).
+ * Installs seeded before reminders existed get the demo reminders exactly
+ * once, without a full reset (which would also wipe photos). Tracked by the
+ * `demo_reminders_seeded` flag, so a caregiver deleting all reminders later
+ * doesn't bring them back.
  */
 export async function backfillDemoReminders(db: DbClient, now: number = Date.now()): Promise<boolean> {
+  const flag = await db.getFirstAsync<{ value: string }>(
+    "SELECT value FROM setting WHERE key = 'demo_reminders_seeded'",
+    [],
+  );
+  if (flag) return false;
   const count = await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM reminder', []);
-  const aita = await db.getFirstAsync<{ id: string }>("SELECT id FROM patient WHERE id = 'p-aita'", []);
-  if ((count?.n ?? 0) > 0 || !aita) return false;
-  await db.withTransactionAsync(() => seedReminders(db, now));
-  return true;
+  await db.withTransactionAsync(async () => {
+    if ((count?.n ?? 0) === 0) await seedReminders(db, now);
+    await db.runAsync("INSERT INTO setting (key, value) VALUES ('demo_reminders_seeded', '1')", []);
+  });
+  return (count?.n ?? 0) === 0;
 }

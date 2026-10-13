@@ -25,6 +25,13 @@ async function freshDb() {
 }
 
 describe('reminders repo', () => {
+  it('a fresh seed is not backfilled again on the next launch', async () => {
+    const db = await freshDb();
+    await initDatabase(db);
+    expect(await listReminders(db, 'p-aita')).toHaveLength(4);
+    db.close();
+  });
+
   it('seeds demo reminders with ~85% history adherence for Aita', async () => {
     const db = await freshDb();
     const aita = await listReminders(db, 'p-aita');
@@ -148,6 +155,11 @@ describe('upgrade from schema v2', () => {
     expect((await listReminders(db, 'p-aita')).length).toBe(4);
     await initDatabase(db); // second launch: no duplicates
     expect((await listReminders(db, 'p-aita')).length).toBe(4);
+
+    // A caregiver deleting every reminder must not get the demo ones back.
+    await db.execAsync('DELETE FROM reminder');
+    await initDatabase(db);
+    expect(await listReminders(db, 'p-aita')).toHaveLength(0);
     db.close();
   });
 });
