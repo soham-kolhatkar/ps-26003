@@ -2,7 +2,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite';
 import { useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { NotificationResponder } from '@/components/NotificationResponder';
@@ -22,6 +22,16 @@ import { refreshPeople } from '@/sync/refresh';
 import { colors } from '@/theme/tokens';
 
 configureNotifications();
+
+/**
+ * Phones: always open a fresh native connection. expo-sqlite (Android) caches
+ * open connections "for fast refresh" and hands the cached one back on the
+ * next open; after a full JS reload in Expo Go that connection is broken and
+ * every query throws "NativeDatabase … NullPointerException". A module-level
+ * constant, because SQLiteProvider re-opens whenever `options` changes identity.
+ */
+const DB_OPTIONS = ((globalThis as { __smritiDbOptions?: object }).__smritiDbOptions ??=
+  Platform.OS === 'web' ? {} : { useNewConnection: true }) as { useNewConnection?: boolean };
 
 /** Demo (single-phone) database: runs once per launch before any screen renders. */
 async function onInitDemo(db: SQLiteDatabase) {
@@ -68,8 +78,19 @@ async function onInitCloud(db: SQLiteDatabase) {
  * connection is left behind. Initialise each file once per app session; every
  * mount waits for it, then uses its own connection.
  */
-const initialised = new Map<string, Promise<void>>();
-const initFor = new Map<string, (db: SQLiteDatabase) => Promise<void>>();
+// Kept on globalThis so hot updates (e.g. editing a language pack, which re-runs
+// this module) keep the same onInit functions: a new identity would make
+// SQLiteProvider close and re-open the database under screens still using it.
+type InitRegistry = {
+  done: Map<string, Promise<void>>;
+  fns: Map<string, (db: SQLiteDatabase) => Promise<void>>;
+};
+const registry: InitRegistry = ((globalThis as { __smritiDbInit?: InitRegistry }).__smritiDbInit ??= {
+  done: new Map(),
+  fns: new Map(),
+});
+const initialised = registry.done;
+const initFor = registry.fns;
 
 function initOnce(dbName: string, init: (db: SQLiteDatabase) => Promise<void>) {
   let fn = initFor.get(dbName);
@@ -113,6 +134,7 @@ export default function RootLayout() {
         <SQLiteProvider
           key={dbName}
           databaseName={dbName}
+          options={DB_OPTIONS}
           onInit={initOnce(dbName, mode === 'demo' ? onInitDemo : onInitCloud)}
         >
           <Stack

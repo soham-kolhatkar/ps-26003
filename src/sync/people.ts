@@ -59,7 +59,8 @@ export async function applyPeople(db: DbClient, snap: PeopleSnapshot, now = Date
       for (const m of ms) {
         await db.runAsync(
           'INSERT INTO patient_user (patient_id, user_id, relation, member_role, is_manager) VALUES (?, ?, ?, ?, ?)',
-          [p.id, m.user_id, m.relation ?? m.role, m.role, m.is_manager ? 1 : 0],
+          // No relation chosen: no tag (ASHA/doctor rows show their role as before).
+          [p.id, m.user_id, m.relation ?? (m.role === 'caregiver' ? null : m.role), m.role, m.is_manager ? 1 : 0],
         );
       }
     }

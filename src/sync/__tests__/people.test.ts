@@ -59,6 +59,11 @@ describe('applyPeople', () => {
     expect(await getPatient(db, 'p1')).toMatchObject({ name: 'Hemoprova Bora', village: 'Cinnamara', avatar: '👵' });
     expect((await listPatientsForUser(db, 'u-rim'))[0]).toMatchObject({ id: 'p1', relation: 'daughter' });
     expect((await listPatientsForUser(db, 'u-asha'))[0].relation).toBe('asha');
+    // A caregiver who chose no relation gets no tag (not the raw word "caregiver").
+    const noRel = snap();
+    noRel.members[0].relation = null;
+    await applyPeople(db, noRel);
+    expect((await listPatientsForUser(db, 'u-rim'))[0].relation).toBeNull();
     // The patient's phone (anonymous) is not a local user.
     expect((await db.getAllAsync('SELECT * FROM patient_user WHERE user_id = ?', ['anon-phone'])).length).toBe(0);
     const row = await db.getFirstAsync<{ member_role: string; is_manager: number }>(
