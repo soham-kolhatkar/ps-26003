@@ -6,7 +6,7 @@ import type { Trial } from '@/engine/scoring';
 
 import { finishSession } from '../session';
 
-const game = { id: 'object_recognition' as const, maxLevel: 5, targetReactionMs: 4000 };
+const game = { id: 'word_recall' as const, maxLevel: 5, targetReactionMs: 4000 };
 const trials = (correct: number, total = 6): Trial[] =>
   Array.from({ length: total }, (_, i) => ({ correct: i < correct, reactionMs: 2000 }));
 
@@ -25,7 +25,7 @@ describe('finishSession', () => {
     expect(second.decision).toMatchObject({ level: 2, change: 'up' });
     expect(await getLevel(db, 'p-aita', game.id)).toBe(2);
 
-    expect(await listSessions(db, 'p-aita')).toHaveLength(2);
+    expect(await listSessions(db, 'p-aita', { gameId: game.id })).toHaveLength(2);
     db.close();
   });
 
@@ -43,7 +43,7 @@ describe('finishSession', () => {
     });
     expect(result.decision).toBeNull();
     expect(await getLevel(db, 'p-aita', game.id)).toBe(1);
-    expect((await listSessions(db, 'p-aita'))[0]).toMatchObject({ completed: false });
+    expect((await listSessions(db, 'p-aita', { gameId: game.id }))[0]).toMatchObject({ completed: false });
     db.close();
   });
 

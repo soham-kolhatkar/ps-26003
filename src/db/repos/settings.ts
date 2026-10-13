@@ -6,7 +6,9 @@ export type SettingKey =
   /** The patient who uses this device in patient mode. */
   | 'device_patient_id'
   /** '1' once the demo reminders were added (fresh seed or upgrade backfill). */
-  | 'demo_reminders_seeded';
+  | 'demo_reminders_seeded'
+  /** '1' once the 30-day demo game history was added. */
+  | 'demo_games_seeded';
 
 export async function getSetting(db: DbClient, key: SettingKey): Promise<string | null> {
   const row = await db.getFirstAsync<{ value: string }>('SELECT value FROM setting WHERE key = ?', [key]);
