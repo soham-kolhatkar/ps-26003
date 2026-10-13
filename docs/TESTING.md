@@ -6,6 +6,7 @@
 3. Make sure the phone has a Hindi TTS voice: Settings → System → Languages → Text-to-speech → Google → Install voice data → Hindi (India). Also install English (India).
 
 ## Running
+- **Over USB (default):** plug in the phone → `npm run usb`. Expo Go opens the app automatically (or Expo Go → Enter URL → `exp://localhost:8081`).
 - On the laptop: `npm run tunnel`, then scan the QR with Expo Go (or Expo Go → "Enter URL manually" → the `exp://…exp.direct` URL).
 - Shake the phone (or three-finger long-press) for the dev menu → Reload.
 

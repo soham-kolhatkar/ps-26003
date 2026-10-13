@@ -15,7 +15,7 @@ AI-based cognitive gaming + memory assistance app for elderly dementia patients 
 - Add packages with `npx expo install <pkg>` (dev deps: `npx expo install -- --save-dev <pkg>`, or plain `npm i -D` if that misbehaves).
 - **Git remote:** SSH over port 443 (`ssh://git@ssh.github.com:443/soham-kolhatkar/ps-26003.git`), because port 22 is blocked. `core.sshCommand` is set in the local git config.
 - **WSL2 NAT:** the phone can't reach LAN IPs, so use the tunnel: `npm run tunnel` (uses `@expo/ngrok`).
-  The corporate network sometimes blocks ngrok's TLS (seen 2026-10-12: "session closed" / "remote gone away", ngrok status green). Fallbacks, in order: retry later; **USB**: `adb reverse tcp:8081 tcp:8081` on Windows (WSL `localhostForwarding=true`), then `npx expo start --localhost` and open `exp://localhost:8081` in Expo Go; Cloudflare quick tunnel; Windows `netsh portproxy` (needs admin).
+  The corporate network blocks ngrok's TLS (since 2026-10-12: "session closed" / "remote gone away"). **Use USB instead: `npm run usb`** (`scripts/usb.sh`): portable adb at `C:\Users\kolhsoh\platform-tools\adb.exe` (no admin) → `adb reverse tcp:8081 tcp:8081` → `expo start --localhost` → opens `exp://localhost:8081` in Expo Go on the phone. The phone (Samsung, serial RZCW32417DD) is authorized for USB debugging. If Windows shows an admin/firewall prompt for adb.exe, **cancel** it. From WSL, run adb from a Windows dir (`cd /tmp`) to avoid UNC-path warnings. Other fallbacks: EAS Update via Expo Go (needs `eas login`), Cloudflare tunnel.
 - TypeScript 6: global types must be listed in `tsconfig.json` `compilerOptions.types` (currently `["jest", "node"]`).
 - Typed routes are generated into `.expo/types` by the dev server. After adding a route, keep the server running (or start it once) before `tsc`.
 - Formatting: Prettier (`npm run format`; single quotes, width 120).
@@ -23,7 +23,8 @@ AI-based cognitive gaming + memory assistance app for elderly dementia patients 
 
 ## Commands
 ```bash
-npm run tunnel      # dev server reachable from the phone (Expo Go → scan QR)
+npm run usb         # dev server over USB (default on the corporate network)
+npm run tunnel      # dev server via ngrok tunnel (blocked on the corporate network)
 npm run check       # tsc + lint + jest + expo-doctor  (must pass before push)
 npm test            # jest only
 npx expo export --platform android --output-dir <scratch>   # bundle smoke test

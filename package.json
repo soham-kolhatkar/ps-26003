@@ -52,6 +52,7 @@
   "scripts": {
     "start": "expo start",
     "tunnel": "expo start --tunnel",
+    "usb": "bash scripts/usb.sh",
     "android": "expo start --android",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
