@@ -17,6 +17,7 @@ npm install          # uses the public npm registry via .npmrc
 npm run usb          # phone over USB (corporate network blocks the tunnel)
 npm run tunnel       # or: Expo tunnel, scan the QR with Expo Go (SDK 57)
 npm run check        # typecheck + lint + tests + expo-doctor
+npm run build:apk    # standalone APK -> dist/Smriti-v<version>.apk
 ```
 Demo PIN for caregiver / ASHA / doctor: **1234**.
 

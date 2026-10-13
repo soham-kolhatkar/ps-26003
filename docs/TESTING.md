@@ -150,3 +150,14 @@
 3. Repeat the patient part in **English**.
 4. Reminder editor: "Date" and "Time" labels now appear above the appointment buttons.
 5. ASHA and doctor screens: the placeholder notes no longer mention "Tier 2".
+
+---
+
+## v0.1.0 APK checklist
+> The APK is a separate app ("Smriti", flower icon) with its **own data**, so photos added in Expo Go are not there. It runs without the laptop.
+1. Install: `C:\Users\kolhsoh\Downloads\Smriti-v0.1.0.apk` (copy it to the phone, or let me install it over USB). Allow "install unknown apps" if Android asks.
+2. Launcher shows the **Smriti flower icon**; the splash screen shows the flower on cream.
+3. First launch asks for notification permission → Allow. Then Settings → Apps → Smriti → **Alarms & reminders** should be allowed.
+4. Unplug from the laptop and turn on **airplane mode**: the full demo story works (DEMO.md).
+5. Reminders → Test in 10 s → the notification shows with the **flower icon** in the status bar and plays sound/vibration (the dedicated "Reminders" channel). Long-press the notification → the channel is named "Reminders".
+6. Wait for a real reminder time (e.g. add one 2 minutes ahead): it arrives on time with the phone locked.

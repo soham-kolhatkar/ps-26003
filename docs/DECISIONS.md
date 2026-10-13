@@ -97,3 +97,9 @@ Forms: a KPI row of stat tiles; a **single-series line** for the daily activity 
 
 ### D31: Simulated demo history uses the real engines
 `seedGameHistory` simulates 30 days of play per patient/game (ability, drift, play rate) through `computeSessionStats` and `nextLevel`, so levels evolve exactly as they would in use. Aita: steady/improving. Dhaniram: gradual decline (for F11–F13). Existing installs get it once via the `demo_games_seeded` flag. Existing levels are never overwritten.
+
+### D32: Standalone APK built locally (no Expo account)
+User choice (2026-10-13): build on this machine rather than EAS. A user-space toolchain, no admin: Temurin JDK 17 in `~/opt/jdk-17` (SHA-256 verified), Android SDK in `~/Android/Sdk` (platform 36, build-tools 36.0.0, NDK 27.1.12297006, CMake 3.22.1, per RN 0.86's `libs.versions.toml`). `npm run build:apk` = `expo prebuild --clean` (android/ stays generated and gitignored) + `gradlew assembleRelease` for `arm64-v8a,armeabi-v7a` only → `dist/Smriti-v<version>.apk`, copied to the Windows Downloads folder; `--install` installs it over USB. It is signed with the template's debug keystore (fine for sideloading and demos, **not** for the Play Store). Package `com.smriti.sih26003`, version 0.1.0 (versionCode 1). Permissions added: `SCHEDULE_EXACT_ALARM` + `USE_EXACT_ALARM`, otherwise Android falls back to inexact alarms and medicine reminders can be late. In the standalone app the dedicated MAX-importance "Reminders" channel works (Expo Go couldn't create it, D28).
+
+### D33: Brand icon generated from code
+`assets/source/render-icons.mjs` draws the icon set as SVG (yellow 8-petal flower on a tea-green disc, cream background) and renders: full icon, adaptive foreground/background inside the 66% safe zone, an alpha-only monochrome silhouette (Android 13 themed icons), splash, 96 px notification icon, favicon. To change it, edit the script and re-render.
