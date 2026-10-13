@@ -54,7 +54,6 @@
     "resetConfirmTitle": "Reset demo data?",
     "resetConfirmBody": "This restores the demo patients and clears all played games and changes.",
     "resetDone": "Demo data restored.",
-    "dashboardSoon": "Home-visit tools for ASHA workers (quick check-ups, visit notes) arrive in the next update.",
     "reportsSoon": "Cognitive trend reports for doctors arrive in the next update."
   },
   "stage": {
@@ -184,6 +183,15 @@
       "notInList": "That one was not in the list.",
       "hint": "Look — the {{item}} was in the list too.",
       "allFound": "You found them all!"
+    },
+    "orientation": {
+      "title": "Today's date",
+      "description": "Day, month and year",
+      "instruction": "I will ask about today: the day, the month and the year. Tap the answer.",
+      "weekday": "Which day is it today?",
+      "month": "Which month is it?",
+      "year": "Which year is it?",
+      "reveal": "The answer is {{answer}}."
     }
   },
   "items": {
@@ -513,5 +521,98 @@
     "howTitle": "How Smriti notices these",
     "how": "For each game, Smriti compares the last 7 days with the 3 weeks before. Results combine the level reached and the score at that level, because the games get easier or harder by themselves. Medicines: below 70% taken in 7 days. Alerts clear by themselves when things improve.",
     "disclaimer": "This is trend monitoring from games and reminders on this phone, not a diagnosis. Please talk to a doctor about any health worries."
+  },
+  "checkup": {
+    "step": "Check-up task {{n}} of {{total}}",
+    "skipTask": "Skip this task",
+    "skipped": "skipped",
+    "taskResult": "{{correct}} of {{total}} right",
+    "skip": "Skip"
+  },
+  "visit": {
+    "start": "Start home visit",
+    "title": "Home visit: {{name}}",
+    "intro": "About 5 minutes: a short check-up with {{name}} (3 small tasks), then a few questions for you.",
+    "handOver": "Sit with {{name}} and hand over the phone. The app reads every task aloud. The tasks are always the same, so results can be compared from visit to visit.",
+    "startCheckup": "Start check-up",
+    "skipCheckup": "Skip check-up (questions only)",
+    "formTitle": "Visit notes: {{name}}",
+    "scoreLine": "Check-up score {{score}}",
+    "noCheckup": "No check-up this time",
+    "questionsTitle": "Your observations",
+    "note": "Note (optional)",
+    "notePlaceholder": "Anything the family told you, or that you noticed",
+    "refer": "Refer to the doctor",
+    "referred": "Referred to the doctor",
+    "nextVisit": "Next visit",
+    "inDays": "In {{n}} days",
+    "suggested": "Suggested: in {{n}} days",
+    "save": "Save visit",
+    "saved": "Visit saved",
+    "changeUp": "↑ {{n}} since last visit",
+    "changeDown": "↓ {{n}} since last visit",
+    "changeSame": "Same as last visit",
+    "changeSmall": "→ About the same as last visit",
+    "nextOn": "Next visit: {{date}}",
+    "backToPatient": "Back to patient",
+    "checkupTile": "Check-up score",
+    "checkupCaption": "Full check-ups: {{count}}",
+    "gamesTile": "Games this week",
+    "gamesCaption": "Played by {{name}} on the family phone",
+    "history": "Past visits ({{count}})",
+    "noVisits": "No visits recorded yet.",
+    "allWell": "No worries noted",
+    "listHint": "Tap a patient to see their visits or start a home visit. Patients needing attention are listed first.",
+    "status": {
+      "never": "Not visited yet",
+      "due": "Visit due today",
+      "overdue": "Visit overdue by {{n}} days",
+      "ok": "Next visit in {{n}} days · {{date}}"
+    },
+    "obs": {
+      "sleep": {
+        "q": "How is the sleep?",
+        "short": "Sleep",
+        "good": "Good",
+        "fair": "Fair",
+        "poor": "Poor"
+      },
+      "mood": {
+        "q": "How is the mood?",
+        "short": "Mood",
+        "good": "Happy",
+        "fair": "Okay",
+        "low": "Low / sad"
+      },
+      "appetite": {
+        "q": "Eating and drinking?",
+        "short": "Eating",
+        "good": "Good",
+        "fair": "Fair",
+        "poor": "Poor"
+      },
+      "medicines": {
+        "q": "Taking medicines?",
+        "short": "Medicines",
+        "yes": "Every day",
+        "sometimes": "Sometimes",
+        "no": "No",
+        "none": "No medicines"
+      },
+      "falls": {
+        "q": "Any fall since the last visit?",
+        "short": "Fall",
+        "no": "No",
+        "yes": "Yes"
+      },
+      "confusion": {
+        "q": "Confused or lost (e.g. wandering)?",
+        "short": "Confusion",
+        "none": "No",
+        "sometimes": "Sometimes",
+        "often": "Often"
+      }
+    },
+    "partial": "(partial)"
   }
 }

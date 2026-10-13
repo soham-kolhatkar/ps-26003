@@ -152,6 +152,27 @@ CREATE UNIQUE INDEX idx_alert_open ON alert (patient_id, alert_key) WHERE resolv
 CREATE INDEX idx_alert_patient ON alert (patient_id, first_seen_at);
 `,
   },
+  {
+    version: 5,
+    name: 'ASHA home visits',
+    sql: `
+CREATE TABLE visit (
+  id            TEXT PRIMARY KEY NOT NULL,
+  patient_id    TEXT NOT NULL REFERENCES patient(id) ON DELETE CASCADE,
+  user_id       TEXT REFERENCES app_user(id) ON DELETE SET NULL,
+  started_at    INTEGER NOT NULL,
+  ended_at      INTEGER,
+  checkup       TEXT,
+  checkup_score INTEGER,
+  observations  TEXT NOT NULL DEFAULT '{}',
+  note          TEXT,
+  refer         INTEGER NOT NULL DEFAULT 0,
+  next_visit_at INTEGER,
+  source        TEXT NOT NULL DEFAULT 'app'
+);
+CREATE INDEX idx_visit_patient ON visit (patient_id, started_at);
+`,
+  },
 ];
 
 export const LATEST_VERSION = MIGRATIONS[MIGRATIONS.length - 1].version;

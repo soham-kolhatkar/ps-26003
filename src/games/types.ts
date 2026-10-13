@@ -11,7 +11,9 @@ export type GameId =
   | 'odd_one_out'
   | 'pattern'
   | 'reaction_tap'
-  | 'word_recall';
+  | 'word_recall'
+  /** Check-up only (F12), not on the patient home. */
+  | 'orientation';
 
 /** Props every game component receives from GameShell. */
 export type GameProps = {

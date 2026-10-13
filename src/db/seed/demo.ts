@@ -1,9 +1,11 @@
 import { nextLevel, type SessionOutcome } from '@/engine/difficulty';
 import { seededRng } from '@/engine/random';
-import { computeSessionStats } from '@/engine/scoring';
+import { computeSessionStats, type Trial } from '@/engine/scoring';
+import { CHECKUP_STEPS, checkupScore, checkupTask, type Observations } from '@/engine/visits';
 import { occurrencesBetween, startOfDay, type ReminderSchedule, type ReminderType } from '@/engine/reminders';
 
 import { insertSession } from '../repos/games';
+import { insertVisit } from '../repos/visits';
 import type { DbClient } from '../types';
 
 /**
@@ -169,6 +171,94 @@ export const DEMO = {
     },
   ],
   gameHistoryDays: 30,
+  /**
+   * Pranita's past home visits. Check-up results as [right, asked] per task,
+   * tap = [caught, of 6, avg ms]. Dhaniram's check-ups slip and his next visit
+   * is overdue; Aita and Lakhi are on schedule.
+   */
+  visits: [
+    {
+      patientId: 'p-aita',
+      daysAgo: 24,
+      orientation: [3, 3],
+      recall: [3, 3],
+      tap: [6, 6, 1150],
+      observations: { sleep: 'good', mood: 'good', appetite: 'good', medicines: 'yes', falls: 'no', confusion: 'none' },
+      note: 'Cheerful. Talked about Bihu songs.',
+      nextInDays: 14,
+    },
+    {
+      patientId: 'p-aita',
+      daysAgo: 10,
+      orientation: [3, 3],
+      recall: [3, 3],
+      tap: [6, 6, 1100],
+      observations: { sleep: 'good', mood: 'good', appetite: 'fair', medicines: 'yes', falls: 'no', confusion: 'none' },
+      note: 'Plays memory pairs with her granddaughter every evening.',
+      nextInDays: 14,
+    },
+    {
+      patientId: 'p-lakhi',
+      daysAgo: 5,
+      orientation: [3, 3],
+      recall: [3, 4],
+      tap: [5, 6, 1400],
+      observations: {
+        sleep: 'fair',
+        mood: 'good',
+        appetite: 'good',
+        medicines: 'none',
+        falls: 'no',
+        confusion: 'none',
+      },
+      note: 'Weaving again. Son reminds her to drink water.',
+      nextInDays: 14,
+    },
+    {
+      patientId: 'p-dhaniram',
+      daysAgo: 44,
+      orientation: [3, 3],
+      recall: [3, 3],
+      tap: [6, 6, 1500],
+      observations: { sleep: 'good', mood: 'good', appetite: 'good', medicines: 'yes', falls: 'no', confusion: 'none' },
+      note: 'Started the BP tablet reminder.',
+      nextInDays: 14,
+    },
+    {
+      patientId: 'p-dhaniram',
+      daysAgo: 30,
+      orientation: [2, 3],
+      recall: [3, 4],
+      tap: [5, 6, 1900],
+      observations: {
+        sleep: 'fair',
+        mood: 'fair',
+        appetite: 'good',
+        medicines: 'sometimes',
+        falls: 'no',
+        confusion: 'sometimes',
+      },
+      note: 'Wife says he misses the tablet some mornings.',
+      nextInDays: 14,
+    },
+    {
+      patientId: 'p-dhaniram',
+      daysAgo: 16,
+      orientation: [2, 3],
+      recall: [3, 6],
+      tap: [4, 6, 2300],
+      observations: {
+        sleep: 'poor',
+        mood: 'low',
+        appetite: 'fair',
+        medicines: 'sometimes',
+        falls: 'no',
+        confusion: 'sometimes',
+      },
+      note: 'Sleeping badly. Son works in Guwahati; wife manages alone.',
+      nextInDays: 14,
+    },
+  ],
   devicePatientId: 'p-aita',
   /** Shown on the PIN screen as a hint in demo builds. */
   pin: '1234',
@@ -176,6 +266,7 @@ export const DEMO = {
 
 /** Tables in child → parent order, for clearing. */
 const ALL_TABLES = [
+  'visit',
   'alert',
   'reminder_event',
   'reminder',
@@ -243,8 +334,9 @@ export async function seedDemo(db: DbClient, now: number = Date.now()): Promise<
     );
     await seedReminders(db, now);
     await seedGameHistory(db, now);
+    await seedVisits(db, now);
     await db.runAsync(
-      "INSERT INTO setting (key, value) VALUES ('demo_reminders_seeded', '1'), ('demo_games_seeded', '1') ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+      "INSERT INTO setting (key, value) VALUES ('demo_reminders_seeded', '1'), ('demo_games_seeded', '1'), ('demo_visits_seeded', '1') ON CONFLICT(key) DO UPDATE SET value = excluded.value",
       [],
     );
   });
@@ -401,6 +493,53 @@ export async function backfillDemoGames(db: DbClient, now: number = Date.now()):
   await db.withTransactionAsync(async () => {
     await seedGameHistory(db, now);
     await db.runAsync("INSERT INTO setting (key, value) VALUES ('demo_games_seeded', '1')", []);
+  });
+  return true;
+}
+
+/** Pranita's past home visits with check-up results (see DEMO.visits). */
+export async function seedVisits(db: DbClient, now: number): Promise<void> {
+  const today = startOfDay(now);
+  const existing = new Set((await db.getAllAsync<{ id: string }>('SELECT id FROM patient', [])).map((p) => p.id));
+  const asha = await db.getFirstAsync<{ id: string }>("SELECT id FROM app_user WHERE id = 'u-pranita'", []);
+  const answers = ([right, asked]: readonly number[], ms: number | null): Trial[] =>
+    Array.from({ length: asked }, (_, i) => ({ correct: i < right, reactionMs: ms }));
+  for (const v of DEMO.visits) {
+    if (!existing.has(v.patientId)) continue;
+    const startedAt = startOfDay(today - v.daysAgo * DAY_MS + DAY_MS / 2) + 11 * 3600e3;
+    const [orient, recall, tap] = CHECKUP_STEPS;
+    const [caught, shown, ms] = v.tap;
+    const tasks = [
+      checkupTask(orient, answers(v.orientation, 4000)),
+      checkupTask(recall, answers(v.recall, null)),
+      checkupTask(tap, [...answers([caught, caught], ms), ...answers([0, shown - caught], null)]),
+    ];
+    await insertVisit(db, {
+      patientId: v.patientId,
+      userId: asha?.id ?? null,
+      startedAt,
+      endedAt: startedAt + 22 * 60e3,
+      checkup: tasks,
+      checkupScore: checkupScore(tasks),
+      observations: v.observations as Observations,
+      note: v.note,
+      refer: false,
+      nextVisitAt: startedAt + v.nextInDays * DAY_MS,
+      source: 'seed',
+    });
+  }
+}
+
+/** Existing installs get the demo visits once (flag `demo_visits_seeded`). */
+export async function backfillDemoVisits(db: DbClient, now: number = Date.now()): Promise<boolean> {
+  const flag = await db.getFirstAsync<{ value: string }>(
+    "SELECT value FROM setting WHERE key = 'demo_visits_seeded'",
+    [],
+  );
+  if (flag) return false;
+  await db.withTransactionAsync(async () => {
+    await seedVisits(db, now);
+    await db.runAsync("INSERT INTO setting (key, value) VALUES ('demo_visits_seeded', '1')", []);
   });
   return true;
 }
