@@ -28,7 +28,7 @@ src/games/          types (GameDefinition/GameProps), registry (GAMES list), Gam
                     session.finishSession (save + next level), feedback (praise, haptics, stars),
                     items.ts (shared objects), <game>/ (pure rules file + tested, <Game>.tsx)
                     pacing (afterSpeech/useAlive)
-                    games: object-recognition/, memory-match/, routine-sequence/, photo-recall/, odd-one-out/, pattern/, reaction-tap/
+                    games: object-recognition/, memory-match/, routine-sequence/, photo-recall/, odd-one-out/, pattern/, reaction-tap/, word-recall/
 ```
 
 ## Data flow

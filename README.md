@@ -7,7 +7,7 @@ Offline-first, bilingual (English / हिन्दी, with Assamese next) Andr
 ## What it does (Tier 1, v0.1.0)
 - **Patient mode** (no login): big, spoken, errorless UI; a date and time card for orientation; four games with **adaptive difficulty**:
   🃏 Memory pairs · 📋 Daily routines · 👨‍👩‍👧 Who is this? (family photos) · 🔍 Find the object
-  (Tier 2 adds 🧺 Odd one out · 🔁 Complete the pattern · 🐟 Catch the fish)
+  (Tier 2 adds 🧺 Odd one out · 🔁 Complete the pattern · 🐟 Catch the fish · 🧠 Remember and find)
 - **Reminders**: medicine, water, activity, appointments as local notifications (work offline), with a spoken "time for…" prompt and adherence tracking.
 - **Caregiver** (PIN): family photo manager, reminder manager, **progress dashboard** (activity score, per-game trends, adherence).
 - **Privacy**: all data, including photos, stays on the phone (SQLite). Staff PINs are salted hashes in the OS keystore.

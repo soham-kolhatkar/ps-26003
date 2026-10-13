@@ -12,6 +12,8 @@ import { MAX_LEVEL as PATTERN_MAX_LEVEL } from './pattern/rounds';
 import { PatternGame } from './pattern/PatternGame';
 import { MAX_LEVEL as REACTION_MAX_LEVEL } from './reaction-tap/rounds';
 import { ReactionTapGame } from './reaction-tap/ReactionTapGame';
+import { MAX_LEVEL as WORD_MAX_LEVEL } from './word-recall/rounds';
+import { WordRecallGame } from './word-recall/WordRecallGame';
 import type { GameDefinition, GameId } from './types';
 import { countPeople } from '@/db/repos/photos';
 
@@ -81,6 +83,16 @@ export const GAMES: readonly GameDefinition[] = [
     // Tapping a fish within 1.5 s earns the full speed score (older adults' simple reaction time).
     targetReactionMs: 1500,
     Component: ReactionTapGame,
+  },
+  {
+    id: 'word_recall',
+    icon: '🧠',
+    maxLevel: WORD_MAX_LEVEL,
+    // Not a fixed round count: one trial per tap, progress = pictures found (onProgress).
+    trialsPerSession: 0,
+    // No reaction times are recorded (recognition after a delay), so the score is accuracy only.
+    targetReactionMs: 5000,
+    Component: WordRecallGame,
   },
 ];
 
