@@ -56,12 +56,13 @@
     "start": "expo start",
     "tunnel": "expo start --tunnel",
     "usb": "bash scripts/usb.sh",
-    "android": "expo start --android",
+    "android": "expo run:android",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "check": "tsc --noEmit && expo lint && jest && npx --yes expo-doctor",
-    "format": "prettier --write \"src/**/*.{ts,tsx,json}\""
+    "format": "prettier --write \"src/**/*.{ts,tsx,json}\"",
+    "build:apk": "bash scripts/build-apk.sh"
   },
   "private": true,
   "jest": {
