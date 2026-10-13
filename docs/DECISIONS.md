@@ -73,3 +73,6 @@ No stock photos of "family" are shipped. The demo shows the caregiver taking or 
 
 ### D24: Games receive `patientId`
 Personal-content games load their own data (e.g. photos) through `useDbQuery`, then build rounds once the data is loaded.
+
+### D25: Never pass file uris as route params
+Expo Go cache paths contain URL-encoded segments (`ExperienceData/%40anonymous%2F…`), and expo-router decodes params, which breaks the path. The photo preview showed blank (user bug report on F05). Hand-offs of file uris go through a store (`src/store/pendingPhoto.ts`). Images log `onError` to the dev console.

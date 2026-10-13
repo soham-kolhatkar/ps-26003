@@ -14,24 +14,33 @@ import { displayName, getPatient } from '@/db/repos/patients';
 import { addPhoto } from '@/db/repos/photos';
 import { useDbQuery } from '@/db/useDbQuery';
 import { storePhoto } from '@/services/photos';
+import { usePendingPhoto } from '@/store/pendingPhoto';
 import { useSession } from '@/store/session';
 import { colors, radius, space } from '@/theme/tokens';
 
 export default function NewPhoto() {
   const { t } = useTranslation();
-  const { patientId, uri } = useLocalSearchParams<{ patientId: string; uri: string }>();
+  const { patientId } = useLocalSearchParams<{ patientId: string }>();
+  const uri = usePendingPhoto((s) => s.uri);
+  const setUri = usePendingPhoto((s) => s.setUri);
   const userId = useSession((s) => s.userId);
   const { data: patient } = useDbQuery((db) => getPatient(db, patientId), [patientId]);
   const [personName, setPersonName] = useState('');
   const [relation, setRelation] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
+  const close = () => {
+    setUri(null);
+    router.back();
+  };
+
   const save = async () => {
+    if (!uri) return;
     setSaving(true);
     try {
       const stored = await storePhoto(uri);
       await addPhoto(getDb(), { patientId, uri: stored, personName, relation, addedBy: userId });
-      router.back();
+      close();
     } catch (e) {
       console.warn('Saving photo failed', e);
       Alert.alert(t('photos.saveFailed'));
@@ -41,10 +50,19 @@ export default function NewPhoto() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="✖️" label={t('common.cancel')} onPress={() => router.back()} />
+      <BigButton kind="ghost" icon="✖️" label={t('common.cancel')} onPress={close} />
       <AppText variant="title">{t('photos.addTitle')}</AppText>
       <View style={styles.preview}>
-        <Image source={{ uri }} style={styles.image} contentFit="cover" />
+        {uri ? (
+          <Image
+            source={{ uri }}
+            style={styles.image}
+            contentFit="cover"
+            onError={(e) => console.warn('Photo preview failed to load', uri, e.error)}
+          />
+        ) : (
+          <View style={styles.image} />
+        )}
       </View>
 
       <TextField
@@ -79,7 +97,7 @@ export default function NewPhoto() {
         size="large"
         icon="💾"
         label={t('photos.save')}
-        disabled={!personName.trim() || saving}
+        disabled={!uri || !personName.trim() || saving}
         onPress={save}
       />
     </Screen>

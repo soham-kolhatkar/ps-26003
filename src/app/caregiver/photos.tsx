@@ -14,6 +14,7 @@ import { countPeople, deletePhoto, listPhotos } from '@/db/repos/photos';
 import { useDbQuery } from '@/db/useDbQuery';
 import { MIN_PEOPLE } from '@/games/photo-recall/rounds';
 import { deletePhotoFile, pickPhoto } from '@/services/photos';
+import { usePendingPhoto } from '@/store/pendingPhoto';
 import { colors, radius, space } from '@/theme/tokens';
 
 export default function FamilyPhotos() {
@@ -36,7 +37,8 @@ export default function FamilyPhotos() {
     const result = await pickPhoto(source);
     if (result.status === 'denied') Alert.alert(t('photos.cameraDenied'));
     if (result.status !== 'ok') return;
-    router.push({ pathname: '/caregiver/photo-new', params: { patientId, uri: result.uri } });
+    usePendingPhoto.getState().setUri(result.uri);
+    router.push({ pathname: '/caregiver/photo-new', params: { patientId } });
   };
 
   const confirmDelete = (photo: Photo) => {
@@ -89,7 +91,12 @@ export default function FamilyPhotos() {
             onPress={() => confirmDelete(photo)}
             style={[styles.tile, { width: tile }]}
           >
-            <Image source={{ uri: photo.uri }} style={{ width: tile, height: tile }} contentFit="cover" />
+            <Image
+              source={{ uri: photo.uri }}
+              style={{ width: tile, height: tile }}
+              contentFit="cover"
+              onError={(e) => console.warn('Photo failed to load', photo.uri, e.error)}
+            />
             <View style={styles.caption}>
               <AppText variant="body" bold numberOfLines={1}>
                 {photo.personName}
