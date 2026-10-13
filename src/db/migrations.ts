@@ -130,6 +130,28 @@ CREATE TABLE reminder_event (
 CREATE INDEX idx_reminder_event_patient_due ON reminder_event (patient_id, due_at);
 `,
   },
+  {
+    version: 4,
+    name: 'trend alerts',
+    sql: `
+CREATE TABLE alert (
+  id            TEXT PRIMARY KEY NOT NULL,
+  patient_id    TEXT NOT NULL REFERENCES patient(id) ON DELETE CASCADE,
+  alert_key     TEXT NOT NULL,
+  kind          TEXT NOT NULL CHECK (kind IN ('game_decline', 'adherence_low', 'inactive')),
+  game_id       TEXT,
+  severity      TEXT NOT NULL CHECK (severity IN ('info', 'warning', 'serious')),
+  detail        TEXT NOT NULL,
+  first_seen_at INTEGER NOT NULL,
+  updated_at    INTEGER NOT NULL,
+  seen_at       INTEGER,
+  resolved_at   INTEGER
+);
+-- At most one open alert per patient and key (e.g. "game_decline:memory_match").
+CREATE UNIQUE INDEX idx_alert_open ON alert (patient_id, alert_key) WHERE resolved_at IS NULL;
+CREATE INDEX idx_alert_patient ON alert (patient_id, first_seen_at);
+`,
+  },
 ];
 
 export const LATEST_VERSION = MIGRATIONS[MIGRATIONS.length - 1].version;

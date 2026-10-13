@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F11 trend detection + alerts.
+**Current feature:** F11 trend detection + alerts, on `feat/f11-trend-alerts`: pushed, **waiting for the user's phone test** (checklist at the end of TESTING.md).
 **Next:** F12 ASHA mode.
 
 ## Tier 1: core demo
@@ -22,7 +22,7 @@
 | F08 | Games: **Odd one out** 🧺 + **Complete the pattern** 🔁 (separate games, D34) | ✅ done (51c5729) |
 | F09 | Game: 🐟 **Catch the fish** (attention / reaction time, go/no-go) | ✅ done (cda05af) |
 | F10 | Game: 🧠 **Remember and find** (delayed picture-word recall) | ✅ done (afb8a9e) |
-| F11 | Trend detection + alerts | ⏳ |
+| F11 | Trend detection + alerts (engine/trends, `alert` table v4, caregiver/ASHA/doctor views) | 🧪 testing |
 | F12 | ASHA mode | ⏳ |
 | F13 | Doctor view | ⏳ |
 | F14 | Assamese pack | ⏳ |
@@ -33,6 +33,7 @@
 Low-resource language (Manipuri/Khasi/Mizo) + recorded audio, PDF report export, polish, EAS APK, demo script.
 
 ## Known issues / notes
+- F11: on a phone whose demo history was *backfilled* (F07) after real test games, levels can disagree with the seeded history (real games at level 1, seed at level 3) and Aita may show a "Daily routines" decline. **Reset demo data** gives the consistent story (Dhaniram flagged, Aita and Lakhi clear).
 - Next APK: block permissions the app doesn't use (SYSTEM_ALERT_WINDOW, USE_BIOMETRIC/FINGERPRINT, c2dm push, WRITE_EXTERNAL_STORAGE) via `android.blockedPermissions`.
 - APK v0.1.0 sha256 `a08cf427269f8c3b9a9093f4c05facf05f83cbe014098e18f32fcd9438bf0273` (on the phone in Download/ and in C:\Users\kolhsoh\Downloads).
 - 2026-10-12: the Expo ngrok tunnel was blocked by the corporate network during F05 testing (TLS to tunnel.*.ngrok.com fails). Still blocked 2026-10-13 → switched to USB (`npm run usb`).

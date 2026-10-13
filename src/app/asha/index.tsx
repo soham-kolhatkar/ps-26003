@@ -4,5 +4,5 @@ import { StaffPatientList } from '@/components/StaffPatientList';
 
 export default function AshaHome() {
   const { t } = useTranslation();
-  return <StaffPatientList footer={t('staff.dashboardSoon')} />;
+  return <StaffPatientList footer={t('staff.dashboardSoon')} alertsPath="/asha/alerts" />;
 }

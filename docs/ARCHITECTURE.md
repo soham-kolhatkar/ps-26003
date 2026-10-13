@@ -23,7 +23,7 @@ src/store/          zustand: settings (language, persisted), session (role/user/
 src/services/       Device services: tts (promise-based), auth (PINs), photos (pick/store/delete files), datetime, notifications (local reminder scheduling, snooze/test), sync (F15)
 src/db/             client (setDb/getDb), types (DbClient), migrations (PRAGMA user_version), models,
                     repos/*, seed/demo (DEMO story + resetDemo), useDbQuery hook, testing/nodeDb
-src/engine/         (F02+) pure, unit-tested logic: difficulty, scoring, trends
+src/engine/         (F02+) pure, unit-tested logic: difficulty, scoring, reminders, progress, trends (F11 alerts)
 src/games/          types (GameDefinition/GameProps), registry (GAMES list), GameShell (intro→play→done),
                     session.finishSession (save + next level), feedback (praise, haptics, stars),
                     items.ts (shared objects), <game>/ (pure rules file + tested, <Game>.tsx)
@@ -38,6 +38,7 @@ UI → store/repo → SQLite (sync, local). Engines are pure functions over sess
 Schema v1 (F01): `setting(key,value)`, `household`, `patient` (→household), `app_user` (role caregiver|asha|doctor), `patient_user` (patient↔staff + relation), `game_session`, `game_level`.
 Schema v2 (F05): `photo` (patient, local uri, person_name, relation, added_by).
 Schema v3 (F06): `reminder`, `reminder_event`.
+Schema v4 (F11): `alert` (patient, alert_key, kind game_decline|adherence_low|inactive, game_id, severity info|warning|serious, detail JSON, first_seen/updated/seen/resolved). `services/alerts.refreshAlerts` = engine/trends → repos/alerts.syncAlerts. Shown via `components/PatientAlerts` (routes caregiver|asha|doctor/alerts) and `AlertsButton`.
 Planned migrations: v4 `alert` (F11), v5 `sync_outbox` (F15).
 
 ## Demo story (src/db/seed/demo.ts)

@@ -127,7 +127,7 @@ export const DEMO = {
       title: 'Amlodipine 5 mg',
       note: 'For blood pressure',
       times: ['09:00'],
-      takeRate: 0.6,
+      takeRate: 0.5,
     },
   ],
   appointments: [
@@ -159,7 +159,14 @@ export const DEMO = {
       playRate: 0.45,
       targetMs: 4000,
     },
-    { patientId: 'p-dhaniram', gameId: 'routine_sequence', ability: 0.76, drift: -0.14, playRate: 0.45, targetMs: 6000 },
+    {
+      patientId: 'p-dhaniram',
+      gameId: 'routine_sequence',
+      ability: 0.76,
+      drift: -0.14,
+      playRate: 0.45,
+      targetMs: 6000,
+    },
   ],
   gameHistoryDays: 30,
   devicePatientId: 'p-aita',
@@ -169,6 +176,7 @@ export const DEMO = {
 
 /** Tables in child → parent order, for clearing. */
 const ALL_TABLES = [
+  'alert',
   'reminder_event',
   'reminder',
   'photo',
