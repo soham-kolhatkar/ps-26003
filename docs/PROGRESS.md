@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** F15 cloud foundation + accounts, on `feat/f15-cloud-accounts`: pushed, **waiting for the user's test in Chromium** (checklist at the end of TESTING.md). SQL 001 applied by the user. Also checked on the phone (Expo Go): setup → caregiver sign-in → restart keeps the session → double-R reload OK.
-**Next:** F16 patients, invites, pairing.
+**Current feature:** F16 patients, people, invites and pairing.
+**Next:** F17 data sync.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -31,7 +31,7 @@
 Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync rules, access rules, risks).
 | ID | Feature | Status |
 |---|---|---|
-| F15 | Cloud foundation: "Who will use this phone?" setup, phone + PIN accounts, settings and sign-out, hidden single-phone demo mode, web build for testing (Chromium), SQL `001` | 🧪 testing |
+| F15 | Cloud foundation: "Who will use this phone?" setup, phone + PIN accounts, settings and sign-out, hidden single-phone demo mode, web build for testing (Chromium), SQL `001` | ✅ done (63ee663) |
 | F16 | Patients, people, invite codes and patient-phone pairing (+ family corner for photos on the patient phone), membership pull, SQL `002` | ⏳ |
 | F17 | Data sync: outbox triggers, push/pull for reminders, doses, games, levels, visits; sync status chip; two-device tests, SQL `003` | ⏳ |
 | F18 | Role extras: ASHA edits reminders, doctor's notes, PIN reset via manager (Edge Function) | ⏳ |
