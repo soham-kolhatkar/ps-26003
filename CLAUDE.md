@@ -6,7 +6,7 @@ AI-based cognitive gaming + memory assistance app for elderly dementia patients 
 
 ## Working agreement (from the user, non-negotiable)
 - Claude writes all code. The user tests on a real Android phone (Expo Go) and approves.
-- **One feature at a time:** branch `feat/fNN-slug` → implement → `npm run check` → update docs → push branch → **STOP** with a test checklist (in `docs/TESTING.md`). Merge `--no-ff` into `main` only after the user approves. Tag at tier end (`v0.1.0`, `v0.2.0`).
+- **One feature at a time:** branch `feat/fNN-slug` → implement → `npm run check` → update docs → push branch → **STOP** with a test checklist (**appended at the end** of `docs/TESTING.md`). Merge `--no-ff` into `main` only after the user approves. Tag at tier end (`v0.1.0`, `v0.2.0`).
 - If stuck on a decision (scope, stack, paid service, culturally sensitive content), **ask the user**. Don't guess.
 - Commit messages: conventional (`feat:`, `fix:`, `chore:`, `docs:`, `test:`) ending with `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
 

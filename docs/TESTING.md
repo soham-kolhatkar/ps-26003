@@ -144,6 +144,28 @@
 
 ---
 
+## T1 Hardening: final pass before v0.1.0 (≈15 min, follow docs/DEMO.md)
+1. **Chart crash fix:** Progress → Last 30 days → tap an early column (mid-September) → switch to **Last 7 days**. No crash. (Previously: `Cannot read property 'decided' of undefined`.)
+2. **Full demo story in airplane mode**, steps 1–13 of [DEMO.md](DEMO.md), **in Hindi**. Watch for text that is cut off or overflows, and wording that sounds unnatural.
+3. Repeat the patient part in **English**.
+4. Reminder editor: "Date" and "Time" labels now appear above the appointment buttons.
+5. ASHA and doctor screens: the placeholder notes no longer mention "Tier 2".
+
+---
+
+## v0.1.0 APK checklist
+> The APK is a separate app ("Smriti", flower icon) with its **own data**, so photos added in Expo Go are not there. It runs without the laptop.
+1. Install: `C:\Users\kolhsoh\Downloads\Smriti-v0.1.0.apk` (copy it to the phone, or let me install it over USB). Allow "install unknown apps" if Android asks.
+2. Launcher shows the **Smriti flower icon**; the splash screen shows the flower on cream.
+3. First launch asks for notification permission → Allow. Then Settings → Apps → Smriti → **Alarms & reminders** should be allowed.
+4. Unplug from the laptop and turn on **airplane mode**: the full demo story works (DEMO.md).
+5. Reminders → Test in 10 s → the notification shows with the **flower icon** in the status bar and plays sound/vibration (the dedicated "Reminders" channel). Long-press the notification → the channel is named "Reminders".
+6. Wait for a real reminder time (e.g. add one 2 minutes ahead): it arrives on time with the phone locked.
+
+---
+
+# Tier 2
+
 ## F08 Odd one out + Complete the pattern checklist
 > Two new tiles at the bottom of Aita's home: **🧺 Odd one out** and **🔁 Complete the pattern**. Both start at level 1. "Find the object" also uses the new pictures now.
 1. **Odd one out**: intro reads the instruction → Start. Three pictures with names (e.g. 2 fruits + 1 animal); "Which one is different?" is spoken.
@@ -186,23 +208,3 @@
 8. **🔊 Hear again** in the recall step repeats the question. **✖ Stop** at any step → home, with no speech carrying on.
 9. Caregiver → 📊 Progress: a "Remember and find" tile.
 10. Hindi: "याद करें और ढूँढें", "इन चित्रों को याद रखें।", "अब थोड़ा आराम। सारे तारे छुएँ।", "आपने सब ढूँढ लिए!" sound natural.
-
----
-
-## T1 Hardening: final pass before v0.1.0 (≈15 min, follow docs/DEMO.md)
-1. **Chart crash fix:** Progress → Last 30 days → tap an early column (mid-September) → switch to **Last 7 days**. No crash. (Previously: `Cannot read property 'decided' of undefined`.)
-2. **Full demo story in airplane mode**, steps 1–13 of [DEMO.md](DEMO.md), **in Hindi**. Watch for text that is cut off or overflows, and wording that sounds unnatural.
-3. Repeat the patient part in **English**.
-4. Reminder editor: "Date" and "Time" labels now appear above the appointment buttons.
-5. ASHA and doctor screens: the placeholder notes no longer mention "Tier 2".
-
----
-
-## v0.1.0 APK checklist
-> The APK is a separate app ("Smriti", flower icon) with its **own data**, so photos added in Expo Go are not there. It runs without the laptop.
-1. Install: `C:\Users\kolhsoh\Downloads\Smriti-v0.1.0.apk` (copy it to the phone, or let me install it over USB). Allow "install unknown apps" if Android asks.
-2. Launcher shows the **Smriti flower icon**; the splash screen shows the flower on cream.
-3. First launch asks for notification permission → Allow. Then Settings → Apps → Smriti → **Alarms & reminders** should be allowed.
-4. Unplug from the laptop and turn on **airplane mode**: the full demo story works (DEMO.md).
-5. Reminders → Test in 10 s → the notification shows with the **flower icon** in the status bar and plays sound/vibration (the dedicated "Reminders" channel). Long-press the notification → the channel is named "Reminders".
-6. Wait for a real reminder time (e.g. add one 2 minutes ahead): it arrives on time with the phone locked.
