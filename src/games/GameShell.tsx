@@ -158,6 +158,7 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
         </View>
         <Game
           key={run}
+          patientId={patientId}
           level={level}
           totalTrials={game.trialsPerSession}
           onTrial={onTrial}

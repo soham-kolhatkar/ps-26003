@@ -35,7 +35,15 @@
       ],
       "expo-localization",
       "expo-sqlite",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Smriti lets family choose photos of loved ones for memory games.",
+          "cameraPermission": "Smriti uses the camera so family can add photos of loved ones for memory games.",
+          "microphonePermission": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

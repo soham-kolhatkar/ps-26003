@@ -6,6 +6,7 @@
 3. Make sure the phone has a Hindi TTS voice: Settings → System → Languages → Text-to-speech → Google → Install voice data → Hindi (India). Also install English (India).
 
 ## Running
+- **Over USB (default):** plug in the phone → `npm run usb`. Expo Go opens the app automatically (or Expo Go → Enter URL → `exp://localhost:8081`).
 - On the laptop: `npm run tunnel`, then scan the QR with Expo Go (or Expo Go → "Enter URL manually" → the `exp://…exp.direct` URL).
 - Shake the phone (or three-finger long-press) for the dev menu → Reload.
 
@@ -84,3 +85,21 @@
 ### F04 fix: speech pacing (all games)
 - Find the object: the praise ("Wonderful!") is heard in full before the next prompt.
 - Memory pairs: the praise after the last pair finishes before the 🎉 screen speaks.
+
+---
+
+## F05 Family photos checklist
+> Use real photos of 2–3 people (family, colleagues, or a photo of a photo).
+
+1. Aita's home: there is **no** "Who is this?" tile yet (no photos).
+2. Sign out → Rimjhim (1234). The caregiver home has a **📷 Family photos (0)** button under Aita's card.
+3. Open it: an orange banner reads "Add photos of at least 2 different people…", plus Take photo / Choose from gallery and a 🔒 privacy note.
+4. **Take photo**: the camera permission prompt appears the first time → take a photo → square crop → "Who is in this photo?" Type a name (Save stays disabled until you do), pick a relation chip (e.g. Daughter) → **Save photo**. It appears in the grid with name and relation.
+5. Add a 2nd person **from the gallery**. The banner turns green: "✅ Who is this? is ready for Aita (2 people)". Go back: the button shows the count.
+6. Optional: add a 2nd photo of the same person with different capitalisation ("rimjhim"). It still counts as 2 people.
+7. Sign out → Aita: the **👨‍👩‍👧 Who is this?** tile now appears. Play: you see a big photo, "Who is this?" (spoken), and name buttons **with the relation** under each.
+8. Wrong name → the right one glows orange, "This is Rimjhim." Right name → green, then "Yes! This is Rimjhim, your daughter." heard in full before the next photo.
+9. Levels (2 perfect sessions each): L3 drops the relation text; L5 asks "Where is Rimjhim?" and you tap the **photo**. With only 2 people there are always 2 choices; add 4 people to see 4.
+10. Caregiver: tap a photo → "Delete this photo?" → Delete. Drop below 2 people and the tile disappears from Aita's home again.
+11. **Reset demo data** removes all photos.
+12. Airplane mode: everything works (photos are local).

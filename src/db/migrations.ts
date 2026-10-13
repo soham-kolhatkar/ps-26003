@@ -82,6 +82,22 @@ CREATE TABLE game_level (
 );
 `,
   },
+  {
+    version: 2,
+    name: 'family photos',
+    sql: `
+CREATE TABLE photo (
+  id          TEXT PRIMARY KEY NOT NULL,
+  patient_id  TEXT NOT NULL REFERENCES patient(id) ON DELETE CASCADE,
+  uri         TEXT NOT NULL,
+  person_name TEXT NOT NULL,
+  relation    TEXT,
+  added_by    TEXT REFERENCES app_user(id) ON DELETE SET NULL,
+  created_at  INTEGER NOT NULL
+);
+CREATE INDEX idx_photo_patient ON photo (patient_id, created_at);
+`,
+  },
 ];
 
 export const LATEST_VERSION = MIGRATIONS[MIGRATIONS.length - 1].version;
