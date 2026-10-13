@@ -30,13 +30,12 @@
 | 12 | Point at the **disclaimer** | We show trends to support the doctor's judgement. We never diagnose. |
 | 13 | Show airplane mode is still on | All of it ran offline. Data lives in SQLite on the phone. |
 
-## Close (about 30 s): what's next (Tier 2)
+## Close (about 30 s): Tier 2 highlights and what's next
 - **More games** (done): odd one out, complete the pattern, catch the fish (attention/reaction time), remember and find (delayed recall).
 - **Trend alerts** (done): Pranita's (ASHA) list puts Dhaniram first with "Please review soon": lower results in 2 games and missed blood-pressure medicine, each explained with its numbers.
 - **ASHA mode** (done): Pranita's list is a triage list (Dhaniram first: alerts + visit overdue). His page shows check-ups slipping 100 → 77 → 63 across visits, with sleep and mood worries. **Start home visit** runs a fixed 5-minute check-up (date, remember-and-find, catch the fish) and quick observations, with a referral and the next visit date.
 - **Doctor view** (done): Dr. Anjali's list puts Dhaniram first ("Referred by the ASHA worker"). His report shows the abilities (Planning & reasoning ↓, Recognition & meaning ↓), a weekly index chart, a per-game table, medicines 36%, falling ASHA check-ups, and **Share summary** sends it as text over WhatsApp.
-- **Assamese**, then Manipuri / Khasi / Mizo with recorded voices.
-- **Optional cloud sync** (Firebase) so family members on other phones can follow along.
+- **Next (Tier 3)**: Assamese, then Manipuri / Khasi / Mizo with recorded voices, and optional cloud sync (Firebase) so family members on other phones can follow along.
 
 ## Likely judge questions
 - **"Is the AI real?"** Yes, and it's explainable: an adaptive difficulty engine and trend detection that compares each patient's last week with their own previous 3 weeks, on a level-aware performance index. These rules are unit-tested; there's no black box. 146 automated tests run on every change.

@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** F13 doctor view, on `feat/f13-doctor-view`: pushed, **waiting for the user's phone test** (checklist at the end of TESTING.md).
-**Next:** F14 Assamese pack.
+**Current feature:** — (Tier 2 complete, tagged `v0.2.0`). **Paused at the user's request (2026-10-13).**
+**Next:** wait for the user. Tier 3 (incl. the former F14 Assamese and F15 Firebase sync) starts only when the user says so.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -24,13 +24,15 @@
 | F10 | Game: 🧠 **Remember and find** (delayed picture-word recall) | ✅ done (afb8a9e) |
 | F11 | Trend detection + alerts (engine/trends, `alert` table v4, caregiver/ASHA/doctor views) | ✅ done (2df3d4e) |
 | F12 | ASHA mode: triage list, patient page, 5-min home visit (fixed check-up + observations + referral), `visit` table v5 | ✅ done (16f35a0) |
-| F13 | Doctor view: referral-first list, read-only 30-day report (abilities, weekly index, per-game, reaction time, reminders, check-ups), share as text | 🧪 testing |
-| F14 | Assamese pack | ⏳ |
-| F15 | Firebase sync (needs user's Firebase project) | ⏳ |
-| T2 | Tag v0.2.0 | ⏳ |
+| F13 | Doctor view: referral-first list, read-only 30-day report (abilities, weekly index, per-game, reaction time, reminders, check-ups), share as text | ✅ done (5bb72d0) |
+| T2 | Tag v0.2.0 (F14, F15 moved to Tier 3 by the user) | ✅ done | v0.2.0 |
 
 ## Tier 3: polish (to discuss)
-Low-resource language (Manipuri/Khasi/Mizo) + recorded audio, PDF report export, polish, EAS APK, demo script.
+| ID | Feature | Status |
+|---|---|---|
+| F14 | Assamese pack (moved from Tier 2; strings + content; check `as-IN` TTS on the phone, fall back to Hindi speech) | ⏳ |
+| F15 | Firebase sync (moved from Tier 2; needs the user's Firebase project) | ⏳ |
+| — | Low-resource language (Manipuri/Khasi/Mizo) + recorded audio, PDF report export, polish, APK v0.2.0 (with blocked permissions), demo script refresh | ⏳ (to discuss) |
 
 ## Known issues / notes
 - **Expo Go dev only:** after a *full JS reload* (double-R, or editing a language-pack JSON while the app is open), expo-sqlite calls fail with `NativeDatabase.execAsync … NullPointerException` (a red "Render Error" or `DB query failed` toasts). A **cold restart** fixes it: `adb shell am force-stop host.exp.exponent`, then open `exp://localhost:8081` again. Normal Fast Refresh of .tsx files is fine. The APK never reloads JS, so it is unaffected.
