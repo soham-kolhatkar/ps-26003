@@ -103,3 +103,21 @@
 10. Caregiver: tap a photo → "Delete this photo?" → Delete. Drop below 2 people and the tile disappears from Aita's home again.
 11. **Reset demo data** removes all photos.
 12. Airplane mode: everything works (photos are local).
+
+---
+
+## F06 Reminders checklist
+> On first launch after this update the app asks **"Allow Expo Go to send notifications?"** → Allow.
+
+1. **Caregiver home** (Rimjhim): under Aita's card there is **🔔 Reminders · X/Y today**.
+2. Open it: a green summary "Today: X of Y done", then 4 reminders: 💊 Metformin 500 mg (every day 8:30 am, 8:30 pm), 💧 Drink a glass of water (10, 1, 4), 🚶 Evening walk (5:30 pm), 🩺 Check-up with Dr. Anjali Sharma (date 3 days from now, 10:30).
+3. **Test in 10 s** on Metformin → lock the phone → within about 10 s a notification appears: "💊 Time for your medicine — Aita: Metformin 500 mg".
+4. **Tap the notification**: the app opens straight to Aita's full-screen prompt (no PIN), which is read aloud: "Aita, it is time to take your medicine: Metformin 500 mg." Tap **✅ I took it** → "Thank you, Aita! Well done." (heard in full) → Aita's home.
+5. Test again → tap the notification → **⏰ Remind me in 10 minutes** → it says it will remind you → a notification comes back about 10 min later.
+6. **Patient home:** a due reminder (within 30 min before to 2 h after its time) shows as a **red "🔔 Now" card**. Tap it → same prompt. Below it, one line: "Later · 4:00 pm · Drink a glass of water". When nothing is left: "No more reminders today 🎉".
+7. **Add:** ➕ Add reminder → type 💊 → title "Vitamin D" → Add time (native time picker) → Save. It appears in the list. Test it.
+8. **Appointment:** type 🩺 → date and time buttons open native pickers → Save. It shows the date and time.
+9. **Edit / off / delete:** tap a reminder → change its time → Save. Toggle the switch off: no more alerts (Test is hidden). Delete removes it.
+10. Switch the app to **Hindi**, then Test: the notification text is in Hindi ("💊 दवाई का समय").
+11. **Airplane mode:** Test still works (notifications are local).
+12. Your existing photos are still there (no reset was needed to get the demo reminders).

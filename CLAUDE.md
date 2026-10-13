@@ -42,7 +42,7 @@ npx expo export --platform android --output-dir <scratch>   # bundle smoke test
 - `src/components/`: shared UI (`AppText`, `BigButton`, `Screen`).
 - `src/theme/`: design tokens.
 - `src/i18n/`: i18next setup + language packs. Add a language = pack + an entry in `LANGUAGES`.
-- `src/services/`: device services (tts, notifications, photos, sync).
+- `src/services/`: device services (tts, notifications, photos, sync). After changing reminders, call `syncReminderNotifications(db)`.
 - `src/store/`: zustand stores.
 - `src/db/`: SQLite. Repos take a `DbClient` argument; screens read with `useDbQuery`; stores use `getDb()`. New tables = a new migration in `migrations.ts` (append-only) + add the table to `ALL_TABLES` in `seed/demo.ts`.
 - `src/engine/`: pure logic, unit-tested. No React, no DB.
