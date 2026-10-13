@@ -44,6 +44,9 @@ describe('visits', () => {
     expect(scores[0]).toBeGreaterThan(scores[1]);
     expect(scores[1]).toBeGreaterThan(scores[2]);
     expect(visitStatus(d[0], now)).toMatchObject({ state: 'overdue', days: 2 });
+    // Pranita referred him to Dr. Anjali at the last visit.
+    expect(d[0].refer).toBe(true);
+    expect(d.slice(1).every((v) => !v.refer)).toBe(true);
     expect(visitStatus(await lastVisit(db, 'p-aita'), now)).toMatchObject({ state: 'ok', days: 4 });
     expect(visitStatus(await lastVisit(db, 'p-lakhi'), now)).toMatchObject({ state: 'ok', days: 9 });
     db.close();

@@ -4,5 +4,12 @@ import { StaffPatientList } from '@/components/StaffPatientList';
 
 export default function DoctorHome() {
   const { t } = useTranslation();
-  return <StaffPatientList footer={t('staff.reportsSoon')} alertsPath="/doctor/alerts" />;
+  return (
+    <StaffPatientList
+      footer={t('doctor.listHint')}
+      alertsPath="/doctor/alerts"
+      patientPath="/doctor/patient"
+      withReferrals
+    />
+  );
 }

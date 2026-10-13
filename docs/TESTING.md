@@ -234,3 +234,16 @@
 10. Hindi: "घर का दौरा शुरू करें", "आज कौन-सा दिन है?" (the weekday and month names in Hindi), the observation questions and "दौरे में 2 दिन की देरी" read naturally.
 > Dev note: if you edit while Expo Go is open and see red "NativeDatabase … NullPointerException" errors, cold-restart Expo Go (see Known issues in PROGRESS.md).
 
+## F13 Doctor view checklist
+> Start with **Rimjhim → ♻️ Reset demo data**: the seeded Dhaniram visit now includes a referral to the doctor.
+1. **Dr. Anjali** → 1234. **Dhaniram** is first, with "🩺 Referred by the ASHA worker on <date>" (amber) and the 🔴 alerts button. The other patients follow. The footer explains the order.
+2. Tap **Dhaniram** → **Cognitive trend report**: patient card, "Last 30 days · <from> – <to>", an amber **Referred by Pranita Das on <date>** box with "Sleep: Poor", "Mood: Low / sad", "Medicines: Sometimes" and her note.
+3. Alert cards (Find the object, Daily routines, Medicines often missed).
+4. **Abilities**: tiles for "Planning & reasoning" and "Recognition & meaning" with an index and "↓ N points", with the games named under each.
+5. **Performance index by week**: a line falling in recent weeks. Tap it to see "Week from <date> · index N · N games". **▦ Table** shows the weeks as rows.
+6. **By game (30 days)**: rows with games played, level and change.
+7. **Reminders taken (30 days)**: Medicine ≈ 36–50% with counts. **ASHA check-ups**: 63, 77, 100 with dates.
+8. **📤 Share summary (text)** → the Android share sheet (WhatsApp, Messages, Gmail…). The message lists the patient, period, abilities, medicines, last check-up, referral, alerts and the disclaimer. (Send it to yourself to check.)
+9. Open **Aita**'s report: no referral and no alerts. Abilities show Memory etc. (or "Too few games to compare").
+10. Hindi: "संज्ञानात्मक रुझान रिपोर्ट", ability names, the table headers and the shared text are in Hindi.
+

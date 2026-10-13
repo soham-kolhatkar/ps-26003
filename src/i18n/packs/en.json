@@ -53,8 +53,7 @@
     "resetDemo": "Reset demo data",
     "resetConfirmTitle": "Reset demo data?",
     "resetConfirmBody": "This restores the demo patients and clears all played games and changes.",
-    "resetDone": "Demo data restored.",
-    "reportsSoon": "Cognitive trend reports for doctors arrive in the next update."
+    "resetDone": "Demo data restored."
   },
   "stage": {
     "mild": "Early stage",
@@ -614,5 +613,51 @@
       }
     },
     "partial": "(partial)"
+  },
+  "doctor": {
+    "title": "Cognitive trend report",
+    "period": "Last 30 days · {{from}} – {{to}}",
+    "listHint": "Tap a patient for their report. Referred patients and patients with alerts are listed first.",
+    "referredList": "Referred by the ASHA worker on {{date}}",
+    "referredBy": "Referred by {{name}} on {{date}}",
+    "domainsTitle": "Abilities (last 2 weeks vs the 2 weeks before)",
+    "domain": {
+      "memory": "Memory",
+      "attention": "Attention & speed",
+      "executive": "Planning & reasoning",
+      "recognition": "Recognition & meaning"
+    },
+    "down": "↓ {{n}} points",
+    "up": "↑ {{n}} points",
+    "steady": "→ Steady",
+    "notEnough": "Too few games to compare",
+    "noGames": "No games in this period.",
+    "weeklyTitle": "Performance index by week",
+    "weeklySubtitle": "All games, 0–100 (level reached + score at that level)",
+    "week": "Week from",
+    "index": "Index",
+    "weekReadout": "Week from {{date}} · index {{index}} · {{count}} games",
+    "weekNone": "Week from {{date}} · no games",
+    "gamesTitle": "By game (30 days)",
+    "col": {
+      "game": "Game",
+      "sessions": "Games",
+      "level": "Level",
+      "change": "Change"
+    },
+    "reactionTitle": "Reaction time (Catch the fish)",
+    "reaction": "Average {{recent}} in the last 2 weeks; {{previous}} in the 2 weeks before. Slower can mean tiredness, illness or medicines.",
+    "seconds": "{{n}} s",
+    "remindersTitle": "Reminders taken (30 days)",
+    "checkupsTitle": "ASHA home-visit check-ups (full check-ups only)",
+    "noCheckups": "No check-ups recorded yet.",
+    "share": "Share summary (text)",
+    "shareTitle": "Smriti: cognitive trend summary",
+    "sharePeriod": "Period: {{period}}",
+    "shareMedicine": "Medicines taken: {{taken}} of {{decided}} ({{pct}})",
+    "shareCheckup": "Last ASHA check-up: {{score}} on {{date}}",
+    "howTitle": "How to read this report",
+    "how": "Every game adapts its difficulty to keep the patient succeeding, so change shows mostly in the level reached. The index (0–100) combines the level (1–5) and the score at that level. Abilities group the games: Memory (Memory pairs, Remember and find, Who is this?), Attention & speed (Catch the fish), Planning & reasoning (Daily routines, Complete the pattern), Recognition & meaning (Find the object, Odd one out). Comparisons are with the patient's own earlier weeks, not with population norms.",
+    "disclaimer": "Trend monitoring from games, reminders and ASHA visits recorded on the patient's phone. Not a diagnostic test: please interpret it alongside your clinical assessment."
   }
 }
