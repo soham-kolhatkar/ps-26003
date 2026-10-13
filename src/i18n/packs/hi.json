@@ -252,5 +252,83 @@
     "relationLabel": "{{name}} से रिश्ता",
     "save": "फ़ोटो सहेजें",
     "saveFailed": "फ़ोटो सहेजी नहीं जा सकी। कृपया फिर से कोशिश करें।"
+  },
+  "reminders": {
+    "type": {
+      "medicine": "दवाई",
+      "hydration": "पानी",
+      "activity": "गतिविधि",
+      "appointment": "अपॉइंटमेंट"
+    },
+    "prompt": {
+      "medicine": {
+        "title": "दवाई का समय",
+        "spoken": "{{name}}, अब अपनी दवाई लेने का समय है: {{title}}।",
+        "done": "मैंने ले ली"
+      },
+      "hydration": {
+        "title": "पानी पीने का समय",
+        "spoken": "{{name}}, कृपया एक गिलास पानी पी लीजिए।",
+        "done": "मैंने पी लिया"
+      },
+      "activity": {
+        "title": "गतिविधि का समय",
+        "spoken": "{{name}}, अब समय है: {{title}}।",
+        "done": "हो गया"
+      },
+      "appointment": {
+        "title": "अपॉइंटमेंट की याद",
+        "spoken": "{{name}}, आपका अपॉइंटमेंट है: {{title}}, {{time}} बजे।",
+        "done": "ठीक है"
+      }
+    },
+    "later": "10 मिनट बाद याद दिलाएँ",
+    "laterSpoken": "ठीक है, मैं 10 मिनट बाद याद दिलाऊँगी।",
+    "thanks": "धन्यवाद {{name}}! बहुत अच्छे।",
+    "alreadyDone": "पहले ही हो चुका ✓",
+    "today": "आज की याद-दिहानी",
+    "nothingToday": "आज और कोई याद-दिहानी नहीं 🎉",
+    "state": {
+      "upcoming": "बाद में",
+      "due": "अभी",
+      "taken": "हो गया",
+      "skipped": "छोड़ा",
+      "missed": "छूट गया"
+    },
+    "notifBody": "{{name}}: {{title}}",
+    "caregiver": {
+      "button": "याद-दिहानी · आज {{total}} में से {{done}}",
+      "title": "याद-दिहानी",
+      "subtitle": "{{name}} के लिए",
+      "add": "याद-दिहानी जोड़ें",
+      "newTitle": "नई याद-दिहानी",
+      "editTitle": "याद-दिहानी बदलें",
+      "typeLabel": "प्रकार",
+      "titleLabel": "क्या",
+      "titlePlaceholder": "जैसे: मेटफ़ॉर्मिन 500 mg",
+      "noteLabel": "नोट (वैकल्पिक)",
+      "notePlaceholder": "जैसे: खाने के बाद",
+      "timesLabel": "रोज़ का समय",
+      "addTime": "समय जोड़ें",
+      "dateLabel": "तारीख़",
+      "timeLabel": "समय",
+      "save": "याद-दिहानी सहेजें",
+      "delete": "याद-दिहानी हटाएँ",
+      "deleteConfirm": "यह याद-दिहानी हटाएँ?",
+      "on": "चालू",
+      "off": "बंद",
+      "test": "10 सेकंड में जाँचें",
+      "testSent": "लगभग 10 सेकंड में एक जाँच याद-दिहानी आएगी। आप फ़ोन लॉक कर सकते हैं।",
+      "permissionDenied": "इस ऐप की सूचनाएँ बंद हैं। याद-दिहानी पाने के लिए फ़ोन की सेटिंग में इन्हें चालू करें।",
+      "daily": "रोज़ · {{times}}",
+      "once": "{{date}} · {{time}}",
+      "needTime": "कम से कम एक समय जोड़ें।",
+      "todaySummary": "आज: {{total}} में से {{done}} हो गए",
+      "empty": "अभी कोई याद-दिहानी नहीं है।",
+      "defaultTitle": {
+        "hydration": "एक गिलास पानी पिएँ",
+        "activity": "शाम की सैर"
+      }
+    }
   }
 }

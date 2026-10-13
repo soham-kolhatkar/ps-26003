@@ -252,5 +252,83 @@
     "relationLabel": "Relation to {{name}}",
     "save": "Save photo",
     "saveFailed": "Could not save the photo. Please try again."
+  },
+  "reminders": {
+    "type": {
+      "medicine": "Medicine",
+      "hydration": "Water",
+      "activity": "Activity",
+      "appointment": "Appointment"
+    },
+    "prompt": {
+      "medicine": {
+        "title": "Time for your medicine",
+        "spoken": "{{name}}, it is time to take your medicine: {{title}}.",
+        "done": "I took it"
+      },
+      "hydration": {
+        "title": "Time to drink water",
+        "spoken": "{{name}}, please drink a glass of water.",
+        "done": "I drank it"
+      },
+      "activity": {
+        "title": "Time for an activity",
+        "spoken": "{{name}}, it is time for: {{title}}.",
+        "done": "Done"
+      },
+      "appointment": {
+        "title": "Appointment reminder",
+        "spoken": "{{name}}, you have an appointment: {{title}}, at {{time}}.",
+        "done": "OK, I know"
+      }
+    },
+    "later": "Remind me in 10 minutes",
+    "laterSpoken": "All right, I will remind you in 10 minutes.",
+    "thanks": "Thank you, {{name}}! Well done.",
+    "alreadyDone": "Already done ✓",
+    "today": "Today's reminders",
+    "nothingToday": "No more reminders today 🎉",
+    "state": {
+      "upcoming": "Later",
+      "due": "Now",
+      "taken": "Done",
+      "skipped": "Skipped",
+      "missed": "Missed"
+    },
+    "notifBody": "{{name}}: {{title}}",
+    "caregiver": {
+      "button": "Reminders · {{done}}/{{total}} today",
+      "title": "Reminders",
+      "subtitle": "for {{name}}",
+      "add": "Add reminder",
+      "newTitle": "New reminder",
+      "editTitle": "Edit reminder",
+      "typeLabel": "Type",
+      "titleLabel": "What",
+      "titlePlaceholder": "e.g. Metformin 500 mg",
+      "noteLabel": "Note (optional)",
+      "notePlaceholder": "e.g. After food",
+      "timesLabel": "Times every day",
+      "addTime": "Add time",
+      "dateLabel": "Date",
+      "timeLabel": "Time",
+      "save": "Save reminder",
+      "delete": "Delete reminder",
+      "deleteConfirm": "Delete this reminder?",
+      "on": "On",
+      "off": "Off",
+      "test": "Test in 10 s",
+      "testSent": "A test reminder will appear in about 10 seconds. You can lock the phone.",
+      "permissionDenied": "Notifications are turned off for this app. Turn them on in the phone's Settings to get reminders.",
+      "daily": "Every day · {{times}}",
+      "once": "{{date}} · {{time}}",
+      "needTime": "Add at least one time.",
+      "todaySummary": "Today: {{done}} of {{total}} done",
+      "empty": "No reminders yet.",
+      "defaultTitle": {
+        "hydration": "Drink a glass of water",
+        "activity": "Evening walk"
+      }
+    }
   }
 }

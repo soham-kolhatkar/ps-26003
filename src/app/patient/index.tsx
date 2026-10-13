@@ -8,6 +8,7 @@ import { BigButton } from '@/components/BigButton';
 import { GameTile } from '@/components/GameTile';
 import { HoldButton } from '@/components/HoldButton';
 import { Screen } from '@/components/Screen';
+import { TodayReminders } from '@/components/TodayReminders';
 import { displayName, getPatient } from '@/db/repos/patients';
 import { useDbQuery } from '@/db/useDbQuery';
 import { GAMES } from '@/games/registry';
@@ -73,6 +74,8 @@ export default function PatientHome() {
           🕰️ {formatTime(now, language)}
         </AppText>
       </View>
+
+      {patientId ? <TodayReminders patientId={patientId} now={now} language={language} /> : null}
 
       <BigButton
         kind="secondary"
