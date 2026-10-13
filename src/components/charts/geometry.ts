@@ -37,3 +37,11 @@ export function nearestIndex(px: number, left: number, width: number, count: num
   const step = width / (count - 1);
   return Math.min(count - 1, Math.max(0, Math.round((px - left) / step)));
 }
+
+/**
+ * The tapped index if it still exists in the data, else the fallback.
+ * Data length changes (e.g. 30 → 7 days) must never leave a stale selection.
+ */
+export function validIndex(selected: number | null, length: number, fallback: number | null): number | null {
+  return selected != null && selected >= 0 && selected < length ? selected : fallback;
+}

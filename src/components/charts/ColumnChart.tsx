@@ -5,7 +5,7 @@ import Svg, { Line, Path, Text as SvgText } from 'react-native-svg';
 import { AppText } from '@/components/AppText';
 import { chart, font, space } from '@/theme/tokens';
 
-import { columnPath } from './geometry';
+import { columnPath, validIndex } from './geometry';
 
 export type Column = { label: string; value: number | null };
 
@@ -45,7 +45,7 @@ export function ColumnChart({
   const base = PAD.top + plotH;
   const y = (v: number) => base - (Math.min(v, max) / max) * plotH;
   const lastIdx = columns.reduce<number>((acc, c, i) => (c.value != null ? i : acc), -1);
-  const sel = selected ?? (lastIdx >= 0 ? lastIdx : null);
+  const sel = validIndex(selected, columns.length, lastIdx >= 0 ? lastIdx : null);
   const xLabels = columns.length ? [0, Math.floor((columns.length - 1) / 2), columns.length - 1] : [];
 
   return (
