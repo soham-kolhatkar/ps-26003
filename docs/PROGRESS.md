@@ -1,7 +1,7 @@
 # Progress
 
 **Current feature:** — (Tier 2 complete, tagged `v0.2.0`). **Paused at the user's request (2026-10-13).**
-**Next:** discussing the **multi-device version** (one phone per role: patient, caregiver, ASHA, doctor) on **Supabase + phone-number & PIN** sign-in (D41). No code until the user agrees on the design. APK v0.2.0 built (branch `chore/apk-v0.2.0`, sha256 `34ace20b…a57b023`, on the phone in Download/); merge + tag `apk-v0.2.0` after the user confirms it works.
+**Next:** discussing the **multi-device version** (one phone per role: patient, caregiver, ASHA, doctor) on **Supabase + phone-number & PIN** sign-in (D41). No code until the user agrees on the design. APK v0.2.0 confirmed working by the user (tag `apk-v0.2.0`, sha256 `34ace20b…a57b023`).
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
