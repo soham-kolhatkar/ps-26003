@@ -220,3 +220,17 @@
 6. Optional, to see one appear: play **Daily routines** as Aita 3 times on purpose badly (tap wrong steps first). Rimjhim's home may then show "Things to look at" and the dashboard shows the alert cards. It clears by itself once results recover.
 7. Hindi: "ध्यान देने वाली बातें", "जल्द देखें", "दवाइयाँ अक्सर छूट रही हैं" and the explanations read naturally.
 
+## F12 ASHA mode checklist
+> Start with **Rimjhim → ♻️ Reset demo data**, so the past visits are the clean demo ones.
+1. **Pranita (ASHA)** → 1234. List order: **Dhaniram** first, with "🏠 Visit overdue by 2 days" (amber) and the 🔴 alerts button. Then Aita ("Next visit in 4 days · <date>", "✅ No concerns") and Lakhi (in 9 days).
+2. Tap **Dhaniram's card** → his page: notes, overdue line, **🏠 Start home visit**, alerts button, **Check-up score 63, "↓ 14 since last visit"**, a falling sparkline, "Games this week". **Past visits (3)**, each with date, score, amber chips (Sleep: Poor, Mood: Low / sad, Medicines: Sometimes) and the note.
+3. **Start home visit** → intro ("about 5 minutes…", hand over the phone) → **Start check-up**.
+4. Task 1 of 3 **Today's date**: the instruction is spoken → Start → "Which day is it today?" with 3 big answers, then month, then year. A wrong answer shows the right one ("The answer is …").
+5. Task 2 **Remember and find**: one list of 3 pictures → stars → find them. Task 3 **Catch the fish**: 6 fish, 4 spots.
+6. The form shows "Check-up score N" with each task's result. Answer the 6 questions (worrying answers turn amber), write a note, tick **Refer to the doctor**. Next visit: "Suggested: in 7 days" is preselected.
+7. **Save visit** → "Visit saved", score with "↑/↓ N since last visit", next visit date, "Referred to the doctor" → **Back to patient**: the new visit is at the top, and the status line now says "Next visit in 7 days".
+8. Try once with **Skip** on a task: the score shows "(partial)" and is **not** compared with earlier check-ups (no ↑/↓ line, and the tile keeps the last full score).
+9. **✖/Back** during the intro leaves without saving anything.
+10. Hindi: "घर का दौरा शुरू करें", "आज कौन-सा दिन है?" (the weekday and month names in Hindi), the observation questions and "दौरे में 2 दिन की देरी" read naturally.
+> Dev note: if you edit while Expo Go is open and see red "NativeDatabase … NullPointerException" errors, cold-restart Expo Go (see Known issues in PROGRESS.md).
+

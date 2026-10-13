@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F12 ASHA mode.
+**Current feature:** F12 ASHA mode, on `feat/f12-asha-mode`: pushed, **waiting for the user's phone test** (checklist at the end of TESTING.md).
 **Next:** F13 doctor view.
 
 ## Tier 1: core demo
@@ -23,7 +23,7 @@
 | F09 | Game: 🐟 **Catch the fish** (attention / reaction time, go/no-go) | ✅ done (cda05af) |
 | F10 | Game: 🧠 **Remember and find** (delayed picture-word recall) | ✅ done (afb8a9e) |
 | F11 | Trend detection + alerts (engine/trends, `alert` table v4, caregiver/ASHA/doctor views) | ✅ done (2df3d4e) |
-| F12 | ASHA mode | ⏳ |
+| F12 | ASHA mode: triage list, patient page, 5-min home visit (fixed check-up + observations + referral), `visit` table v5 | 🧪 testing |
 | F13 | Doctor view | ⏳ |
 | F14 | Assamese pack | ⏳ |
 | F15 | Firebase sync (needs user's Firebase project) | ⏳ |
@@ -33,6 +33,7 @@
 Low-resource language (Manipuri/Khasi/Mizo) + recorded audio, PDF report export, polish, EAS APK, demo script.
 
 ## Known issues / notes
+- **Expo Go dev only:** after a *full JS reload* (double-R, or editing a language-pack JSON while the app is open), expo-sqlite calls fail with `NativeDatabase.execAsync … NullPointerException` (a red "Render Error" or `DB query failed` toasts). A **cold restart** fixes it: `adb shell am force-stop host.exp.exponent`, then open `exp://localhost:8081` again. Normal Fast Refresh of .tsx files is fine. The APK never reloads JS, so it is unaffected.
 - F11: on a phone whose demo history was *backfilled* (F07) after real test games, levels can disagree with the seeded history (real games at level 1, seed at level 3) and Aita may show a "Daily routines" decline. **Reset demo data** gives the consistent story (Dhaniram flagged, Aita and Lakhi clear).
 - Next APK: block permissions the app doesn't use (SYSTEM_ALERT_WINDOW, USE_BIOMETRIC/FINGERPRINT, c2dm push, WRITE_EXTERNAL_STORAGE) via `android.blockedPermissions`.
 - APK v0.1.0 sha256 `a08cf427269f8c3b9a9093f4c05facf05f83cbe014098e18f32fcd9438bf0273` (on the phone in Download/ and in C:\Users\kolhsoh\Downloads).
