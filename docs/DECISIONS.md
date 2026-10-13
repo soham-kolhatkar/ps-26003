@@ -88,3 +88,12 @@ The patient sees a big red "Now" card on the home screen for due items plus one 
 2. **The custom channel is optional.** In Expo Go, `setNotificationChannelAsync` fails natively (`NotificationsChannelsProvider` is null). We fall back to the default channel (no `channelId` on triggers). A real build (EAS APK, Tier 3) gets the MAX-importance "Reminders" channel.
 3. **The demo-reminder backfill is flag-based** (`setting.demo_reminders_seeded`), not schema-version based. The upgrade to v3 happened on the launch that crashed, so the version check never saw "v2". This also prevents re-adding demo reminders after a caregiver deletes them all.
 In dev, `syncReminderNotifications` logs "Reminder notifications scheduled: N (…)". Verify with `adb shell dumpsys alarm | grep host.exp.exponent`.
+
+### D29: Dashboard built with the dataviz method (validated, measured, looked at)
+Forms: a KPI row of stat tiles; a **single-series line** for the daily activity score (no legend, end value labelled, gaps left as gaps, ~10% wash); per-game **stat tiles** with a trend word + arrow (never colour alone) and a 12-session sparkline (de-emphasised history, accent on the latest); **single-series columns** (≤24 px, 4 px rounded data-end) for reminder adherence; same-hue **meters** by reminder type. One period filter (7/30 days) above everything. Every chart has a **table view**; tapping snaps to the nearest day and shows a readout (no gating). The chart series colour is `chart.series` `#13805A`: the brand green `#1E6B52` failed the validator's chroma floor (reads as gray), so it stays for UI and text only. Charts are custom react-native-svg (D5) with pure geometry helpers (tested). Verified on the phone by screenshots via adb.
+
+### D30: Trends need enough data on both sides
+"vs previous period" and per-game trends require ≥3 completed sessions in **each** window (`MIN_SESSIONS_FOR_TREND`), otherwise "No earlier data to compare". This was caught on-device: the 30-day view claimed "↓10" against 1–2 old sessions. A move under 3 score points is "steady".
+
+### D31: Simulated demo history uses the real engines
+`seedGameHistory` simulates 30 days of play per patient/game (ability, drift, play rate) through `computeSessionStats` and `nextLevel`, so levels evolve exactly as they would in use. Aita: steady/improving. Dhaniram: gradual decline (for F11–F13). Existing installs get it once via the `demo_games_seeded` flag. Existing levels are never overwritten.

@@ -13,9 +13,10 @@ src/app/            Routes (expo-router). Thin: compose components, call stores/
   patient/ caregiver/ asha/ doctor/   Role folders; _layout = RoleStack guard
   patient/game/[id].tsx               GameShell for a registry game
   caregiver/photos.tsx, photo-new.tsx  Family photo manager (camera/gallery → name + relation)
+  caregiver/progress.tsx              Progress dashboard (KPIs, score line, per-game tiles, adherence, recent)
   caregiver/reminders.tsx, reminder-edit.tsx  Reminder list (on/off, test) + editor (type, title, times/date)
   patient/reminder/[eventId].tsx      Full-screen spoken "time for…" prompt (done / later)
-src/components/     Shared elder-friendly UI primitives
+src/components/     Shared elder-friendly UI primitives; charts/ (LineChart, ColumnChart, Sparkline, StatTile, Meter, ChartCard, geometry)
 src/theme/          Design tokens (colors, type scale, spacing, touch sizes)
 src/i18n/           i18next init + LANGUAGES registry + packs/*.json
 src/store/          zustand: settings (language, persisted), session (role/user/patient, in-memory)

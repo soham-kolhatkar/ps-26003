@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** F06 Reminders (`feat/f06-reminders`). Implemented and waiting for user test.
-**Next:** F07 Caregiver dashboard (charts).
+**Current feature:** F07 Caregiver dashboard (`feat/f07-caregiver-dashboard`). Implemented and waiting for user test.
+**Next:** Tier 1 hardening + tag v0.1.0, then Tier 2 (F08).
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -12,8 +12,8 @@
 | F03 | Game: memory card match | ✅ done | feat/f03-memory-match | d79ea60 |
 | F04 | Game: daily routine sequencing (+ speech pacing fix) | ✅ done | feat/f04-routine-sequencing | a5b4282 |
 | F05 | Game: family photo recall + caregiver photo manager | ✅ done | feat/f05-family-photos | a7f1f21 |
-| F06 | Reminders (local notifications, ack screen, adherence) | 🧪 testing | feat/f06-reminders | — |
-| F07 | Caregiver dashboard (charts) | ⏳ | | |
+| F06 | Reminders (local notifications, ack screen, adherence) | ✅ done | feat/f06-reminders | f3ce415 |
+| F07 | Caregiver dashboard (charts) | 🧪 testing | feat/f07-caregiver-dashboard | — |
 | T1 | Hardening + tag v0.1.0 | ⏳ | | |
 
 ## Tier 2: complete platform
