@@ -19,6 +19,7 @@ AI-based cognitive gaming + memory assistance app for elderly dementia patients 
 - TypeScript 6: global types must be listed in `tsconfig.json` `compilerOptions.types` (currently `["jest", "node"]`).
 - Typed routes are generated into `.expo/types` by the dev server. After adding a route, keep the server running (or start it once) before `tsc`.
 - Formatting: Prettier (`npm run format`; single quotes, width 120).
+- **Supabase (Tier 3):** project `ougzjutjseethfhxemzc` (Mumbai, created under an office account inside its own organization, to be moved to a personal account later). `.env` (gitignored) holds only `EXPO_PUBLIC_SUPABASE_URL` + `EXPO_PUBLIC_SUPABASE_ANON_KEY`. They are inlined into the bundle/APK at build time (publishable by design; RLS protects data). **Never** put the service_role/secret key in the app or `.env`. Template: `.env.example`. Reachable from the corporate network (checked 2026-10-13). Auth settings: email provider on with confirm-email off (phone+PIN maps to email/password), anonymous sign-ins on (patient phone). Free plan pauses after 7 days idle.
 - **APK builds:** JDK 17 at `~/opt/jdk-17`, Android SDK at `~/Android/Sdk` (see D32). Bump `expo.version` and `android.versionCode` in app.json for each release. The APK has its own data, separate from Expo Go's.
 - Expo SDK **57** (RN 0.86, React 19.2, React Compiler on, typed routes on). Check versioned docs before using any Expo API: https://docs.expo.dev/versions/v57.0.0/
 

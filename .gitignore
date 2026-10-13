@@ -30,7 +30,8 @@ yarn-error.*
 .DS_Store
 *.pem
 
-# local env files
+# local env files (Supabase URL + publishable key; never commit, never put the service key here)
+.env
 .env*.local
 
 # typescript
