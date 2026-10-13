@@ -20,3 +20,9 @@ export async function initDatabase(db: DbClient): Promise<{ version: number; see
   }
   return { version, seeded };
 }
+
+/** Cloud and setup databases: same schema, never the demo story (data comes from sync). */
+export async function initCloudDatabase(db: DbClient): Promise<{ version: number }> {
+  await db.execAsync('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;');
+  return { version: await migrate(db) };
+}

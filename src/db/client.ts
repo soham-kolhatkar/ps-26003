@@ -17,3 +17,14 @@ export function getDb(): DbClient {
 }
 
 export const DATABASE_NAME = 'smriti.db';
+
+/**
+ * Which SQLite file to open (D42). The demo keeps today's seeded file; each
+ * cloud account gets its own file, so one person never sees another's data on
+ * a shared phone; before sign-in an empty setup file is used.
+ */
+export function databaseNameFor(mode: 'demo' | 'cloud' | null, uid: string | null): string {
+  if (mode === 'demo') return DATABASE_NAME;
+  if (mode === 'cloud' && uid) return `smriti-cloud-${uid}.db`;
+  return 'smriti-setup.db';
+}

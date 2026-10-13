@@ -247,3 +247,20 @@
 9. Open **Aita**'s report: no referral and no alerts. Abilities show Memory etc. (or "Too few games to compare").
 10. Hindi: "संज्ञानात्मक रुझान रिपोर्ट", ability names, the table headers and the shared text are in Hindi.
 
+---
+
+# Tier 3 (tested in Chromium)
+> How: with the dev server running (`npm run web`), open **http://localhost:8081** in Chrome or Edge on Windows. Use a separate **profile or InPrivate/Incognito window per "phone"**, because each window keeps its own data. Make the window phone-sized (F12 → device toolbar, or just narrow it). I run the same flows automatically with `npm run e2e`.
+
+## F15 Cloud accounts checklist
+1. New window → Welcome → **Continue** → **"Who will use this phone?"** with 4 cards (Patient's phone, Family caregiver, ASHA worker, Doctor). There is no role picker any more.
+2. **Family caregiver** → Sign in screen ("This phone is set up for: Family caregiver") → **New here? Create an account** → name, mobile number (10 digits), district, 6-digit PIN twice → **Create account** → your caregiver home: "Hello, <name>", ⚙️ Settings, and "No family member added yet…" (adding one is F16).
+3. Reload the page at `http://localhost:8081/` (= an app restart): it opens straight into your home, still signed in.
+4. ⚙️ **Settings**: your name, role, district and number, and the language buttons (switch to हिन्दी and back) → **Sign out** → confirm → back to the start.
+5. Sign in again: a wrong PIN shows "Wrong mobile number or PIN". The right PIN works, even typed as "+91 98765 43210".
+6. New window → **ASHA worker** → sign in with the *caregiver's* number → "This number is registered as Family caregiver, but this phone is set up for ASHA worker…". Create an ASHA account instead: there is a "Sub-centre / PHC" field.
+7. Doctor: same, with a "Hospital or clinic" field.
+8. **Patient's phone** → "Pairing this phone with a family code arrives in the next update" → Change this phone's role.
+9. **Hidden demo:** on "Who will use this phone?", press and hold the 🌼 for 2 seconds → "Demo on one phone?" → Open demo → today's role picker, with Aita and the full offline demo as before.
+10. Supabase dashboard → **Authentication → Users**: your accounts appear as `p91XXXXXXXXXX@phone.smriti.app`. **Table Editor → profiles**: name, role, phone, district.
+

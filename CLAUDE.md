@@ -26,6 +26,8 @@ AI-based cognitive gaming + memory assistance app for elderly dementia patients 
 ## Commands
 ```bash
 npm run usb         # dev server over USB (default on the corporate network)
+npm run web         # dev server for Chromium testing (Tier 3): http://localhost:8081
+npm run e2e         # Playwright: simulated phones in headless Chromium, against the real Supabase project
 npm run tunnel      # dev server via ngrok tunnel (blocked on the corporate network)
 npm run check       # tsc + lint + jest + expo-doctor  (must pass before push)
 npm run build:apk   # standalone release APK -> dist/ + Windows Downloads (add -- --install to put it on the phone)
