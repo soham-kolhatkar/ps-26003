@@ -10,6 +10,8 @@ import { MAX_LEVEL as ODD_MAX_LEVEL } from './odd-one-out/rounds';
 import { OddOneOutGame } from './odd-one-out/OddOneOutGame';
 import { MAX_LEVEL as PATTERN_MAX_LEVEL } from './pattern/rounds';
 import { PatternGame } from './pattern/PatternGame';
+import { MAX_LEVEL as REACTION_MAX_LEVEL } from './reaction-tap/rounds';
+import { ReactionTapGame } from './reaction-tap/ReactionTapGame';
 import type { GameDefinition, GameId } from './types';
 import { countPeople } from '@/db/repos/photos';
 
@@ -70,6 +72,15 @@ export const GAMES: readonly GameDefinition[] = [
     // The row is read aloud first (about 4–6 s), and timing starts with it.
     targetReactionMs: 10000,
     Component: PatternGame,
+  },
+  {
+    id: 'reaction_tap',
+    icon: '🐟',
+    maxLevel: REACTION_MAX_LEVEL,
+    trialsPerSession: 10,
+    // Tapping a fish within 1.5 s earns the full speed score (older adults' simple reaction time).
+    targetReactionMs: 1500,
+    Component: ReactionTapGame,
   },
 ];
 
