@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** — (Tier 1 complete, tagged `v0.1.0`).
-**Next:** Tier 2, starting with F08.
+**Current feature:** — (Tier 1 complete, tagged `v0.1.0`; APK built from tag `apk-v0.1.0`).
+**Next:** Tier 2, starting with F08, **only when the user says to start**.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -33,6 +33,8 @@
 Low-resource language (Manipuri/Khasi/Mizo) + recorded audio, PDF report export, polish, EAS APK, demo script.
 
 ## Known issues / notes
+- Next APK: block permissions the app doesn't use (SYSTEM_ALERT_WINDOW, USE_BIOMETRIC/FINGERPRINT, c2dm push, WRITE_EXTERNAL_STORAGE) via `android.blockedPermissions`.
+- APK v0.1.0 sha256 `a08cf427269f8c3b9a9093f4c05facf05f83cbe014098e18f32fcd9438bf0273` (on the phone in Download/ and in C:\Users\kolhsoh\Downloads).
 - 2026-10-12: the Expo ngrok tunnel was blocked by the corporate network during F05 testing (TLS to tunnel.*.ngrok.com fails). Still blocked 2026-10-13 → switched to USB (`npm run usb`).
 - `npm install` warns about `always-auth` in the user's global npm config. This is harmless.
 - `unrs-resolver` postinstall is not approved under npm 11 `allowScripts`. Lint works without it.
