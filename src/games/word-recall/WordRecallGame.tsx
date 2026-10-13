@@ -26,9 +26,10 @@ type Phase = 'study' | 'recap' | 'break' | 'recall' | 'roundDone';
  * needed. Errorless: a wrong picture fades with a gentle word; after
  * HINT_AFTER_WRONG wrong taps a remaining picture glows. Each tap is one trial.
  */
-export function WordRecallGame({ level, onTrial, onProgress, onComplete, say }: GameProps) {
+export function WordRecallGame({ level, totalTrials, onTrial, onProgress, onComplete, say }: GameProps) {
   const { t } = useTranslation();
-  const [rounds] = useState(() => makeRounds(level));
+  // totalTrials = lists to play (the check-up plays 1); everyday play passes 0 → the default.
+  const [rounds] = useState(() => makeRounds(level, totalTrials || undefined));
   const [roundIndex, setRoundIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>('study');
   const [studyIndex, setStudyIndex] = useState(0);
