@@ -1,4 +1,4 @@
-import * as Notifications from 'expo-notifications';
+import * as Notifications from '@/services/notificationsApi';
 import { Platform } from 'react-native';
 
 import type { Reminder, ReminderType } from '@/db/models';
@@ -46,15 +46,34 @@ export function configureNotifications(): void {
   });
 }
 
-async function ensureChannel(): Promise<void> {
-  if (Platform.OS !== 'android') return;
-  await Notifications.setNotificationChannelAsync(CHANNEL_ID, {
-    name: 'Reminders',
-    importance: Notifications.AndroidImportance.MAX,
-    vibrationPattern: [0, 400, 200, 400],
-    lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
-  });
+/**
+ * Our own high-priority "Reminders" channel. Expo Go cannot create channels
+ * (native NotificationsChannelsProvider is null there), so on failure we fall
+ * back to the app's default channel; a real build gets the dedicated one.
+ */
+let channelId: string | undefined;
+let channelTried = false;
+
+async function ensureChannel(): Promise<string | undefined> {
+  if (Platform.OS !== 'android' || channelTried) return channelId;
+  channelTried = true;
+  try {
+    await Notifications.setNotificationChannelAsync(CHANNEL_ID, {
+      name: 'Reminders',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 400, 200, 400],
+      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
+    });
+    channelId = CHANNEL_ID;
+  } catch (e) {
+    console.info('Custom notification channel unavailable (expected in Expo Go); using default channel.', e);
+    channelId = undefined;
+  }
+  return channelId;
 }
+
+/** Spread into a trigger: adds the channel only when it exists. */
+const channel = () => (channelId ? { channelId } : {});
 
 /** Creates the channel and asks for permission if still possible. */
 export async function ensureNotificationPermission(): Promise<boolean> {
@@ -113,7 +132,7 @@ export async function syncReminderNotifications(db: DbClient, now = Date.now()):
             type: Notifications.SchedulableTriggerInputTypes.DAILY,
             hour: t.hour,
             minute: t.minute,
-            channelId: CHANNEL_ID,
+            ...channel(),
           },
         });
       }
@@ -121,9 +140,17 @@ export async function syncReminderNotifications(db: DbClient, now = Date.now()):
       await Notifications.scheduleNotificationAsync({
         identifier: `${ID_PREFIX}${r.id}-once`,
         content: await contentFor(db, r, { kind: 'reminder', reminderId: r.id, dueAt: r.schedule.at }),
-        trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: r.schedule.at, channelId: CHANNEL_ID },
+        trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: r.schedule.at, ...channel() },
       });
     }
+  }
+  if (__DEV__) {
+    const scheduled = (await Notifications.getAllScheduledNotificationsAsync()).filter((n) =>
+      n.identifier.startsWith(ID_PREFIX),
+    );
+    console.info(
+      `Reminder notifications scheduled: ${scheduled.length} (device patient ${devicePatientId}, ${reminders.length} enabled reminders)`,
+    );
   }
 }
 
@@ -136,7 +163,7 @@ export async function snoozeReminder(db: DbClient, r: Reminder, dueAt: number, m
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
       seconds: minutes * 60,
-      channelId: CHANNEL_ID,
+      ...channel(),
     },
   });
 }
@@ -148,7 +175,7 @@ export async function sendTestReminder(db: DbClient, r: Reminder, seconds = 10):
   await Notifications.scheduleNotificationAsync({
     identifier: `${ID_PREFIX}test-${r.id}-${dueAt}`,
     content: await contentFor(db, r, { kind: 'reminder', reminderId: r.id, dueAt }),
-    trigger: { type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL, seconds, channelId: CHANNEL_ID },
+    trigger: { type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL, seconds, ...channel() },
   });
   return true;
 }
