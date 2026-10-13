@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** — (Tier 2 complete, tagged `v0.2.0`). **Paused at the user's request (2026-10-13).**
-**Next:** discussing the **multi-device version** (one phone per role: patient, caregiver, ASHA, doctor) on **Supabase + phone-number & PIN** sign-in (D41). No code until the user agrees on the design. APK v0.2.0 confirmed working by the user (tag `apk-v0.2.0`, sha256 `34ace20b…a57b023`).
+**Current feature:** F15 cloud foundation + accounts (Tier 3 started 2026-10-13).
+**Next:** F16 patients, invites, pairing.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -27,12 +27,18 @@
 | F13 | Doctor view: referral-first list, read-only 30-day report (abilities, weekly index, per-game, reaction time, reminders, check-ups), share as text | ✅ done (5bb72d0) |
 | T2 | Tag v0.2.0 (F14, F15 moved to Tier 3 by the user) | ✅ done | v0.2.0 |
 
-## Tier 3: polish (to discuss)
+## Tier 3: multi-device (one phone per role) on Supabase, target v0.3.0
+Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync rules, access rules, risks).
 | ID | Feature | Status |
 |---|---|---|
-| F14 | Assamese pack (moved from Tier 2; strings + content; check `as-IN` TTS on the phone, fall back to Hindi speech) | ⏳ |
-| F15 | Multi-device accounts + sync on **Supabase** (replaces Firebase, D41): device role setup, phone + PIN sign-in, patients/members/invite & pairing codes, RLS, outbox sync. Design under discussion | ⏳ |
-| — | Low-resource language (Manipuri/Khasi/Mizo) + recorded audio, PDF report export, polish, APK v0.2.0 (with blocked permissions), demo script refresh | ⏳ (to discuss) |
+| F15 | Cloud foundation: "Who will use this phone?" setup, phone + PIN accounts, settings and sign-out, hidden single-phone demo mode, web build for testing (Chromium), SQL `001` | ⏳ |
+| F16 | Patients, people, invite codes and patient-phone pairing (+ family corner for photos on the patient phone), membership pull, SQL `002` | ⏳ |
+| F17 | Data sync: outbox triggers, push/pull for reminders, doses, games, levels, visits; sync status chip; two-device tests, SQL `003` | ⏳ |
+| F18 | Role extras: ASHA edits reminders, doctor's notes, PIN reset via manager (Edge Function) | ⏳ |
+| F19 | Cloud demo story (Demo tools), 4-phone demo script, APK v0.3.0, tag v0.3.0 | ⏳ |
+
+## Tier 4: later (moved from Tier 3 by the user)
+F14 Assamese pack · low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report export · real SMS OTP (MSG91 + DLT) + login lockout · realtime updates · accessibility/animation polish · Play Store signing.
 
 ## Known issues / notes
 - **Expo Go dev only:** after a *full JS reload* (double-R, or editing a language-pack JSON while the app is open), expo-sqlite calls fail with `NativeDatabase.execAsync … NullPointerException` (a red "Render Error" or `DB query failed` toasts). A **cold restart** fixes it: `adb shell am force-stop host.exp.exponent`, then open `exp://localhost:8081` again. Normal Fast Refresh of .tsx files is fine. The APK never reloads JS, so it is unaffected.
