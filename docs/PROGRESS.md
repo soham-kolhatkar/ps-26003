@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** F12 ASHA mode, on `feat/f12-asha-mode`: pushed, **waiting for the user's phone test** (checklist at the end of TESTING.md).
-**Next:** F13 doctor view.
+**Current feature:** F13 doctor view.
+**Next:** F14 Assamese pack.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -23,7 +23,7 @@
 | F09 | Game: 🐟 **Catch the fish** (attention / reaction time, go/no-go) | ✅ done (cda05af) |
 | F10 | Game: 🧠 **Remember and find** (delayed picture-word recall) | ✅ done (afb8a9e) |
 | F11 | Trend detection + alerts (engine/trends, `alert` table v4, caregiver/ASHA/doctor views) | ✅ done (2df3d4e) |
-| F12 | ASHA mode: triage list, patient page, 5-min home visit (fixed check-up + observations + referral), `visit` table v5 | 🧪 testing |
+| F12 | ASHA mode: triage list, patient page, 5-min home visit (fixed check-up + observations + referral), `visit` table v5 | ✅ done (16f35a0) |
 | F13 | Doctor view | ⏳ |
 | F14 | Assamese pack | ⏳ |
 | F15 | Firebase sync (needs user's Firebase project) | ⏳ |
