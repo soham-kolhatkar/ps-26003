@@ -7,16 +7,13 @@
     "continue": "Continue",
     "back": "Back",
     "speak": "Read aloud",
-    "comingSoon": "Coming soon",
     "signOut": "Sign out",
     "cancel": "Cancel",
     "loading": "Loading…",
     "error": "Something went wrong. Please try again."
   },
   "language": {
-    "title": "Choose language",
-    "en": "English",
-    "hi": "हिन्दी"
+    "title": "Choose language"
   },
   "welcome": {
     "greeting": "Namaskar! Welcome to Smriti.",
@@ -39,7 +36,6 @@
     "delete": "Delete"
   },
   "patient": {
-    "greeting": "Namaskar, {{name}}!",
     "greetingSpoken": "{{greeting}} Today is {{date}}. Shall we play a game?",
     "holdToExit": "Hold to exit",
     "holdToExitHint": "Press and hold for 2 seconds",
@@ -58,8 +54,8 @@
     "resetConfirmTitle": "Reset demo data?",
     "resetConfirmBody": "This restores the demo patients and clears all played games and changes.",
     "resetDone": "Demo data restored.",
-    "dashboardSoon": "Progress charts and reminders arrive in the next updates.",
-    "reportsSoon": "Cognitive trend reports arrive in Tier 2."
+    "dashboardSoon": "Home-visit tools for ASHA workers (quick check-ups, visit notes) arrive in the next update.",
+    "reportsSoon": "Cognitive trend reports for doctors arrive in the next update."
   },
   "stage": {
     "mild": "Early stage",
@@ -286,14 +282,10 @@
     "laterSpoken": "All right, I will remind you in 10 minutes.",
     "thanks": "Thank you, {{name}}! Well done.",
     "alreadyDone": "Already done ✓",
-    "today": "Today's reminders",
     "nothingToday": "No more reminders today 🎉",
     "state": {
       "upcoming": "Later",
-      "due": "Now",
-      "taken": "Done",
-      "skipped": "Skipped",
-      "missed": "Missed"
+      "due": "Now"
     },
     "notifBody": "{{name}}: {{title}}",
     "caregiver": {
@@ -362,7 +354,6 @@
       "title": "By game",
       "level": "Level {{level}}",
       "sessions": "{{count}} games",
-      "lastPlayed": "Last played {{date}}",
       "never": "Not played in this period",
       "up": "↑ Improving",
       "down": "↓ Lower than before",
