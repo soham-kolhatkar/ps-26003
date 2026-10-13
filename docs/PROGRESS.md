@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** F07 Caregiver dashboard (`feat/f07-caregiver-dashboard`). Implemented and waiting for user test.
-**Next:** Tier 1 hardening + tag v0.1.0, then Tier 2 (F08).
+**Current feature:** T1 hardening (`chore/t1-hardening`). Waiting for the user's final on-device pass.
+**Next:** tag `v0.1.0`, then Tier 2 (F08).
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -13,8 +13,8 @@
 | F04 | Game: daily routine sequencing (+ speech pacing fix) | ✅ done | feat/f04-routine-sequencing | a5b4282 |
 | F05 | Game: family photo recall + caregiver photo manager | ✅ done | feat/f05-family-photos | a7f1f21 |
 | F06 | Reminders (local notifications, ack screen, adherence) | ✅ done | feat/f06-reminders | f3ce415 |
-| F07 | Caregiver dashboard (charts) | 🧪 testing | feat/f07-caregiver-dashboard | — |
-| T1 | Hardening + tag v0.1.0 | ⏳ | | |
+| F07 | Caregiver dashboard (charts) | ✅ done | feat/f07-caregiver-dashboard | 5c9891f |
+| T1 | Hardening + tag v0.1.0 | 🧪 testing | chore/t1-hardening | — |
 
 ## Tier 2: complete platform
 | ID | Feature | Status |
