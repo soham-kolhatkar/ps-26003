@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { router, useFocusEffect, useLocalSearchParams, usePathname } from 'expo-router';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
@@ -17,7 +17,9 @@ import { deletePhotoFile, pickPhoto } from '@/services/photos';
 import { usePendingPhoto } from '@/store/pendingPhoto';
 import { colors, radius, space } from '@/theme/tokens';
 
+/** Also mounted on the patient's phone (family corner, `/patient/photos`): photos stay on that phone. */
 export default function FamilyPhotos() {
+  const onPatientPhone = usePathname().startsWith('/patient');
   const { t } = useTranslation();
   const { width } = useWindowDimensions();
   const { patientId } = useLocalSearchParams<{ patientId: string }>();
@@ -38,7 +40,7 @@ export default function FamilyPhotos() {
     if (result.status === 'denied') Alert.alert(t('photos.cameraDenied'));
     if (result.status !== 'ok') return;
     usePendingPhoto.getState().setUri(result.uri);
-    router.push({ pathname: '/caregiver/photo-new', params: { patientId } });
+    router.push({ pathname: onPatientPhone ? '/patient/photo-new' : '/caregiver/photo-new', params: { patientId } });
   };
 
   const confirmDelete = (photo: Photo) => {

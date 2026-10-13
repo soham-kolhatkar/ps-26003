@@ -264,3 +264,18 @@
 9. **Hidden demo:** on "Who will use this phone?", press and hold the 🌼 for 2 seconds → "Demo on one phone?" → Open demo → today's role picker, with Aita and the full offline demo as before.
 10. Supabase dashboard → **Authentication → Users**: your accounts appear as `p91XXXXXXXXXX@phone.smriti.app`. **Table Editor → profiles**: name, role, phone, district.
 
+## F16 People, codes and pairing checklist
+> Use 3–4 separate windows (one per "phone"). Accounts from F15 can be reused.
+1. **Caregiver window** → home → **➕ Add your family member** → full name, "What the family calls them" (e.g. Aita), age, gender, language, stage, **You are their… Daughter**, village → **Save** → the patient card appears, with Progress, Reminders and **👥 People**, and a note that family photos are added on the patient's own phone.
+2. **👥 People** → you are listed as "Daughter · ⭐ manager". "Aita's phone is not paired yet" (amber).
+3. **Invite the ASHA worker** → a big 6-digit code, "Valid for 7 days, for one person", **Send the code** (share sheet) → Done.
+4. **ASHA window** → sign up as ASHA → **🔑 Join with a code** → try `000001`: "That code is not valid or has expired" → the real code → the patient appears in her list. Her People screen shows everyone, but "Only the family … can invite people".
+5. **Caregiver → People → Pair Aita's phone** → a code "Valid until <time>" (15 minutes).
+6. **Patient window** → Continue → **Patient's phone** → type the code → **Pair this phone** → choose a 4-digit family PIN, twice → **Aita's home** (greeting, date, games). Reload at `/`: it opens straight into Aita's home.
+7. On the patient window: **Hold for the family corner** (bottom, 2 seconds) → PIN → **Family corner**: Family photos, Unpair this phone.
+8. Caregiver → People: "Aita's phone is paired" (green).
+9. **Invite the doctor** → **Doctor window** → sign up as doctor → Join with a code → the patient appears. Caregiver → People → **Remove** the doctor → the doctor's list (reload at `/`) shows "No patients linked yet".
+10. ASHA → patient → People → **Leave** → back to her list, without the patient.
+11. Optional: ASHA **➕ Register a patient** (a family without a smartphone): she becomes the manager and can pair that patient's phone herself.
+12. Hindi: switch language in ⚙️ Settings (staff) and check the People and code screens.
+

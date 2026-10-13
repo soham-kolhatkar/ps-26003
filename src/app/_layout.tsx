@@ -8,7 +8,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NotificationResponder } from '@/components/NotificationResponder';
 import { databaseNameFor, setDb } from '@/db/client';
 import { initCloudDatabase, initDatabase } from '@/db/init';
-import { getSetting } from '@/db/repos/settings';
+import { getPatient } from '@/db/repos/patients';
+import { getSetting, setSetting } from '@/db/repos/settings';
 import { listUsers, upsertUser } from '@/db/repos/users';
 import { DEMO } from '@/db/seed/demo';
 import { isLanguageCode } from '@/i18n';
@@ -17,6 +18,7 @@ import { configureNotifications, syncReminderNotifications } from '@/services/no
 import { useAccount } from '@/store/account';
 import { useDevice } from '@/store/device';
 import { useSettings } from '@/store/settings';
+import { refreshPeople } from '@/sync/refresh';
 import { colors } from '@/theme/tokens';
 
 configureNotifications();
@@ -45,6 +47,17 @@ async function onInitCloud(db: SQLiteDatabase) {
   await initCloudDatabase(db);
   const profile = useAccount.getState().profile;
   if (profile) await upsertUser(db, profile);
+  const { role, patientId } = useDevice.getState();
+  if (role === 'patient' && patientId) {
+    await setSetting(db, 'device_patient_id', patientId);
+    // First start after pairing: wait (briefly) for the patient's profile so the home has a name.
+    if (!(await getPatient(db, patientId))) {
+      await Promise.race([
+        refreshPeople().catch((e) => console.warn('First pull failed (offline?)', e)),
+        new Promise((r) => setTimeout(r, 6000)),
+      ]);
+    }
+  }
   syncReminderNotifications(db).catch((e) => console.warn('Reminder notifications not scheduled', e));
 }
 

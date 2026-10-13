@@ -13,6 +13,10 @@ export type CloudErrorKey =
   | 'nameMissing'
   | 'wrongRole'
   | 'notConfigured'
+  | 'notAllowed'
+  | 'lastManager'
+  | 'invalidCode'
+  | 'codeWrongRole'
   | 'generic';
 
 export class CloudError extends Error {

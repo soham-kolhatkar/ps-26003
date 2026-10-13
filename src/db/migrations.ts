@@ -173,6 +173,14 @@ CREATE TABLE visit (
 CREATE INDEX idx_visit_patient ON visit (patient_id, started_at);
 `,
   },
+  {
+    version: 6,
+    name: 'cloud membership (Tier 3)',
+    sql: `
+ALTER TABLE patient_user ADD COLUMN member_role TEXT;
+ALTER TABLE patient_user ADD COLUMN is_manager INTEGER NOT NULL DEFAULT 0;
+`,
+  },
 ];
 
 export const LATEST_VERSION = MIGRATIONS[MIGRATIONS.length - 1].version;

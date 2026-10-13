@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { AlertsButton } from '@/components/AlertsButton';
 import { AppText } from '@/components/AppText';
+import { BigButton } from '@/components/BigButton';
 import { PatientCard } from '@/components/PatientCard';
 import { VisitStatusLine } from '@/components/VisitStatusLine';
 import { Screen } from '@/components/Screen';
@@ -16,6 +17,8 @@ import { getUser } from '@/db/repos/users';
 import { useDbQuery } from '@/db/useDbQuery';
 import { visitStatus, visitUrgency, type VisitStatus } from '@/engine/visits';
 import { refreshAlerts } from '@/services/alerts';
+import { useDevice } from '@/store/device';
+import { useCloudRefresh } from '@/sync/refresh';
 import { useSession } from '@/store/session';
 import { formatShortDate } from '@/services/datetime';
 import { useSettings } from '@/store/settings';
@@ -34,6 +37,9 @@ type StaffPatientListProps = {
   withVisits?: boolean;
   /** Show "Referred by the ASHA worker" and list referred patients first (doctor). */
   withReferrals?: boolean;
+  /** Cloud mode: where "Register a patient" (ASHA) and "Join with a code" go. */
+  registerPath?: '/asha/patient-new';
+  joinPath?: '/asha/join' | '/doctor/join';
 };
 
 /**
@@ -47,7 +53,10 @@ export function StaffPatientList({
   patientPath,
   withVisits,
   withReferrals,
+  registerPath,
+  joinPath,
 }: StaffPatientListProps) {
+  const cloud = useDevice((s) => s.mode) === 'cloud';
   const language = useSettings((s) => s.language);
   const { t } = useTranslation();
   const userId = useSession((s) => s.userId) ?? '';
@@ -85,6 +94,7 @@ export function StaffPatientList({
     [userId, withVisits, withReferrals],
   );
   useFocusEffect(useCallback(() => reload(), [reload]));
+  useCloudRefresh(reload);
 
   if (!data?.user) return <Screen>{null}</Screen>;
 
@@ -114,6 +124,12 @@ export function StaffPatientList({
           <AlertsButton counts={counts} patientId={patient.id} pathname={alertsPath} showClear />
         </View>
       ))}
+      {cloud && registerPath ? (
+        <BigButton icon="➕" label={t('people.register')} onPress={() => router.push(registerPath)} />
+      ) : null}
+      {cloud && joinPath ? (
+        <BigButton kind="secondary" icon="🔑" label={t('people.joinButton')} onPress={() => router.push(joinPath)} />
+      ) : null}
       {footer ? <AppText tone="muted">{footer}</AppText> : null}
     </Screen>
   );

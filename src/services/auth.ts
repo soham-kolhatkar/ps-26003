@@ -9,6 +9,9 @@ type StoredPin = { salt: string; hash: string };
 
 export const PIN_LENGTH = 4;
 
+/** Patient's phone (cloud): the family PIN that guards the family corner. */
+export const FAMILY_PIN_ID = 'family';
+
 const keyFor = (userId: string) => `pin.${userId}`;
 
 async function hashPin(pin: string, salt: string): Promise<string> {

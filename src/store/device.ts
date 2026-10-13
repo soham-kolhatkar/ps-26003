@@ -15,6 +15,7 @@ export type DeviceRole = Role;
 
 const MODE_KEY = 'device.mode';
 const ROLE_KEY = 'device.role';
+const PATIENT_KEY = 'device.patientId';
 const ROLES: readonly DeviceRole[] = ['patient', 'caregiver', 'asha', 'doctor'];
 
 function readMode(): DeviceMode | null {
@@ -29,6 +30,9 @@ function readRole(): DeviceRole | null {
 type DeviceState = {
   mode: DeviceMode | null;
   role: DeviceRole | null;
+  /** Patient's phone: the patient it was paired with. */
+  patientId: string | null;
+  setPatientId: (id: string | null) => void;
   chooseDemo: () => void;
   chooseCloud: (role: DeviceRole) => void;
   /** Back to "Who will use this phone?" (after signing out). */
@@ -38,6 +42,12 @@ type DeviceState = {
 export const useDevice = create<DeviceState>((set) => ({
   mode: readMode(),
   role: readRole(),
+  patientId: kv.get(PATIENT_KEY),
+  setPatientId: (id) => {
+    if (id) kv.set(PATIENT_KEY, id);
+    else kv.remove(PATIENT_KEY);
+    set({ patientId: id });
+  },
   chooseDemo: () => {
     kv.set(MODE_KEY, 'demo');
     kv.remove(ROLE_KEY);
@@ -51,7 +61,8 @@ export const useDevice = create<DeviceState>((set) => ({
   reset: () => {
     kv.remove(MODE_KEY);
     kv.remove(ROLE_KEY);
-    set({ mode: null, role: null });
+    kv.remove(PATIENT_KEY);
+    set({ mode: null, role: null, patientId: null });
   },
 }));
 
