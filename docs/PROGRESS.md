@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** T1 hardening (`chore/t1-hardening`). Waiting for the user's final on-device pass.
-**Next:** tag `v0.1.0`, then Tier 2 (F08).
+**Current feature:** — (Tier 1 complete, tagged `v0.1.0`).
+**Next:** Tier 2, starting with F08.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -14,7 +14,7 @@
 | F05 | Game: family photo recall + caregiver photo manager | ✅ done | feat/f05-family-photos | a7f1f21 |
 | F06 | Reminders (local notifications, ack screen, adherence) | ✅ done | feat/f06-reminders | f3ce415 |
 | F07 | Caregiver dashboard (charts) | ✅ done | feat/f07-caregiver-dashboard | 5c9891f |
-| T1 | Hardening + tag v0.1.0 | 🧪 testing | chore/t1-hardening | — |
+| T1 | Hardening + tag v0.1.0 | ✅ done | chore/t1-hardening | v0.1.0 |
 
 ## Tier 2: complete platform
 | ID | Feature | Status |
