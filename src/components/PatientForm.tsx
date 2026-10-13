@@ -19,6 +19,8 @@ import { refreshPeople } from '@/sync/refresh';
 
 const GENDERS = ['female', 'male', 'other'] as const;
 const STAGES = ['mild', 'moderate', 'severe'] as const;
+export const MIN_AGE = 30;
+export const MAX_AGE = 120;
 
 /**
  * New patient (cloud): a caregiver adds a family member, or an ASHA worker
@@ -47,15 +49,20 @@ export function PatientForm() {
       setError(new CloudError('nameMissing'));
       return;
     }
+    const years = age ? Number.parseInt(age, 10) : null;
+    // Same rule as the database (002: patients_age_check).
+    if (years != null && (years < MIN_AGE || years > MAX_AGE)) {
+      setError(new CloudError('ageRange'));
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
-      const n = Number.parseInt(age, 10);
       await createPatient({
         id: newId(),
         name: name.trim(),
         preferred_name: preferred.trim(),
-        age: Number.isFinite(n) ? n : null,
+        age: years,
         gender,
         language: language ?? appLanguage,
         condition_stage: stage,

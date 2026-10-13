@@ -729,7 +729,9 @@
       "notAllowed": "You can't do this for this person.",
       "lastManager": "Someone else must manage this person first: invite a family member before leaving.",
       "invalidCode": "That code is not valid or has expired. Ask for a new one.",
-      "codeWrongRole": "This code is for a different kind of account (for example, a code for the patient's phone)."
+      "codeWrongRole": "This code is for a different kind of account (for example, a code for the patient's phone).",
+      "ageRange": "Please enter an age between 30 and 120.",
+      "invalidInput": "Some details could not be saved. Please check the form and try again."
     }
   },
   "people": {

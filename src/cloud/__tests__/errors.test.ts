@@ -12,6 +12,9 @@ describe('cloud error mapping', () => {
     expect(errorKeyFor(new Error('something odd'))).toBe('generic');
     expect(errorKeyFor(null)).toBe('generic');
     expect(errorKeyFor(new CloudError('wrongRole'))).toBe('wrongRole');
+    expect(errorKeyFor({ code: '23514', message: 'violates check constraint "patients_age_check"' })).toBe(
+      'invalidInput',
+    );
   });
 });
 
