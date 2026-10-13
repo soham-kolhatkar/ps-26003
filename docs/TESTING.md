@@ -208,3 +208,14 @@
 8. **🔊 Hear again** in the recall step repeats the question. **✖ Stop** at any step → home, with no speech carrying on.
 9. Caregiver → 📊 Progress: a "Remember and find" tile.
 10. Hindi: "याद करें और ढूँढें", "इन चित्रों को याद रखें।", "अब थोड़ा आराम। सारे तारे छुएँ।", "आपने सब ढूँढ लिए!" sound natural.
+
+## F11 Trend alerts checklist
+> **First: Rimjhim → ♻️ Reset demo data.** Your phone's older demo history mixes with your test games, so it shows a decline for Aita that the clean demo story doesn't have. The reset also deletes the family photos you added.
+1. Sign out → **Pranita (ASHA)** → 1234. **Dhaniram is listed first**, with a 🔴 "Things to look at: 3 (3 new)" button. Aita and Lakhi show "✅ No concerns in the trends".
+2. Open it: **Please review soon · Lower results in "Find the object"** and **"Daily routines"** (≈45% lower, usual level 2 → 1, numbers of games), and **🟠 Needs attention · Medicines often missed** (3 of 6 doses, 50%). Each has a 💡 tip and "Noticed <date>". At the bottom: "How Smriti notices these" and the "not a diagnosis" note.
+3. Back: the button now says "Things to look at: 3" (no longer "new").
+4. Sign out → **Dr. Anjali** → the same list order and badges.
+5. Rimjhim (caregiver): Aita's card shows no alert button. 📊 Progress has no alert cards at the top.
+6. Optional, to see one appear: play **Daily routines** as Aita 3 times on purpose badly (tap wrong steps first). Rimjhim's home may then show "Things to look at" and the dashboard shows the alert cards. It clears by itself once results recover.
+7. Hindi: "ध्यान देने वाली बातें", "जल्द देखें", "दवाइयाँ अक्सर छूट रही हैं" and the explanations read naturally.
+
