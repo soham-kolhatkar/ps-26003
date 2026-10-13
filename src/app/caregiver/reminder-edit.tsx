@@ -171,6 +171,9 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
       {isOnce ? (
         <View style={styles.row}>
           <View style={styles.flex}>
+            <AppText variant="small" bold>
+              {t('reminders.caregiver.dateLabel')}
+            </AppText>
             <BigButton
               kind="secondary"
               icon="📅"
@@ -179,6 +182,9 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
             />
           </View>
           <View style={styles.flex}>
+            <AppText variant="small" bold>
+              {t('reminders.caregiver.timeLabel')}
+            </AppText>
             <BigButton
               kind="secondary"
               icon="🕰️"
@@ -240,5 +246,5 @@ const styles = StyleSheet.create({
   },
   chipOn: { backgroundColor: colors.primary },
   row: { flexDirection: 'row', gap: space.md },
-  flex: { flex: 1 },
+  flex: { flex: 1, gap: space.xs },
 });

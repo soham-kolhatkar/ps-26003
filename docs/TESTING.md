@@ -141,3 +141,12 @@
 8. **Last 30 days**: everything recalculates. The score comparison says "No earlier data to compare" (the history is only 30 days long).
 9. Play a game as Aita, come back: games played, today's score and Recent activity update.
 10. Hindi: all labels, dates (e.g. "13 अक्टू") and the disclaimer at the bottom are in Hindi.
+
+---
+
+## T1 Hardening: final pass before v0.1.0 (≈15 min, follow docs/DEMO.md)
+1. **Chart crash fix:** Progress → Last 30 days → tap an early column (mid-September) → switch to **Last 7 days**. No crash. (Previously: `Cannot read property 'decided' of undefined`.)
+2. **Full demo story in airplane mode**, steps 1–13 of [DEMO.md](DEMO.md), **in Hindi**. Watch for text that is cut off or overflows, and wording that sounds unnatural.
+3. Repeat the patient part in **English**.
+4. Reminder editor: "Date" and "Time" labels now appear above the appointment buttons.
+5. ASHA and doctor screens: the placeholder notes no longer mention "Tier 2".

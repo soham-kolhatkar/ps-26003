@@ -5,7 +5,7 @@ import Svg, { Circle, Line, Path, Text as SvgText } from 'react-native-svg';
 import { AppText } from '@/components/AppText';
 import { chart, colors, font, space } from '@/theme/tokens';
 
-import { areaPath, linePath, nearestIndex, segments } from './geometry';
+import { areaPath, linePath, nearestIndex, segments, validIndex } from './geometry';
 
 export type LinePoint = { label: string; value: number | null };
 
@@ -49,7 +49,7 @@ export function LineChart({
   const segs = segments(values, (v, i) => ({ x: x(i), y: y(v) }));
   const lastIdx = values.reduce<number>((acc, v, i) => (v != null ? i : acc), -1);
   const hasData = lastIdx >= 0;
-  const sel = selected ?? (hasData ? lastIdx : null);
+  const sel = validIndex(selected, points.length, hasData ? lastIdx : null);
 
   const xLabels = points.length ? [0, Math.floor((points.length - 1) / 2), points.length - 1] : [];
 
@@ -66,6 +66,7 @@ export function LineChart({
         accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
         onAccessibilityAction={(e) => {
           const cur = sel ?? 0;
+          if (!hasData) return;
           setSelected(
             Math.min(points.length - 1, Math.max(0, cur + (e.nativeEvent.actionName === 'increment' ? 1 : -1))),
           );

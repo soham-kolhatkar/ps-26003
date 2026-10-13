@@ -1,4 +1,4 @@
-import { areaPath, columnPath, linePath, nearestIndex, segments } from '../geometry';
+import { areaPath, columnPath, linePath, nearestIndex, segments, validIndex } from '../geometry';
 
 describe('chart geometry', () => {
   it('splits a series into segments at gaps', () => {
@@ -32,5 +32,14 @@ describe('chart geometry', () => {
     expect(nearestIndex(54, 10, 100, 11)).toBe(4);
     expect(nearestIndex(500, 10, 100, 11)).toBe(10);
     expect(nearestIndex(30, 0, 100, 1)).toBe(0);
+  });
+});
+
+describe('validIndex', () => {
+  it('drops a selection that no longer exists (30 → 7 days)', () => {
+    expect(validIndex(25, 7, 6)).toBe(6);
+    expect(validIndex(3, 7, 6)).toBe(3);
+    expect(validIndex(null, 7, 6)).toBe(6);
+    expect(validIndex(-1, 7, null)).toBeNull();
   });
 });
