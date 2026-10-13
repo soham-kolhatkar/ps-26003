@@ -31,7 +31,7 @@
 | 13 | Show airplane mode is still on | All of it ran offline. Data lives in SQLite on the phone. |
 
 ## Close (about 30 s): what's next (Tier 2)
-- **More games**: word recall, attention/reaction, odd-one-out and patterns.
+- **More games**: odd one out and complete the pattern (done), then word recall and attention/reaction.
 - **Trend alerts**: the app flags a sustained decline (seeded example: Dhaniram) to the family and ASHA worker.
 - **ASHA mode**: one phone, many village patients, a 5-minute check-up during home visits.
 - **Doctor view**: a read-only cognitive trend report.
@@ -39,7 +39,7 @@
 - **Optional cloud sync** (Firebase) so family members on other phones can follow along.
 
 ## Likely judge questions
-- **"Is the AI real?"** Yes, and it's explainable: an adaptive difficulty engine and (Tier 2) trend detection over each patient's own baseline. These rules are unit-tested; there's no black box. 90 automated tests run on every change.
+- **"Is the AI real?"** Yes, and it's explainable: an adaptive difficulty engine and (Tier 2) trend detection over each patient's own baseline. These rules are unit-tested; there's no black box. 99 automated tests run on every change.
 - **"Why not cloud-first?"** Connectivity in NER villages. Offline-first, with sync as an add-on.
 - **"Privacy?"** Patient data and photos stay on the device. Staff screens are PIN-protected (salted hash in the OS keystore).
 - **"Clinical validity?"** Games follow established cognitive-stimulation and errorless-learning principles. We report trends, not diagnoses. Next step: validate with a geriatrician and ASHA workers in Jorhat.
