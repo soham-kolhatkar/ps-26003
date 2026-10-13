@@ -94,3 +94,22 @@ describe('alerts repo', () => {
     db.close();
   });
 });
+
+describe('refreshAlerts', () => {
+  it('survives concurrent refreshes of the same patient (screen mount + focus)', async () => {
+    const db = createTestDb();
+    await initDatabase(db);
+    const now = Date.now();
+    await Promise.all([refreshAlerts(db, 'p-dhaniram', now), refreshAlerts(db, 'p-dhaniram', now)]);
+    expect(await listAlerts(db, 'p-dhaniram', { resolvedSince: 0 })).toHaveLength(3);
+    db.close();
+  });
+
+  it('never throws, even when the database fails', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const broken = { getAllAsync: () => Promise.reject(new Error('boom')) } as never;
+    await expect(refreshAlerts(broken, 'p-aita')).resolves.toBeUndefined();
+    expect(warn).toHaveBeenCalled();
+    warn.mockRestore();
+  });
+});

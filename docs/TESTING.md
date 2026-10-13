@@ -210,6 +210,7 @@
 10. Hindi: "याद करें और ढूँढें", "इन चित्रों को याद रखें।", "अब थोड़ा आराम। सारे तारे छुएँ।", "आपने सब ढूँढ लिए!" sound natural.
 
 ## F11 Trend alerts checklist
+> **Fix round 1:** the caregiver home was blank (two alert refreshes collided). Open Rimjhim first and check that her home loads.
 > **First: Rimjhim → ♻️ Reset demo data.** Your phone's older demo history mixes with your test games, so it shows a decline for Aita that the clean demo story doesn't have. The reset also deletes the family photos you added.
 1. Sign out → **Pranita (ASHA)** → 1234. **Dhaniram is listed first**, with a 🔴 "Things to look at: 3 (3 new)" button. Aita and Lakhi show "✅ No concerns in the trends".
 2. Open it: **Please review soon · Lower results in "Find the object"** and **"Daily routines"** (≈45% lower, usual level 2 → 1, numbers of games), and **🟠 Needs attention · Medicines often missed** (3 of 6 doses, 50%). Each has a 💡 tip and "Noticed <date>". At the bottom: "How Smriti notices these" and the "not a diagnosis" note.

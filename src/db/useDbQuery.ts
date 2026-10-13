@@ -20,8 +20,11 @@ export function useDbQuery<T>(query: (db: DbClient) => Promise<T>, deps: readonl
     let cancelled = false;
     query(getDb()).then(
       (data) => !cancelled && setSettled({ key, data, error: null }),
-      (e: unknown) =>
-        !cancelled && setSettled((prev) => ({ ...prev, key, error: e instanceof Error ? e : new Error(String(e)) })),
+      (e: unknown) => {
+        // Visible in the Metro log: a failed query otherwise just leaves the screen empty.
+        console.warn('DB query failed', e);
+        if (!cancelled) setSettled((prev) => ({ ...prev, key, error: e instanceof Error ? e : new Error(String(e)) }));
+      },
     );
     return () => {
       cancelled = true;

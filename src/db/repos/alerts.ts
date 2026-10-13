@@ -54,6 +54,9 @@ const RANK: Record<AlertSeverity, number> = { info: 0, warning: 1, serious: 2 };
  * Makes the stored open alerts match what the engine detects now:
  * new → inserted (unseen); still there → numbers updated (and marked unseen
  * again if it got more serious); gone → resolved.
+ * Not wrapped in withTransactionAsync: expo-sqlite transactions are not
+ * exclusive, so concurrent queries could interleave. Callers serialise
+ * instead (services/alerts), and the insert ignores a duplicate open key.
  */
 export async function syncAlerts(
   db: DbClient,
@@ -65,14 +68,14 @@ export async function syncAlerts(
     patientId,
   ]);
   const byKey = new Map(open.map((r) => [r.alert_key, r]));
-  await db.withTransactionAsync(async () => {
+  {
     for (const d of detected) {
       const existing = byKey.get(d.key);
       const detail = JSON.stringify(d.detail);
       const gameId = d.kind === 'game_decline' ? d.detail.gameId : null;
       if (!existing) {
         await db.runAsync(
-          `INSERT INTO alert (id, patient_id, alert_key, kind, game_id, severity, detail, first_seen_at, updated_at)
+          `INSERT OR IGNORE INTO alert (id, patient_id, alert_key, kind, game_id, severity, detail, first_seen_at, updated_at)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [newId(), patientId, d.key, d.kind, gameId, d.severity, detail, now, now],
         );
@@ -90,7 +93,7 @@ export async function syncAlerts(
     for (const gone of byKey.values()) {
       await db.runAsync('UPDATE alert SET resolved_at = ?, updated_at = ? WHERE id = ?', [now, now, gone.id]);
     }
-  });
+  }
 }
 
 /** Open alerts (most serious first), plus alerts resolved since `resolvedSince` if given. */
