@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F16 patients, people, invites and pairing, on `feat/f16-people-pairing`: pushed, **waiting for the user's test in Chromium** (checklist at the end of TESTING.md). SQL 002 applied by the user.
+**Current feature:** F16 patients, people, invites and pairing, on `feat/f16-people-pairing`: pushed, **waiting for the user's test (planned 2026-10-14)** in Chromium or on the phone (checklist at the end of TESTING.md). SQL 002 applied by the user. Dev server stopped for the night: restart with `npm run web` (browser) or `npm run usb` (phone).
 **Next:** F17 data sync.
 
 ## Tier 1: core demo
