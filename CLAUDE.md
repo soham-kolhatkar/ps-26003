@@ -19,6 +19,7 @@ AI-based cognitive gaming + memory assistance app for elderly dementia patients 
 - TypeScript 6: global types must be listed in `tsconfig.json` `compilerOptions.types` (currently `["jest", "node"]`).
 - Typed routes are generated into `.expo/types` by the dev server. After adding a route, keep the server running (or start it once) before `tsc`.
 - Formatting: Prettier (`npm run format`; single quotes, width 120).
+- **APK builds:** JDK 17 at `~/opt/jdk-17`, Android SDK at `~/Android/Sdk` (see D32). Bump `expo.version` and `android.versionCode` in app.json for each release. The APK has its own data, separate from Expo Go's.
 - Expo SDK **57** (RN 0.86, React 19.2, React Compiler on, typed routes on). Check versioned docs before using any Expo API: https://docs.expo.dev/versions/v57.0.0/
 
 ## Commands
@@ -26,6 +27,7 @@ AI-based cognitive gaming + memory assistance app for elderly dementia patients 
 npm run usb         # dev server over USB (default on the corporate network)
 npm run tunnel      # dev server via ngrok tunnel (blocked on the corporate network)
 npm run check       # tsc + lint + jest + expo-doctor  (must pass before push)
+npm run build:apk   # standalone release APK -> dist/ + Windows Downloads (add -- --install to put it on the phone)
 npm test            # jest only
 npx expo export --platform android --output-dir <scratch>   # bundle smoke test
 ```
