@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F09 attention/reaction tap (Tier 2 started 2026-10-13).
+**Current feature:** F09 🐟 Catch the fish (attention/reaction), on `feat/f09-reaction-tap`: pushed, **waiting for the user's phone test** (checklist in TESTING.md).
 **Next:** F10 word recall.
 
 ## Tier 1: core demo
@@ -20,7 +20,7 @@
 | ID | Feature | Status |
 |---|---|---|
 | F08 | Games: **Odd one out** 🧺 + **Complete the pattern** 🔁 (separate games, D34) | ✅ done (51c5729) |
-| F09 | Game: attention/reaction tap | ⏳ |
+| F09 | Game: 🐟 **Catch the fish** (attention / reaction time, go/no-go) | 🧪 testing |
 | F10 | Game: word recall | ⏳ |
 | F11 | Trend detection + alerts | ⏳ |
 | F12 | ASHA mode | ⏳ |

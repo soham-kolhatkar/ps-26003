@@ -26,6 +26,11 @@ export const colors = {
   warning: '#B26A00',
   warningSoft: '#FFF0D6',
   danger: '#B3261E',
+
+  /** "Catch the fish" pond (a pukhuri). */
+  water: '#CFE8E6',
+  waterLight: '#E4F3F1',
+  waterEdge: '#8FC3BE',
 } as const;
 
 /**

@@ -152,6 +152,19 @@
       "whatMissing": "Which picture is missing?",
       "blank": "empty",
       "hint": "Here it is — the {{item}}. Tap it."
+    },
+    "reaction_tap": {
+      "title": "Catch the fish",
+      "description": "Tap the fish as soon as you see it",
+      "instruction": "Fish will jump up in the pond. Tap each fish as quickly as you can.",
+      "ready": "Tap the fish as soon as you see it.",
+      "readyNoGo": "Tap only the fish. Do not tap the frog, the duck or the leaf.",
+      "watch": "Watch the pond…",
+      "hit": "Caught it!",
+      "waited": "Well done! That was not a fish.",
+      "missed": "The fish swam away. Get ready for the next one.",
+      "tappedNoGo": "That is not a fish. Tap only the fish.",
+      "water": "Water"
     }
   },
   "items": {
@@ -204,7 +217,9 @@
     "car": "car",
     "auto": "auto-rickshaw",
     "train": "train",
-    "truck": "truck"
+    "truck": "truck",
+    "frog": "frog",
+    "leaf": "leaf"
   },
   "categories": {
     "one": {
