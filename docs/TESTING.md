@@ -174,6 +174,21 @@
 
 ---
 
+## F10 Remember and find checklist
+> New tile on Aita's home: **🧠 Remember and find**. It starts at level 1 (remember 2 pictures).
+1. Intro → Start. "Remember these pictures." Then each picture appears big with its name, and the name is spoken ("Remember: 1 of 2"). Every word is heard in full.
+2. A recap shows the whole list together: "Remember: rice, chilli."
+3. Break: "Now a short break. Tap all the stars." Tap each ⭐; they disappear.
+4. "Which pictures did you see? Find 2." A grid of pictures shows "Found 0 of 2". Tap a right one: green, "✓ name", "Yes, the …!". The progress dots fill.
+5. Tap a wrong one: it fades, "That one was not in the list." After 2 wrong taps a remaining picture glows amber and is named. Tap it to finish.
+6. All found → "You found them all!" → a second list (different pictures) → well-done screen.
+7. Play again with no mistakes, 2–3 times: lists grow to 3, 4 and 5 pictures, with more pictures to choose from and more stars. At level 4–5 (9–11 pictures) the grid still fits on screen without scrolling.
+8. **🔊 Hear again** in the recall step repeats the question. **✖ Stop** at any step → home, with no speech carrying on.
+9. Caregiver → 📊 Progress: a "Remember and find" tile.
+10. Hindi: "याद करें और ढूँढें", "इन चित्रों को याद रखें।", "अब थोड़ा आराम। सारे तारे छुएँ।", "आपने सब ढूँढ लिए!" sound natural.
+
+---
+
 ## T1 Hardening: final pass before v0.1.0 (≈15 min, follow docs/DEMO.md)
 1. **Chart crash fix:** Progress → Last 30 days → tap an early column (mid-September) → switch to **Last 7 days**. No crash. (Previously: `Cannot read property 'decided' of undefined`.)
 2. **Full demo story in airplane mode**, steps 1–13 of [DEMO.md](DEMO.md), **in Hindi**. Watch for text that is cut off or overflows, and wording that sounds unnatural.

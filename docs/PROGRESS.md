@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F10 word recall.
+**Current feature:** F10 🧠 Remember and find (word recall), on `feat/f10-word-recall`: pushed, **waiting for the user's phone test** (checklist in TESTING.md).
 **Next:** F11 trend detection + alerts.
 
 ## Tier 1: core demo
@@ -21,7 +21,7 @@
 |---|---|---|
 | F08 | Games: **Odd one out** 🧺 + **Complete the pattern** 🔁 (separate games, D34) | ✅ done (51c5729) |
 | F09 | Game: 🐟 **Catch the fish** (attention / reaction time, go/no-go) | ✅ done (cda05af) |
-| F10 | Game: word recall | ⏳ |
+| F10 | Game: 🧠 **Remember and find** (delayed picture-word recall) | 🧪 testing |
 | F11 | Trend detection + alerts | ⏳ |
 | F12 | ASHA mode | ⏳ |
 | F13 | Doctor view | ⏳ |
