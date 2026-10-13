@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** F05 Family photo recall (`feat/f05-family-photos`). Implemented and waiting for user test.
-**Next:** F06 Reminders.
+**Current feature:** F06 Reminders (`feat/f06-reminders`). Implemented and waiting for user test.
+**Next:** F07 Caregiver dashboard (charts).
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -11,8 +11,8 @@
 | F02 | Patient home, GameShell, difficulty engine (+ "Find the object" game as the first real game) | ✅ done | feat/f02-patient-home-gameshell | 6b4aed5 |
 | F03 | Game: memory card match | ✅ done | feat/f03-memory-match | d79ea60 |
 | F04 | Game: daily routine sequencing (+ speech pacing fix) | ✅ done | feat/f04-routine-sequencing | a5b4282 |
-| F05 | Game: family photo recall + caregiver photo manager | 🧪 testing | feat/f05-family-photos | — |
-| F06 | Reminders (local notifications, ack screen, adherence) | ⏳ | | |
+| F05 | Game: family photo recall + caregiver photo manager | ✅ done | feat/f05-family-photos | a7f1f21 |
+| F06 | Reminders (local notifications, ack screen, adherence) | 🧪 testing | feat/f06-reminders | — |
 | F07 | Caregiver dashboard (charts) | ⏳ | | |
 | T1 | Hardening + tag v0.1.0 | ⏳ | | |
 

@@ -1,3 +1,6 @@
+import { seededRng } from '@/engine/random';
+import { occurrencesBetween, startOfDay, type ReminderSchedule, type ReminderType } from '@/engine/reminders';
+
 import type { DbClient } from '../types';
 
 /**
@@ -76,6 +79,65 @@ export const DEMO = {
     { patientId: 'p-lakhi', userId: 'u-anjali', relation: 'doctor' },
     { patientId: 'p-dhaniram', userId: 'u-anjali', relation: 'doctor' },
   ],
+  /** Daily reminders; `takeRate` drives the seeded 14-day history. Appointment `inDays` from seed time. */
+  reminders: [
+    {
+      id: 'r-aita-metformin',
+      patientId: 'p-aita',
+      type: 'medicine',
+      title: 'Metformin 500 mg',
+      note: 'After food',
+      times: ['08:30', '20:30'],
+      takeRate: 0.88,
+    },
+    {
+      id: 'r-aita-water',
+      patientId: 'p-aita',
+      type: 'hydration',
+      title: 'Drink a glass of water',
+      note: null,
+      times: ['10:00', '13:00', '16:00'],
+      takeRate: 0.75,
+    },
+    {
+      id: 'r-aita-walk',
+      patientId: 'p-aita',
+      type: 'activity',
+      title: 'Evening walk in the garden',
+      note: null,
+      times: ['17:30'],
+      takeRate: 0.8,
+    },
+    {
+      id: 'r-lakhi-water',
+      patientId: 'p-lakhi',
+      type: 'hydration',
+      title: 'Drink a glass of water',
+      note: null,
+      times: ['11:00', '15:00'],
+      takeRate: 0.8,
+    },
+    {
+      id: 'r-dhaniram-bp',
+      patientId: 'p-dhaniram',
+      type: 'medicine',
+      title: 'Amlodipine 5 mg',
+      note: 'For blood pressure',
+      times: ['09:00'],
+      takeRate: 0.6,
+    },
+  ],
+  appointments: [
+    {
+      id: 'r-aita-checkup',
+      patientId: 'p-aita',
+      title: 'Check-up with Dr. Anjali Sharma',
+      note: 'District Hospital Jorhat',
+      inDays: 3,
+      time: '10:30',
+    },
+  ],
+  historyDays: 14,
   devicePatientId: 'p-aita',
   /** Shown on the PIN screen as a hint in demo builds. */
   pin: '1234',
@@ -83,6 +145,8 @@ export const DEMO = {
 
 /** Tables in child → parent order, for clearing. */
 const ALL_TABLES = [
+  'reminder_event',
+  'reminder',
   'photo',
   'game_level',
   'game_session',
@@ -145,7 +209,65 @@ export async function seedDemo(db: DbClient, now: number = Date.now()): Promise<
       "INSERT INTO setting (key, value) VALUES ('device_patient_id', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
       [DEMO.devicePatientId],
     );
+    await seedReminders(db, now);
+    await db.runAsync(
+      "INSERT INTO setting (key, value) VALUES ('demo_reminders_seeded', '1') ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+      [],
+    );
   });
+}
+
+/** Demo reminders plus a deterministic 14-day taken/missed history (for adherence charts). */
+export async function seedReminders(db: DbClient, now: number): Promise<void> {
+  const rng = seededRng(26003);
+  const today = startOfDay(now);
+  const insertReminder = (
+    id: string,
+    patientId: string,
+    type: ReminderType,
+    title: string,
+    note: string | null,
+    schedule: ReminderSchedule,
+  ) =>
+    db.runAsync(
+      `INSERT INTO reminder (id, patient_id, type, title, note, schedule_kind, times, once_at, enabled, created_by, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, NULL, ?, ?)`,
+      [
+        id,
+        patientId,
+        type,
+        title,
+        note,
+        schedule.kind,
+        schedule.kind === 'daily' ? schedule.times.join(',') : null,
+        schedule.kind === 'once' ? schedule.at : null,
+        now,
+        now,
+      ],
+    );
+
+  const existing = new Set((await db.getAllAsync<{ id: string }>('SELECT id FROM patient', [])).map((p) => p.id));
+  for (const r of DEMO.reminders) {
+    if (!existing.has(r.patientId)) continue;
+    const schedule: ReminderSchedule = { kind: 'daily', times: r.times };
+    await insertReminder(r.id, r.patientId, r.type, r.title, r.note, schedule);
+    const history = occurrencesBetween(schedule, today - DEMO.historyDays * 24 * 3600e3, today);
+    for (const dueAt of history) {
+      const taken = rng() < r.takeRate;
+      const actedAt = taken ? dueAt + Math.round(rng() * 40) * 60e3 : null;
+      await db.runAsync(
+        'INSERT INTO reminder_event (id, reminder_id, patient_id, due_at, status, acted_at) VALUES (?, ?, ?, ?, ?, ?)',
+        [`e-${r.id}-${dueAt}`, r.id, r.patientId, dueAt, taken ? 'taken' : 'pending', actedAt],
+      );
+    }
+  }
+  for (const a of DEMO.appointments) {
+    if (!existing.has(a.patientId)) continue;
+    const [h, m] = a.time.split(':').map(Number);
+    const at = new Date(today + a.inDays * 24 * 3600e3);
+    at.setHours(h, m, 0, 0);
+    await insertReminder(a.id, a.patientId, 'appointment', a.title, a.note, { kind: 'once', at: at.getTime() });
+  }
 }
 
 /** Wipes all data rows (keeps schema and language setting) and re-seeds. */
@@ -156,4 +278,24 @@ export async function resetDemo(db: DbClient, now: number = Date.now()): Promise
     if (lang) await db.runAsync("INSERT INTO setting (key, value) VALUES ('language', ?)", [lang.value]);
   });
   await seedDemo(db, now);
+}
+
+/**
+ * Installs seeded before reminders existed get the demo reminders exactly
+ * once, without a full reset (which would also wipe photos). Tracked by the
+ * `demo_reminders_seeded` flag, so a caregiver deleting all reminders later
+ * doesn't bring them back.
+ */
+export async function backfillDemoReminders(db: DbClient, now: number = Date.now()): Promise<boolean> {
+  const flag = await db.getFirstAsync<{ value: string }>(
+    "SELECT value FROM setting WHERE key = 'demo_reminders_seeded'",
+    [],
+  );
+  if (flag) return false;
+  const count = await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM reminder', []);
+  await db.withTransactionAsync(async () => {
+    if ((count?.n ?? 0) === 0) await seedReminders(db, now);
+    await db.runAsync("INSERT INTO setting (key, value) VALUES ('demo_reminders_seeded', '1')", []);
+  });
+  return (count?.n ?? 0) === 0;
 }

@@ -11,9 +11,12 @@ import { StaffHeader } from '@/components/StaffHeader';
 import { getDb } from '@/db/client';
 import { listPatientsForUser } from '@/db/repos/patients';
 import { listPhotos } from '@/db/repos/photos';
+import { ensureEvents, listOccurrences } from '@/db/repos/reminders';
 import { getUser } from '@/db/repos/users';
 import { resetDemo } from '@/db/seed/demo';
 import { useDbQuery } from '@/db/useDbQuery';
+import { startOfDay } from '@/engine/reminders';
+import { syncReminderNotifications } from '@/services/notifications';
 import { clearAllPhotoFiles } from '@/services/photos';
 import { useSession } from '@/store/session';
 import { space } from '@/theme/tokens';
@@ -27,7 +30,14 @@ export default function CaregiverHome() {
       const photoCounts = Object.fromEntries(
         await Promise.all(patients.map(async (p) => [p.id, (await listPhotos(db, p.id)).length] as const)),
       );
-      return { user: await getUser(db, userId), patients, photoCounts };
+      const from = startOfDay(Date.now());
+      const reminderToday: Record<string, { done: number; total: number }> = {};
+      for (const p of patients) {
+        await ensureEvents(db, p.id, from, from + 24 * 60 * 60 * 1000);
+        const occ = await listOccurrences(db, p.id, from, from + 24 * 60 * 60 * 1000);
+        reminderToday[p.id] = { done: occ.filter((o) => o.status === 'taken').length, total: occ.length };
+      }
+      return { user: await getUser(db, userId), patients, photoCounts, reminderToday };
     },
     [userId],
   );
@@ -42,6 +52,7 @@ export default function CaregiverHome() {
         onPress: async () => {
           await resetDemo(getDb());
           clearAllPhotoFiles();
+          await syncReminderNotifications(getDb());
           reload();
           Alert.alert(t('staff.resetDone'));
         },
@@ -62,6 +73,12 @@ export default function CaregiverHome() {
             icon="📷"
             label={t('photos.button', { count: data.photoCounts[p.id] ?? 0 })}
             onPress={() => router.push({ pathname: '/caregiver/photos', params: { patientId: p.id } })}
+          />
+          <BigButton
+            kind="secondary"
+            icon="🔔"
+            label={t('reminders.caregiver.button', data.reminderToday[p.id] ?? { done: 0, total: 0 })}
+            onPress={() => router.push({ pathname: '/caregiver/reminders', params: { patientId: p.id } })}
           />
         </View>
       ))}

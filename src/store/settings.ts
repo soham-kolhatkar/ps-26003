@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { getDb } from '@/db/client';
 import { setSetting } from '@/db/repos/settings';
 import i18n, { detectDeviceLanguage, type LanguageCode } from '@/i18n';
+import { syncReminderNotifications } from '@/services/notifications';
 
 type SettingsState = {
   language: LanguageCode;
@@ -22,5 +23,7 @@ export const useSettings = create<SettingsState>((set) => ({
     i18n.changeLanguage(language);
     set({ language });
     setSetting(getDb(), 'language', language).catch((e) => console.warn('Failed to save language', e));
+    // Notification texts are rendered at schedule time — rebuild them in the new language.
+    syncReminderNotifications(getDb()).catch((e) => console.warn('Failed to reschedule reminders', e));
   },
 }));

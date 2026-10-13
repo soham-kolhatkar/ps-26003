@@ -98,6 +98,38 @@ CREATE TABLE photo (
 CREATE INDEX idx_photo_patient ON photo (patient_id, created_at);
 `,
   },
+  {
+    version: 3,
+    name: 'reminders + reminder events',
+    sql: `
+CREATE TABLE reminder (
+  id            TEXT PRIMARY KEY NOT NULL,
+  patient_id    TEXT NOT NULL REFERENCES patient(id) ON DELETE CASCADE,
+  type          TEXT NOT NULL CHECK (type IN ('medicine', 'hydration', 'activity', 'appointment')),
+  title         TEXT NOT NULL,
+  note          TEXT,
+  schedule_kind TEXT NOT NULL CHECK (schedule_kind IN ('daily', 'once')),
+  times         TEXT,
+  once_at       INTEGER,
+  enabled       INTEGER NOT NULL DEFAULT 1,
+  created_by    TEXT REFERENCES app_user(id) ON DELETE SET NULL,
+  created_at    INTEGER NOT NULL,
+  updated_at    INTEGER NOT NULL
+);
+CREATE INDEX idx_reminder_patient ON reminder (patient_id);
+
+CREATE TABLE reminder_event (
+  id          TEXT PRIMARY KEY NOT NULL,
+  reminder_id TEXT NOT NULL REFERENCES reminder(id) ON DELETE CASCADE,
+  patient_id  TEXT NOT NULL REFERENCES patient(id) ON DELETE CASCADE,
+  due_at      INTEGER NOT NULL,
+  status      TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'taken', 'skipped')),
+  acted_at    INTEGER,
+  UNIQUE (reminder_id, due_at)
+);
+CREATE INDEX idx_reminder_event_patient_due ON reminder_event (patient_id, due_at);
+`,
+  },
 ];
 
 export const LATEST_VERSION = MIGRATIONS[MIGRATIONS.length - 1].version;

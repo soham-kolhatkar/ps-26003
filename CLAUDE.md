@@ -42,11 +42,13 @@ npx expo export --platform android --output-dir <scratch>   # bundle smoke test
 - `src/components/`: shared UI (`AppText`, `BigButton`, `Screen`).
 - `src/theme/`: design tokens.
 - `src/i18n/`: i18next setup + language packs. Add a language = pack + an entry in `LANGUAGES`.
-- `src/services/`: device services (tts, notifications, photos, sync).
+- `src/services/`: device services (tts, notifications, photos, sync). After changing reminders, call `syncReminderNotifications(db)`.
 - `src/store/`: zustand stores.
 - `src/db/`: SQLite. Repos take a `DbClient` argument; screens read with `useDbQuery`; stores use `getDb()`. New tables = a new migration in `migrations.ts` (append-only) + add the table to `ALL_TABLES` in `seed/demo.ts`.
 - `src/engine/`: pure logic, unit-tested. No React, no DB.
 - `src/games/`: **adding a game** = folder `src/games/<name>/` with a pure rules file (`rounds.ts`/`board.ts`; reuse `src/games/items.ts`) (tested with `seededRng`) + `<Name>Game.tsx` implementing `GameProps` (call `onTrial` once per round with the first-try result, `onProgress` if progress isn't one dot per trial, `onComplete` at the end, `say()` for speech — **await it before any automatic transition** (`afterSpeech` / `useAlive` in `src/games/pacing.ts`), errorless feedback) → add a `GameDefinition` to `registry.ts` → add `games.<id>.{title,description,instruction,...}` to every pack.
 - Use `nowMs()` from `src/engine/clock.ts`, never `Date.now()`, in components.
 - Never pass file uris through route params (they get URL-decoded). Use a store, as `src/store/pendingPhoto.ts` does.
+- **Never `import … from 'expo-notifications'`** (the root crashes Expo Go on Android). Use `@/services/notificationsApi`; add any missing export there as a deep import. ESLint enforces this.
+- **Check the Metro log after every feature** (`grep -E 'ERROR|WARN'` on the dev server log) and relaunch the app (`adb shell am force-stop host.exp.exponent`, then `am start -d exp://localhost:8081`). Passing tests don't prove the app starts in Expo Go.
 - DB tests: add `/** @jest-environment node */` and use `createTestDb()` from `src/db/testing/nodeDb.ts`.

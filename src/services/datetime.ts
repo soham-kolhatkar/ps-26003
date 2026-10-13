@@ -36,3 +36,24 @@ export const GREETING_KEY: Record<DayPart, 'patient.greetMorning' | 'patient.gre
     afternoon: 'patient.greetAfternoon',
     evening: 'patient.greetEvening',
   };
+
+/** "08:30" → "8:30 am" (locale-formatted) for display. */
+export function formatClock(hhmm: string, language: LanguageCode): string {
+  const [h, m] = hhmm.split(':').map(Number);
+  const d = new Date();
+  d.setHours(h, m, 0, 0);
+  return formatTime(d, language);
+}
+
+/** "Mon, 16 Oct" style short date. */
+export function formatShortDate(date: Date, language: LanguageCode): string {
+  try {
+    return new Intl.DateTimeFormat(LANGUAGES[language].locale, {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+    }).format(date);
+  } catch {
+    return date.toDateString();
+  }
+}
