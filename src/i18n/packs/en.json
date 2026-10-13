@@ -135,6 +135,23 @@
       "confirm": "Yes! This is {{name}}.",
       "confirmRelation": "Yes! This is {{name}}, your {{relation}}.",
       "hint": "This is {{name}}."
+    },
+    "odd_one_out": {
+      "title": "Odd one out",
+      "description": "Find the picture that does not belong",
+      "instruction": "Most of these pictures belong together. One is different. Find it and tap it.",
+      "prompt": "Which one is different?",
+      "hint": "This one is different — the {{item}}. Tap it.",
+      "explain": "This one is {{kind}}: the {{item}}. The others are all {{group}}."
+    },
+    "pattern": {
+      "title": "Complete the pattern",
+      "description": "What comes next in the row?",
+      "instruction": "Look at the row of pictures. It repeats. Tap the picture that fits the empty place.",
+      "whatNext": "What comes next?",
+      "whatMissing": "Which picture is missing?",
+      "blank": "empty",
+      "hint": "Here it is — the {{item}}. Tap it."
     }
   },
   "items": {
@@ -161,7 +178,51 @@
     "elephant": "elephant",
     "boat": "boat",
     "goat": "goat",
-    "apple": "apple"
+    "apple": "apple",
+    "pineapple": "pineapple",
+    "grapes": "grapes",
+    "watermelon": "watermelon",
+    "coconut": "coconut",
+    "lemon": "lemon",
+    "carrot": "carrot",
+    "potato": "potato",
+    "chilli": "chilli",
+    "onion": "onion",
+    "corn": "corn",
+    "cucumber": "cucumber",
+    "garlic": "garlic",
+    "greens": "leafy greens",
+    "dog": "dog",
+    "cat": "cat",
+    "buffalo": "buffalo",
+    "hen": "hen",
+    "duck": "duck",
+    "parrot": "parrot",
+    "peacock": "peacock",
+    "owl": "owl",
+    "bus": "bus",
+    "car": "car",
+    "auto": "auto-rickshaw",
+    "train": "train",
+    "truck": "truck"
+  },
+  "categories": {
+    "one": {
+      "fruit": "a fruit",
+      "vegetable": "a vegetable",
+      "animal": "an animal",
+      "bird": "a bird",
+      "vehicle": "a vehicle",
+      "household": "a thing we use at home"
+    },
+    "plural": {
+      "fruit": "fruits",
+      "vegetable": "vegetables",
+      "animal": "animals",
+      "bird": "birds",
+      "vehicle": "vehicles",
+      "household": "things we use at home"
+    }
   },
   "routines": {
     "make_tea": {

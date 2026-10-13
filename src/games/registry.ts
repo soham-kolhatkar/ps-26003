@@ -6,6 +6,10 @@ import { MAX_LEVEL as ROUTINE_MAX_LEVEL } from './routine-sequence/rounds';
 import { RoutineSequenceGame } from './routine-sequence/RoutineSequenceGame';
 import { MAX_LEVEL as PHOTO_MAX_LEVEL, MIN_PEOPLE } from './photo-recall/rounds';
 import { PhotoRecallGame } from './photo-recall/PhotoRecallGame';
+import { MAX_LEVEL as ODD_MAX_LEVEL } from './odd-one-out/rounds';
+import { OddOneOutGame } from './odd-one-out/OddOneOutGame';
+import { MAX_LEVEL as PATTERN_MAX_LEVEL } from './pattern/rounds';
+import { PatternGame } from './pattern/PatternGame';
 import type { GameDefinition, GameId } from './types';
 import { countPeople } from '@/db/repos/photos';
 
@@ -49,6 +53,23 @@ export const GAMES: readonly GameDefinition[] = [
     trialsPerSession: 6,
     targetReactionMs: 4000,
     Component: ObjectRecognitionGame,
+  },
+  {
+    id: 'odd_one_out',
+    icon: '🧺',
+    maxLevel: ODD_MAX_LEVEL,
+    trialsPerSession: 6,
+    targetReactionMs: 6000,
+    Component: OddOneOutGame,
+  },
+  {
+    id: 'pattern',
+    icon: '🔁',
+    maxLevel: PATTERN_MAX_LEVEL,
+    trialsPerSession: 5,
+    // The row is read aloud first (about 4–6 s), and timing starts with it.
+    targetReactionMs: 10000,
+    Component: PatternGame,
   },
 ];
 

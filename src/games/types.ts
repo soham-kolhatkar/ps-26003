@@ -4,7 +4,14 @@ import type { DbClient } from '@/db/types';
 import type { Trial } from '@/engine/scoring';
 
 export type GameId =
-  'object_recognition' | 'memory_match' | 'routine_sequence' | 'photo_recall' | 'reaction_tap' | 'word_recall';
+  | 'object_recognition'
+  | 'memory_match'
+  | 'routine_sequence'
+  | 'photo_recall'
+  | 'odd_one_out'
+  | 'pattern'
+  | 'reaction_tap'
+  | 'word_recall';
 
 /** Props every game component receives from GameShell. */
 export type GameProps = {
