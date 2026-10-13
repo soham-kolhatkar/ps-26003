@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** — (Tier 1 complete, tagged `v0.1.0`; APK built from tag `apk-v0.1.0`).
-**Next:** Tier 2, starting with F08, **only when the user says to start**.
+**Current feature:** F08 Odd one out + Complete the pattern, on `feat/f08-odd-one-out-pattern`: pushed, **waiting for the user's phone test** (checklist in TESTING.md).
+**Next:** F09 attention/reaction tap (Tier 2 started 2026-10-13).
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -19,7 +19,7 @@
 ## Tier 2: complete platform
 | ID | Feature | Status |
 |---|---|---|
-| F08 | Object recognition: add odd-one-out + pattern modes (basic "Find the object" shipped in F02) | ⏳ |
+| F08 | Games: **Odd one out** 🧺 + **Complete the pattern** 🔁 (separate games, D34) | 🧪 testing |
 | F09 | Game: attention/reaction tap | ⏳ |
 | F10 | Game: word recall | ⏳ |
 | F11 | Trend detection + alerts | ⏳ |

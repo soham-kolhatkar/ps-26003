@@ -144,6 +144,21 @@
 
 ---
 
+## F08 Odd one out + Complete the pattern checklist
+> Two new tiles at the bottom of Aita's home: **🧺 Odd one out** and **🔁 Complete the pattern**. Both start at level 1. "Find the object" also uses the new pictures now.
+1. **Odd one out**: intro reads the instruction → Start. Three pictures with names (e.g. 2 fruits + 1 animal); "Which one is different?" is spoken.
+2. Tap the right one: green tick, the card explains *"This one is an animal: the cow. The others are all fruits."* and it is read in full before the next round.
+3. Tap a wrong one: it fades, the odd one glows amber, "This one is different — the …". Tap it to continue. No red, no buzzer.
+4. 6 rounds → the well-done screen. Play 2–3 more times without mistakes: level 2 has 4 pictures, level 3 has 5. All tiles fit on screen without scrolling.
+5. **Complete the pattern**: "banana, cup, banana, cup, banana, empty. What comes next?" is spoken. The row is shown as lines (A B / A B / A ?) with a dashed **?** box, and 2 big choices below.
+6. Right answer: the **?** box fills with the picture (green). Wrong answer: it fades, the right one glows amber, "Here it is — the …".
+7. 5 rounds → done. Later levels: 3 choices, then 3-picture units (A A B), then 4-picture units, where the gap can be in the middle ("Which picture is missing?").
+8. **🔊 Hear again** repeats the row and the question.
+9. Caregiver → 📊 Progress: two new game tiles ("Not played in this period" until played, then score and level).
+10. Hindi: titles "अलग कौन?" and "क्रम पूरा करें", the explanations ("गाय एक जानवर है। बाकी सब फल हैं।") and all picture names sound natural. Tell me about any word that sounds wrong.
+
+---
+
 ## T1 Hardening: final pass before v0.1.0 (≈15 min, follow docs/DEMO.md)
 1. **Chart crash fix:** Progress → Last 30 days → tap an early column (mid-September) → switch to **Last 7 days**. No crash. (Previously: `Cannot read property 'decided' of undefined`.)
 2. **Full demo story in airplane mode**, steps 1–13 of [DEMO.md](DEMO.md), **in Hindi**. Watch for text that is cut off or overflows, and wording that sounds unnatural.
