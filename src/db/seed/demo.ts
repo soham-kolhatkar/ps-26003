@@ -256,6 +256,7 @@ export const DEMO = {
         confusion: 'sometimes',
       },
       note: 'Sleeping badly. Son works in Guwahati; wife manages alone.',
+      refer: true,
       nextInDays: 14,
     },
   ],
@@ -523,7 +524,7 @@ export async function seedVisits(db: DbClient, now: number): Promise<void> {
       checkupScore: checkupScore(tasks),
       observations: v.observations as Observations,
       note: v.note,
-      refer: false,
+      refer: 'refer' in v && v.refer === true,
       nextVisitAt: startedAt + v.nextInDays * DAY_MS,
       source: 'seed',
     });
