@@ -75,8 +75,7 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
     DateTimePickerAndroid.open({
       value: base,
       mode: 'time',
-      onChange: (event, date) => {
-        if (event.type !== 'set' || !date) return;
+      onValueChange: (_event, date) => {
         setTimes((prev) => normalizeTimes([...prev, hhmm({ hour: date.getHours(), minute: date.getMinutes() })]));
       },
     });
@@ -87,8 +86,7 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
       value: new Date(onceAt),
       mode,
       minimumDate: mode === 'date' ? new Date() : undefined,
-      onChange: (event, date) => {
-        if (event.type !== 'set' || !date) return;
+      onValueChange: (_event, date) => {
         const d = new Date(onceAt);
         if (mode === 'date') d.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
         else d.setHours(date.getHours(), date.getMinutes(), 0, 0);

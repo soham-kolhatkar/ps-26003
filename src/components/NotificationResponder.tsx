@@ -1,5 +1,5 @@
 import * as Notifications from '@/services/notificationsApi';
-import { router } from 'expo-router';
+import { router, useRootNavigationState } from 'expo-router';
 import { useEffect } from 'react';
 
 import { getDb } from '@/db/client';
@@ -13,8 +13,11 @@ import { useSession } from '@/store/session';
  */
 export function NotificationResponder() {
   const response = Notifications.useLastNotificationResponse();
+  // On a cold start from a notification, wait until the navigator is mounted.
+  const navigationReady = !!useRootNavigationState()?.key;
 
   useEffect(() => {
+    if (!navigationReady) return;
     if (!response || response.actionIdentifier !== Notifications.DEFAULT_ACTION_IDENTIFIER) return;
     const data = response.notification.request.content.data;
     if (!isReminderPayload(data)) return;
@@ -26,15 +29,15 @@ export function NotificationResponder() {
       await Notifications.clearLastNotificationResponseAsync();
       if (cancelled || !occurrence) return;
       useSession.getState().signInPatient(occurrence.patientId);
-      if (router.canDismiss()) router.dismissAll();
-      router.replace('/patient');
+      // Back to (or replace with) the patient home, then open the prompt on top of it.
+      router.dismissTo('/patient');
       router.push({ pathname: '/patient/reminder/[eventId]', params: { eventId: occurrence.eventId } });
     })().catch((e) => console.warn('Could not open reminder from notification', e));
 
     return () => {
       cancelled = true;
     };
-  }, [response]);
+  }, [response, navigationReady]);
 
   return null;
 }

@@ -47,7 +47,7 @@ export default function ReminderPrompt() {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- speak once when loaded
   }, [occ?.eventId]);
 
-  const goHome = () => (router.canGoBack() ? router.back() : router.replace('/patient'));
+  const goHome = () => router.dismissTo('/patient');
 
   const done = async () => {
     if (!occ) return;

@@ -121,3 +121,7 @@
 10. Switch the app to **Hindi**, then Test: the notification text is in Hindi ("💊 दवाई का समय").
 11. **Airplane mode:** Test still works (notifications are local).
 12. Your existing photos are still there (no reset was needed to get the demo reminders).
+
+### F06 fix round 2 (from logs)
+- **Cold start from a notification:** Test in 10 s → swipe Expo Go away from Recents → tap the notification. Aita's prompt opens over her home screen, and ✅ returns to her home. (Previously logged `POP_TO_TOP was not handled`.)
+- **Time picker:** Add time / pick a date. Cancel does nothing; choosing adds the time. (The `onChange is deprecated` warning is gone.)
