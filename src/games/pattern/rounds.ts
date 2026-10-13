@@ -1,6 +1,6 @@
 import { defaultRng, pick, randomInt, shuffle, type Rng } from '@/engine/random';
 
-import { ITEMS, type Item } from '../items';
+import { distinctLooking, ITEMS, type Item } from '../items';
 
 export const MAX_LEVEL = 5;
 
@@ -37,23 +37,6 @@ export type Round = {
   answer: Item;
   options: Item[];
 };
-
-/**
- * `count` items from different categories, so no two pictures on screen look
- * alike (orange/lemon, bus/truck). Uncategorised items each count as their own.
- */
-export function distinctLooking(pool: readonly Item[], count: number, rng: Rng = defaultRng): Item[] {
-  const seen = new Set<string>();
-  const out: Item[] = [];
-  for (const it of shuffle(pool, rng)) {
-    const key = it.category ?? it.id;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push(it);
-    if (out.length === count) break;
-  }
-  return out;
-}
 
 export function makeRound(level: number, rng: Rng = defaultRng, pool: readonly Item[] = ITEMS): Round {
   const { templates, options, gapAnywhere } = levelParams(level);

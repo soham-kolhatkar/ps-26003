@@ -1,7 +1,7 @@
 import { seededRng } from '@/engine/random';
 
-import { ITEMS } from '../items';
-import { distinctLooking, levelParams, makeRounds, MAX_LEVEL } from '../pattern/rounds';
+import { distinctLooking, ITEMS } from '../items';
+import { levelParams, makeRounds, MAX_LEVEL } from '../pattern/rounds';
 
 describe('pattern rounds', () => {
   it('starts with A-B and 2 choices, ends with longer units and a gap anywhere', () => {

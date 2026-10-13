@@ -1,3 +1,5 @@
+import { defaultRng, shuffle, type Rng } from '@/engine/random';
+
 /**
  * Everyday, familiar objects for Assam / North East households, shared by games.
  * Names live in the language packs under `items.<id>`; category names under
@@ -83,4 +85,21 @@ export const CATEGORIES: readonly Category[] = ['fruit', 'vegetable', 'animal', 
 
 export function itemsIn(category: Category, pool: readonly Item[] = ITEMS): Item[] {
   return pool.filter((it) => it.category === category);
+}
+
+/**
+ * `count` items from different categories, so no two pictures on screen look
+ * alike (orange/lemon, bus/truck). Uncategorised items each count as their own.
+ */
+export function distinctLooking(pool: readonly Item[], count: number, rng: Rng = defaultRng): Item[] {
+  const seen = new Set<string>();
+  const out: Item[] = [];
+  for (const it of shuffle(pool, rng)) {
+    const key = it.category ?? it.id;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(it);
+    if (out.length === count) break;
+  }
+  return out;
 }

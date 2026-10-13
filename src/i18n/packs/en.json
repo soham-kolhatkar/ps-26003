@@ -165,6 +165,25 @@
       "missed": "The fish swam away. Get ready for the next one.",
       "tappedNoGo": "That is not a fish. Tap only the fish.",
       "water": "Water"
+    },
+    "word_recall": {
+      "title": "Remember and find",
+      "description": "Remember pictures, then find them again",
+      "instruction": "I will show you a few pictures. Remember them well. After a short break, you will find them again.",
+      "remember": "Remember these pictures.",
+      "rememberCount": "Remember: {{done}} of {{total}}",
+      "recapTitle": "Remember these",
+      "recap": "Remember: {{list}}.",
+      "breakTitle": "Tap all the stars",
+      "break": "Now a short break. Tap all the stars.",
+      "star": "Star",
+      "find": "Find the {{count}} pictures you saw",
+      "findSpoken": "Which pictures did you see? Find {{count}}.",
+      "foundCount": "Found {{found}} of {{total}}",
+      "hit": "Yes, the {{item}}!",
+      "notInList": "That one was not in the list.",
+      "hint": "Look — the {{item}} was in the list too.",
+      "allFound": "You found them all!"
     }
   },
   "items": {
