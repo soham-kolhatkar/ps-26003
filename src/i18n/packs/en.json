@@ -477,5 +477,41 @@
       "taken": "Taken"
     },
     "disclaimer": "These scores show how game performance changes over time, to support conversations with the doctor. They are not a medical diagnosis."
+  },
+  "alerts": {
+    "title": "Things to look at: {{name}}",
+    "none": "Nothing to look at right now.",
+    "noConcerns": "No concerns in the trends",
+    "banner": "Things to look at: {{count}}",
+    "bannerNew": "Things to look at: {{count}} ({{unseen}} new)",
+    "seeAll": "See all things to look at ({{count}})",
+    "new": "new",
+    "since": "Noticed {{date}}",
+    "resolved": "Back to normal since {{date}}",
+    "resolvedChip": "Back to normal",
+    "resolvedSection": "Earlier, now back to normal",
+    "severity": {
+      "info": "For your information",
+      "warning": "Needs attention",
+      "serious": "Please review soon"
+    },
+    "game_decline": {
+      "title": "Lower results in \"{{game}}\"",
+      "body": "In the last 7 days, results were {{pct}}% lower than in the 3 weeks before ({{recent}} games now, {{baseline}} before). Usual level: {{fromLevel}} → {{toLevel}}.",
+      "tip": "Many things can cause this: poor sleep, illness, a new medicine, low mood. If it continues, mention it to the ASHA worker or doctor."
+    },
+    "adherence_low": {
+      "title": "Medicines often missed",
+      "body": "{{taken}} of {{decided}} medicine doses were marked as taken in the last {{days}} days ({{pct}}%).",
+      "tip": "Check that the reminder can be heard, and whether the times fit the daily routine."
+    },
+    "inactive": {
+      "title": "No games for {{days}} days",
+      "body": "{{name}} played {{count}} games in the 3 weeks before, and last played on {{date}}.",
+      "tip": "A short game together can help. Check that the phone is charged and within reach."
+    },
+    "howTitle": "How Smriti notices these",
+    "how": "For each game, Smriti compares the last 7 days with the 3 weeks before. Results combine the level reached and the score at that level, because the games get easier or harder by themselves. Medicines: below 70% taken in 7 days. Alerts clear by themselves when things improve.",
+    "disclaimer": "This is trend monitoring from games and reminders on this phone, not a diagnosis. Please talk to a doctor about any health worries."
   }
 }

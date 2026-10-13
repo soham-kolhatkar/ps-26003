@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { AlertCard } from '@/components/AlertCard';
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
 import { ChartCard } from '@/components/charts/ChartCard';
@@ -11,6 +12,7 @@ import { LineChart } from '@/components/charts/LineChart';
 import { Meter } from '@/components/charts/Meter';
 import { StatTile, type DeltaTone } from '@/components/charts/StatTile';
 import { Screen } from '@/components/Screen';
+import { listAlerts } from '@/db/repos/alerts';
 import { listSessions } from '@/db/repos/games';
 import { displayName, getPatient } from '@/db/repos/patients';
 import { ensureEvents, listOccurrences } from '@/db/repos/reminders';
@@ -28,6 +30,7 @@ import {
 import { eventState, MISSED_AFTER_MS, startOfDay } from '@/engine/reminders';
 import { GAMES } from '@/games/registry';
 import { formatDayMonth, formatShortDate, formatTime } from '@/services/datetime';
+import { refreshAlerts } from '@/services/alerts';
 import { REMINDER_ICON } from '@/services/notifications';
 import { useSettings } from '@/store/settings';
 import { colors, radius, space } from '@/theme/tokens';
@@ -57,7 +60,9 @@ export default function ProgressDashboard() {
         completed: s.completed,
       }));
       const occurrences = await listOccurrences(db, patientId, since, today + DAY);
-      return { now, patient: await getPatient(db, patientId), sessions, occurrences };
+      await refreshAlerts(db, patientId, now);
+      const alerts = await listAlerts(db, patientId);
+      return { now, patient: await getPatient(db, patientId), sessions, occurrences, alerts };
     },
     [patientId],
   );
@@ -125,6 +130,19 @@ export default function ProgressDashboard() {
     <Screen>
       <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
       <AppText variant="title">{t('progress.title', { name })}</AppText>
+
+      {/* Trend alerts first: they are the reason to open this screen. */}
+      {data.alerts.slice(0, 2).map((a) => (
+        <AlertCard key={a.id} alert={a} patientName={name} compact />
+      ))}
+      {data.alerts.length ? (
+        <BigButton
+          kind="secondary"
+          icon="⚠️"
+          label={t('alerts.seeAll', { count: data.alerts.length })}
+          onPress={() => router.push({ pathname: '/caregiver/alerts', params: { patientId } })}
+        />
+      ) : null}
 
       {/* One filter row, above everything it scopes. */}
       <View style={styles.filters}>

@@ -3,11 +3,13 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, StyleSheet, View } from 'react-native';
 
+import { AlertsButton } from '@/components/AlertsButton';
 import { BigButton } from '@/components/BigButton';
 import { PatientCard } from '@/components/PatientCard';
 import { Screen } from '@/components/Screen';
 import { StaffHeader } from '@/components/StaffHeader';
 import { getDb } from '@/db/client';
+import { alertCounts, type AlertCounts } from '@/db/repos/alerts';
 import { listPatientsForUser } from '@/db/repos/patients';
 import { listSessions } from '@/db/repos/games';
 import { listPhotos } from '@/db/repos/photos';
@@ -16,6 +18,7 @@ import { getUser } from '@/db/repos/users';
 import { resetDemo } from '@/db/seed/demo';
 import { useDbQuery } from '@/db/useDbQuery';
 import { startOfDay } from '@/engine/reminders';
+import { refreshAlerts } from '@/services/alerts';
 import { syncReminderNotifications } from '@/services/notifications';
 import { clearAllPhotoFiles } from '@/services/photos';
 import { useSession } from '@/store/session';
@@ -33,14 +36,17 @@ export default function CaregiverHome() {
       const from = startOfDay(Date.now());
       const reminderToday: Record<string, { done: number; total: number }> = {};
       const gamesThisWeek: Record<string, number> = {};
+      const alerts: Record<string, AlertCounts> = {};
       for (const p of patients) {
+        await refreshAlerts(db, p.id);
+        alerts[p.id] = await alertCounts(db, p.id);
         const week = await listSessions(db, p.id, { since: from - 6 * 24 * 60 * 60 * 1000 });
         gamesThisWeek[p.id] = week.filter((x) => x.completed).length;
         await ensureEvents(db, p.id, from, from + 24 * 60 * 60 * 1000);
         const occ = await listOccurrences(db, p.id, from, from + 24 * 60 * 60 * 1000);
         reminderToday[p.id] = { done: occ.filter((o) => o.status === 'taken').length, total: occ.length };
       }
-      return { user: await getUser(db, userId), patients, photoCounts, reminderToday, gamesThisWeek };
+      return { user: await getUser(db, userId), patients, photoCounts, reminderToday, gamesThisWeek, alerts };
     },
     [userId],
   );
@@ -71,6 +77,7 @@ export default function CaregiverHome() {
       {data.patients.map((p) => (
         <View key={p.id} style={styles.patient}>
           <PatientCard patient={p} showNotes />
+          <AlertsButton counts={data.alerts[p.id]} patientId={p.id} pathname="/caregiver/alerts" />
           <BigButton
             icon="📊"
             label={t('progress.button', { count: data.gamesThisWeek[p.id] ?? 0 })}
