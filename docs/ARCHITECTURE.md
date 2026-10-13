@@ -38,6 +38,7 @@ UI → store/repo → SQLite (sync, local). Engines are pure functions over sess
 Schema v1 (F01): `setting(key,value)`, `household`, `patient` (→household), `app_user` (role caregiver|asha|doctor), `patient_user` (patient↔staff + relation), `game_session`, `game_level`.
 Schema v2 (F05): `photo` (patient, local uri, person_name, relation, added_by).
 Schema v3 (F06): `reminder`, `reminder_event`.
+F13: `engine/report` (GAME_DOMAIN, domainSummaries, gameRows, weeklyIndex, reactionSummary, adherenceOver) → route `doctor/patient`.
 Schema v5 (F12): `visit` (patient, user, started/ended, checkup JSON + checkup_score, observations JSON, note, refer, next_visit_at). Engine `engine/visits` (observations, scheduling, CHECKUP_STEPS, scores). `games/CheckupRunner` runs the fixed check-up (incl. `games/orientation`). Routes `asha/patient`, `asha/visit`.
 Schema v4 (F11): `alert` (patient, alert_key, kind game_decline|adherence_low|inactive, game_id, severity info|warning|serious, detail JSON, first_seen/updated/seen/resolved). `services/alerts.refreshAlerts` = engine/trends → repos/alerts.syncAlerts. Shown via `components/PatientAlerts` (routes caregiver|asha|doctor/alerts) and `AlertsButton`.
 Planned migrations: v4 `alert` (F11), v5 `sync_outbox` (F15).
