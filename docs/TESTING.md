@@ -159,6 +159,21 @@
 
 ---
 
+## F09 Catch the fish checklist
+> New tile on Aita's home: **🐟 Catch the fish**. It starts at level 1.
+1. Intro reads the instruction → Start. "Tap the fish as soon as you see it." is spoken, then **Watch the pond…** shows above a blue-green pond.
+2. Level 1: one big spot. After a short, varying wait a big 🐟 appears. Tap it: "✓ Caught it!" (green), a soft vibration, and the next fish comes after a moment.
+3. Don't tap: after about 5 s, "The fish swam away. Get ready for the next one." is spoken. There's no red and no buzzer, and the game carries on.
+4. Tapping the empty pond before the fish appears does nothing (no penalty).
+5. 10 fish → well-done screen with stars. Play again 2–3 times, catching every fish quickly: level 2 has 4 spots and the fish appears in a different one each time.
+6. Level 3+: the start says "Tap only the fish. Do not tap the frog, the duck or the leaf." Sometimes a 🐸/🦆/🍃 appears. Leave it alone: "✓ Well done! That was not a fish." If you tap it: "That is not a fish. Tap only the fish."
+7. Level 4–5: 6, then 9 spots, and less time. Every spot is still easy to hit.
+8. **✖ Stop** halfway → back home, no crash, no speech carrying on.
+9. Caregiver → 📊 Progress: a "Catch the fish" tile with score and level once played.
+10. Hindi: "मछली पकड़ें", "पकड़ ली!", "मछली तैरकर चली गई…" sound natural.
+
+---
+
 ## T1 Hardening: final pass before v0.1.0 (≈15 min, follow docs/DEMO.md)
 1. **Chart crash fix:** Progress → Last 30 days → tap an early column (mid-September) → switch to **Last 7 days**. No crash. (Previously: `Cannot read property 'decided' of undefined`.)
 2. **Full demo story in airplane mode**, steps 1–13 of [DEMO.md](DEMO.md), **in Hindi**. Watch for text that is cut off or overflows, and wording that sounds unnatural.
