@@ -1,7 +1,7 @@
 # Progress
 
 **Current feature:** — (Tier 2 complete, tagged `v0.2.0`). **Paused at the user's request (2026-10-13).**
-**Next:** wait for the user. Tier 3 (incl. the former F14 Assamese and F15 Firebase sync) starts only when the user says so.
+**Next:** discussing the **multi-device version** (one phone per role: patient, caregiver, ASHA, doctor) on **Supabase + phone-number & PIN** sign-in (D41). No code until the user agrees on the design. APK v0.2.0 built (branch `chore/apk-v0.2.0`, sha256 `34ace20b…a57b023`, on the phone in Download/); merge + tag `apk-v0.2.0` after the user confirms it works.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -31,13 +31,12 @@
 | ID | Feature | Status |
 |---|---|---|
 | F14 | Assamese pack (moved from Tier 2; strings + content; check `as-IN` TTS on the phone, fall back to Hindi speech) | ⏳ |
-| F15 | Firebase sync (moved from Tier 2; needs the user's Firebase project) | ⏳ |
+| F15 | Multi-device accounts + sync on **Supabase** (replaces Firebase, D41): device role setup, phone + PIN sign-in, patients/members/invite & pairing codes, RLS, outbox sync. Design under discussion | ⏳ |
 | — | Low-resource language (Manipuri/Khasi/Mizo) + recorded audio, PDF report export, polish, APK v0.2.0 (with blocked permissions), demo script refresh | ⏳ (to discuss) |
 
 ## Known issues / notes
 - **Expo Go dev only:** after a *full JS reload* (double-R, or editing a language-pack JSON while the app is open), expo-sqlite calls fail with `NativeDatabase.execAsync … NullPointerException` (a red "Render Error" or `DB query failed` toasts). A **cold restart** fixes it: `adb shell am force-stop host.exp.exponent`, then open `exp://localhost:8081` again. Normal Fast Refresh of .tsx files is fine. The APK never reloads JS, so it is unaffected.
 - F11: on a phone whose demo history was *backfilled* (F07) after real test games, levels can disagree with the seeded history (real games at level 1, seed at level 3) and Aita may show a "Daily routines" decline. **Reset demo data** gives the consistent story (Dhaniram flagged, Aita and Lakhi clear).
-- Next APK: block permissions the app doesn't use (SYSTEM_ALERT_WINDOW, USE_BIOMETRIC/FINGERPRINT, c2dm push, WRITE_EXTERNAL_STORAGE) via `android.blockedPermissions`.
 - APK v0.1.0 sha256 `a08cf427269f8c3b9a9093f4c05facf05f83cbe014098e18f32fcd9438bf0273` (on the phone in Download/ and in C:\Users\kolhsoh\Downloads).
 - 2026-10-12: the Expo ngrok tunnel was blocked by the corporate network during F05 testing (TLS to tunnel.*.ngrok.com fails). Still blocked 2026-10-13 → switched to USB (`npm run usb`).
 - `npm install` warns about `always-auth` in the user's global npm config. This is harmless.
