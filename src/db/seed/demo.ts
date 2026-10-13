@@ -1,6 +1,9 @@
+import { nextLevel, type SessionOutcome } from '@/engine/difficulty';
 import { seededRng } from '@/engine/random';
+import { computeSessionStats } from '@/engine/scoring';
 import { occurrencesBetween, startOfDay, type ReminderSchedule, type ReminderType } from '@/engine/reminders';
 
+import { insertSession } from '../repos/games';
 import type { DbClient } from '../types';
 
 /**
@@ -138,6 +141,27 @@ export const DEMO = {
     },
   ],
   historyDays: 14,
+  /**
+   * Simulated play for charts/trends. `ability` = first-try success at level 1;
+   * `drift` = change in ability across the 30 days (negative = gradual decline).
+   */
+  gameHistory: [
+    { patientId: 'p-aita', gameId: 'memory_match', ability: 0.92, drift: 0.02, playRate: 0.75, targetMs: 3000 },
+    { patientId: 'p-aita', gameId: 'routine_sequence', ability: 0.9, drift: 0.03, playRate: 0.6, targetMs: 6000 },
+    { patientId: 'p-aita', gameId: 'object_recognition', ability: 0.95, drift: 0, playRate: 0.6, targetMs: 4000 },
+    { patientId: 'p-lakhi', gameId: 'object_recognition', ability: 0.86, drift: 0, playRate: 0.3, targetMs: 4000 },
+    { patientId: 'p-lakhi', gameId: 'memory_match', ability: 0.82, drift: 0, playRate: 0.3, targetMs: 3000 },
+    {
+      patientId: 'p-dhaniram',
+      gameId: 'object_recognition',
+      ability: 0.8,
+      drift: -0.16,
+      playRate: 0.45,
+      targetMs: 4000,
+    },
+    { patientId: 'p-dhaniram', gameId: 'routine_sequence', ability: 0.76, drift: -0.14, playRate: 0.45, targetMs: 6000 },
+  ],
+  gameHistoryDays: 30,
   devicePatientId: 'p-aita',
   /** Shown on the PIN screen as a hint in demo builds. */
   pin: '1234',
@@ -210,8 +234,9 @@ export async function seedDemo(db: DbClient, now: number = Date.now()): Promise<
       [DEMO.devicePatientId],
     );
     await seedReminders(db, now);
+    await seedGameHistory(db, now);
     await db.runAsync(
-      "INSERT INTO setting (key, value) VALUES ('demo_reminders_seeded', '1') ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+      "INSERT INTO setting (key, value) VALUES ('demo_reminders_seeded', '1'), ('demo_games_seeded', '1') ON CONFLICT(key) DO UPDATE SET value = excluded.value",
       [],
     );
   });
@@ -298,4 +323,76 @@ export async function backfillDemoReminders(db: DbClient, now: number = Date.now
     await db.runAsync("INSERT INTO setting (key, value) VALUES ('demo_reminders_seeded', '1')", []);
   });
   return (count?.n ?? 0) === 0;
+}
+
+const GAME_MAX_LEVEL = 5;
+const TRIALS = 6;
+const DAY_MS = 24 * 3600e3;
+
+/**
+ * 30 days of simulated sessions, run through the real scoring and adaptive
+ * difficulty engines so levels evolve as they would in use. Deterministic.
+ * Leaves a patient's current level alone if they already played that game.
+ */
+export async function seedGameHistory(db: DbClient, now: number): Promise<void> {
+  const rng = seededRng(5303);
+  const today = startOfDay(now);
+  const existing = new Set((await db.getAllAsync<{ id: string }>('SELECT id FROM patient', [])).map((p) => p.id));
+
+  for (const g of DEMO.gameHistory) {
+    if (!existing.has(g.patientId)) continue;
+    let level = 1;
+    const outcomes: SessionOutcome[] = [];
+    for (let d = DEMO.gameHistoryDays; d >= 1; d--) {
+      if (rng() >= g.playRate) continue;
+      const progress = 1 - d / DEMO.gameHistoryDays;
+      const sessionsToday = rng() < 0.2 ? 2 : 1;
+      for (let k = 0; k < sessionsToday; k++) {
+        const p = Math.min(
+          0.99,
+          Math.max(0.2, g.ability + g.drift * progress - 0.06 * (level - 1) + (rng() - 0.5) * 0.12),
+        );
+        const trials = Array.from({ length: TRIALS }, () => ({
+          correct: rng() < p,
+          reactionMs: Math.round(
+            g.targetMs * (0.6 + rng() * 0.8) * (1 + 0.05 * (level - 1)) * (1 - g.drift * progress),
+          ),
+        }));
+        const stats = computeSessionStats(trials, g.targetMs);
+        const startedAt = startOfDay(today - d * DAY_MS + DAY_MS / 2) + Math.round((9.5 + rng() * 8 + k) * 3600e3);
+        await insertSession(db, {
+          patientId: g.patientId,
+          gameId: g.gameId,
+          level,
+          startedAt,
+          endedAt: startedAt + Math.round((60 + rng() * 120) * 1000),
+          stats,
+          completed: true,
+          source: 'seed',
+        });
+        outcomes.unshift({ level, accuracy: stats.accuracy, avgReactionMs: stats.avgReactionMs });
+        level = nextLevel(level, outcomes, { maxLevel: GAME_MAX_LEVEL }).level;
+      }
+    }
+    await db.runAsync('INSERT OR IGNORE INTO game_level (patient_id, game_id, level, updated_at) VALUES (?, ?, ?, ?)', [
+      g.patientId,
+      g.gameId,
+      level,
+      now,
+    ]);
+  }
+}
+
+/** Existing installs get the demo game history once (flag `demo_games_seeded`). */
+export async function backfillDemoGames(db: DbClient, now: number = Date.now()): Promise<boolean> {
+  const flag = await db.getFirstAsync<{ value: string }>(
+    "SELECT value FROM setting WHERE key = 'demo_games_seeded'",
+    [],
+  );
+  if (flag) return false;
+  await db.withTransactionAsync(async () => {
+    await seedGameHistory(db, now);
+    await db.runAsync("INSERT INTO setting (key, value) VALUES ('demo_games_seeded', '1')", []);
+  });
+  return true;
 }

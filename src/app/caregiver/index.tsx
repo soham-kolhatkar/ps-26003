@@ -3,13 +3,13 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, StyleSheet, View } from 'react-native';
 
-import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
 import { PatientCard } from '@/components/PatientCard';
 import { Screen } from '@/components/Screen';
 import { StaffHeader } from '@/components/StaffHeader';
 import { getDb } from '@/db/client';
 import { listPatientsForUser } from '@/db/repos/patients';
+import { listSessions } from '@/db/repos/games';
 import { listPhotos } from '@/db/repos/photos';
 import { ensureEvents, listOccurrences } from '@/db/repos/reminders';
 import { getUser } from '@/db/repos/users';
@@ -32,12 +32,15 @@ export default function CaregiverHome() {
       );
       const from = startOfDay(Date.now());
       const reminderToday: Record<string, { done: number; total: number }> = {};
+      const gamesThisWeek: Record<string, number> = {};
       for (const p of patients) {
+        const week = await listSessions(db, p.id, { since: from - 6 * 24 * 60 * 60 * 1000 });
+        gamesThisWeek[p.id] = week.filter((x) => x.completed).length;
         await ensureEvents(db, p.id, from, from + 24 * 60 * 60 * 1000);
         const occ = await listOccurrences(db, p.id, from, from + 24 * 60 * 60 * 1000);
         reminderToday[p.id] = { done: occ.filter((o) => o.status === 'taken').length, total: occ.length };
       }
-      return { user: await getUser(db, userId), patients, photoCounts, reminderToday };
+      return { user: await getUser(db, userId), patients, photoCounts, reminderToday, gamesThisWeek };
     },
     [userId],
   );
@@ -69,6 +72,11 @@ export default function CaregiverHome() {
         <View key={p.id} style={styles.patient}>
           <PatientCard patient={p} showNotes />
           <BigButton
+            icon="📊"
+            label={t('progress.button', { count: data.gamesThisWeek[p.id] ?? 0 })}
+            onPress={() => router.push({ pathname: '/caregiver/progress', params: { patientId: p.id } })}
+          />
+          <BigButton
             kind="secondary"
             icon="📷"
             label={t('photos.button', { count: data.photoCounts[p.id] ?? 0 })}
@@ -82,7 +90,6 @@ export default function CaregiverHome() {
           />
         </View>
       ))}
-      <AppText tone="muted">{t('staff.dashboardSoon')}</AppText>
       <BigButton kind="secondary" icon="♻️" label={t('staff.resetDemo')} onPress={confirmReset} />
     </Screen>
   );

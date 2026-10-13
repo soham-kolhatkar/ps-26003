@@ -330,5 +330,66 @@
         "activity": "Evening walk"
       }
     }
+  },
+  "progress": {
+    "button": "Progress · {{count}} games this week",
+    "title": "{{name}}'s progress",
+    "last7": "Last 7 days",
+    "last30": "Last 30 days",
+    "kpi": {
+      "sessions": "Games played",
+      "activeDays": "Active days",
+      "activeDaysValue": "{{n}} of {{d}}",
+      "avgScore": "Average score",
+      "remindersTaken": "Reminders taken",
+      "minutes": "{{n}} min of play",
+      "noData": "—"
+    },
+    "delta": {
+      "up": "↑ {{n}} vs previous {{d}} days",
+      "down": "↓ {{n}} vs previous {{d}} days",
+      "steady": "→ Steady vs previous {{d}} days",
+      "none": "No earlier data to compare"
+    },
+    "score": {
+      "title": "Daily activity score",
+      "subtitle": "Average game score per day (0–100). Tap the chart to see a day.",
+      "readout": "{{date}} · score {{score}} · {{count}} games",
+      "readoutNone": "{{date}} · no games played",
+      "empty": "No games played in this period yet."
+    },
+    "games": {
+      "title": "By game",
+      "level": "Level {{level}}",
+      "sessions": "{{count}} games",
+      "lastPlayed": "Last played {{date}}",
+      "never": "Not played in this period",
+      "up": "↑ Improving",
+      "down": "↓ Lower than before",
+      "steady": "→ Steady"
+    },
+    "reminders": {
+      "title": "Reminders taken per day",
+      "subtitle": "Share of reminders marked done. No answer within 2 hours counts as missed.",
+      "readout": "{{date}} · {{taken}} of {{decided}} taken",
+      "readoutNone": "{{date}} · nothing due",
+      "byType": "By type",
+      "empty": "No reminders were due in this period."
+    },
+    "recent": {
+      "title": "Recent activity",
+      "game": "{{game}} · score {{score}}",
+      "taken": "Done: {{title}}",
+      "missed": "Missed: {{title}}",
+      "empty": "Nothing yet."
+    },
+    "table": {
+      "show": "Table",
+      "chart": "Chart",
+      "day": "Day",
+      "score": "Score",
+      "taken": "Taken"
+    },
+    "disclaimer": "These scores show how game performance changes over time, to support conversations with the doctor. They are not a medical diagnosis."
   }
 }

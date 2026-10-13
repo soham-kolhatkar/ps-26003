@@ -28,6 +28,20 @@ export const colors = {
   danger: '#B3261E',
 } as const;
 
+/**
+ * Chart tokens. The brand green reads gray as a data mark (fails the dataviz
+ * chroma floor), so marks use a more chromatic tea-green validated against
+ * the white card surface. Text never wears the series color.
+ */
+export const chart = {
+  series: '#13805A',
+  seriesWash: 'rgba(19, 128, 90, 0.10)',
+  deemphasis: '#B9B1A4',
+  grid: '#ECE5D8',
+  axisText: colors.textMuted,
+  surface: colors.surface,
+} as const;
+
 export const font = {
   /** Sizes in sp. Patient-facing screens should not go below `body`. */
   size: {
@@ -68,5 +82,5 @@ export const touch = {
   large: 88,
 } as const;
 
-export const theme = { colors, font, space, radius, touch } as const;
+export const theme = { colors, chart, font, space, radius, touch } as const;
 export type Theme = typeof theme;

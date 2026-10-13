@@ -57,3 +57,12 @@ export function formatShortDate(date: Date, language: LanguageCode): string {
     return date.toDateString();
   }
 }
+
+/** "12 Oct" — compact axis / table label. */
+export function formatDayMonth(date: Date, language: LanguageCode): string {
+  try {
+    return new Intl.DateTimeFormat(LANGUAGES[language].locale, { day: 'numeric', month: 'short' }).format(date);
+  } catch {
+    return `${date.getDate()}/${date.getMonth() + 1}`;
+  }
+}

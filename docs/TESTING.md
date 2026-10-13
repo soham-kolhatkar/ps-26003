@@ -125,3 +125,19 @@
 ### F06 fix round 2 (from logs)
 - **Cold start from a notification:** Test in 10 s → swipe Expo Go away from Recents → tap the notification. Aita's prompt opens over her home screen, and ✅ returns to her home. (Previously logged `POP_TO_TOP was not handled`.)
 - **Time picker:** Add time / pick a date. Cancel does nothing; choosing adds the time. (The `onChange is deprecated` warning is gone.)
+
+---
+
+## F07 Caregiver dashboard checklist
+> Your phone already has 30 days of demo play history (added automatically on update).
+
+1. Rimjhim → under Aita's card, a green **📊 Progress · N games this week** button. Open it.
+2. **Last 7 days** is selected. Four tiles: Games played (+ minutes), Active days "x of 7", Average score (+ "↑/↓/→ … vs previous 7 days" or "No earlier data"), Reminders taken % (taken/decided).
+3. **Daily activity score** line: gaps on days without games, a dot and value at the end. **Tap the chart** anywhere: the line above it changes to "12 Oct · score 71 · 3 games" for the nearest day.
+4. **▦ Table** turns the chart into a Day/Score table (newest first). **📈 Chart** switches back.
+5. **By game**: one tile per game with average score, a trend word ("↑ Improving" green / "↓ Lower than before" amber / "→ Steady"), number of games and level, and a small line of the last 12 sessions.
+6. **Reminders taken per day**: thin columns, tap one for "3 of 4 taken". Below: Medicine / Water / Activity meters with % and counts. The table view works here too.
+7. **Recent activity**: latest games (score) and reminders (done / missed), with date and time.
+8. **Last 30 days**: everything recalculates. The score comparison says "No earlier data to compare" (the history is only 30 days long).
+9. Play a game as Aita, come back: games played, today's score and Recent activity update.
+10. Hindi: all labels, dates (e.g. "13 अक्टू") and the disclaimer at the bottom are in Hindi.

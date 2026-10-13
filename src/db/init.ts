@@ -1,5 +1,5 @@
 import { migrate } from './migrations';
-import { backfillDemoReminders, isSeeded, seedDemo } from './seed/demo';
+import { backfillDemoGames, backfillDemoReminders, isSeeded, seedDemo } from './seed/demo';
 import type { DbClient } from './types';
 
 /**
@@ -15,6 +15,7 @@ export async function initDatabase(db: DbClient): Promise<{ version: number; see
     seeded = true;
   } else {
     await backfillDemoReminders(db);
+    await backfillDemoGames(db);
   }
   return { version, seeded };
 }
