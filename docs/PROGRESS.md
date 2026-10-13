@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F15 cloud foundation + accounts (Tier 3 started 2026-10-13).
+**Current feature:** F15 cloud foundation + accounts, on `feat/f15-cloud-accounts`: pushed, **waiting for the user's test in Chromium** (checklist at the end of TESTING.md). SQL 001 applied by the user. Also checked on the phone (Expo Go): setup → caregiver sign-in → restart keeps the session → double-R reload OK.
 **Next:** F16 patients, invites, pairing.
 
 ## Tier 1: core demo
@@ -31,7 +31,7 @@
 Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync rules, access rules, risks).
 | ID | Feature | Status |
 |---|---|---|
-| F15 | Cloud foundation: "Who will use this phone?" setup, phone + PIN accounts, settings and sign-out, hidden single-phone demo mode, web build for testing (Chromium), SQL `001` | ⏳ |
+| F15 | Cloud foundation: "Who will use this phone?" setup, phone + PIN accounts, settings and sign-out, hidden single-phone demo mode, web build for testing (Chromium), SQL `001` | 🧪 testing |
 | F16 | Patients, people, invite codes and patient-phone pairing (+ family corner for photos on the patient phone), membership pull, SQL `002` | ⏳ |
 | F17 | Data sync: outbox triggers, push/pull for reminders, doses, games, levels, visits; sync status chip; two-device tests, SQL `003` | ⏳ |
 | F18 | Role extras: ASHA edits reminders, doctor's notes, PIN reset via manager (Edge Function) | ⏳ |
@@ -41,7 +41,10 @@ Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync
 F14 Assamese pack · low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report export · real SMS OTP (MSG91 + DLT) + login lockout · realtime updates · accessibility/animation polish · Play Store signing.
 
 ## Known issues / notes
-- **Expo Go dev only:** after a *full JS reload* (double-R, or editing a language-pack JSON while the app is open), expo-sqlite calls fail with `NativeDatabase.execAsync … NullPointerException` (a red "Render Error" or `DB query failed` toasts). A **cold restart** fixes it: `adb shell am force-stop host.exp.exponent`, then open `exp://localhost:8081` again. Normal Fast Refresh of .tsx files is fine. The APK never reloads JS, so it is unaffected.
+- **Testing is in Chromium during Tier 3** (user's choice; the phone is busy). `npm run web` serves the app at http://localhost:8081 (the same server Expo Go uses). `npm run e2e` drives headless Chromium (Playwright, browser in `~/.cache/ms-playwright`, Noto emoji/Devanagari fonts in `~/.local/share/fonts`). Each browser context = one phone. E2E runs create real **test accounts named "E2E …"** in Supabase (Authentication → Users; safe to delete).
+- On web, `/` is served without the COOP/COEP headers (other routes have them); expo-sqlite works anyway with the async API. Web is a test bed only, never shipped.
+- **Probably fixed by D44 (2026-10-13):** after the init-once change, a double-R reload on the phone no longer broke the database (tested once). If it happens again, see the note below.
+- **Expo Go dev only (older note):** after a *full JS reload* (double-R, or editing a language-pack JSON while the app is open), expo-sqlite calls fail with `NativeDatabase.execAsync … NullPointerException` (a red "Render Error" or `DB query failed` toasts). A **cold restart** fixes it: `adb shell am force-stop host.exp.exponent`, then open `exp://localhost:8081` again. Normal Fast Refresh of .tsx files is fine. The APK never reloads JS, so it is unaffected.
 - F11: on a phone whose demo history was *backfilled* (F07) after real test games, levels can disagree with the seeded history (real games at level 1, seed at level 3) and Aita may show a "Daily routines" decline. **Reset demo data** gives the consistent story (Dhaniram flagged, Aita and Lakhi clear).
 - APK v0.1.0 sha256 `a08cf427269f8c3b9a9093f4c05facf05f83cbe014098e18f32fcd9438bf0273` (on the phone in Download/ and in C:\Users\kolhsoh\Downloads).
 - 2026-10-12: the Expo ngrok tunnel was blocked by the corporate network during F05 testing (TLS to tunnel.*.ngrok.com fails). Still blocked 2026-10-13 → switched to USB (`npm run usb`).

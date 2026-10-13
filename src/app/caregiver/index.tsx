@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, StyleSheet, View } from 'react-native';
 
 import { AlertsButton } from '@/components/AlertsButton';
+import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
 import { PatientCard } from '@/components/PatientCard';
 import { Screen } from '@/components/Screen';
@@ -21,12 +22,14 @@ import { startOfDay } from '@/engine/reminders';
 import { refreshAlerts } from '@/services/alerts';
 import { syncReminderNotifications } from '@/services/notifications';
 import { clearAllPhotoFiles } from '@/services/photos';
+import { useDevice } from '@/store/device';
 import { useSession } from '@/store/session';
 import { space } from '@/theme/tokens';
 
 export default function CaregiverHome() {
   const { t } = useTranslation();
   const userId = useSession((s) => s.userId) ?? '';
+  const cloud = useDevice((s) => s.mode) === 'cloud';
   const { data, reload } = useDbQuery(
     async (db) => {
       const patients = await listPatientsForUser(db, userId);
@@ -97,7 +100,9 @@ export default function CaregiverHome() {
           />
         </View>
       ))}
-      <BigButton kind="secondary" icon="♻️" label={t('staff.resetDemo')} onPress={confirmReset} />
+      {cloud && data.patients.length === 0 ? <AppText tone="muted">{t('cloud.noFamilyYet')}</AppText> : null}
+      {/* The demo story lives only in the single-phone demo database. */}
+      {cloud ? null : <BigButton kind="secondary" icon="♻️" label={t('staff.resetDemo')} onPress={confirmReset} />}
     </Screen>
   );
 }

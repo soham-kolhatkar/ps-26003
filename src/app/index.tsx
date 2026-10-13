@@ -1,4 +1,5 @@
 import { router } from 'expo-router';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
@@ -7,6 +8,9 @@ import { BigButton } from '@/components/BigButton';
 import { Screen } from '@/components/Screen';
 import { LANGUAGE_CODES, LANGUAGES } from '@/i18n';
 import { speak } from '@/services/tts';
+import { useAccount } from '@/store/account';
+import { isStaffRole, useDevice } from '@/store/device';
+import { useSession } from '@/store/session';
 import { useSettings } from '@/store/settings';
 import { colors, radius, space } from '@/theme/tokens';
 
@@ -14,6 +18,26 @@ export default function Welcome() {
   const { t } = useTranslation();
   const language = useSettings((s) => s.language);
   const setLanguage = useSettings((s) => s.setLanguage);
+  const mode = useDevice((s) => s.mode);
+  const role = useDevice((s) => s.role);
+  const status = useAccount((s) => s.status);
+  const uid = useAccount((s) => s.uid);
+
+  // A signed-in cloud phone opens straight into its role (no welcome, no role picker).
+  const openRole = mode === 'cloud' && status === 'signedIn' && uid && isStaffRole(role) ? role : null;
+  useEffect(() => {
+    if (!openRole || !uid) return;
+    useSession.getState().signInStaff(openRole, uid);
+    router.replace(`/${openRole}`);
+  }, [openRole, uid]);
+  if (openRole) return <Screen>{null}</Screen>;
+
+  const next = () => {
+    if (mode === 'demo') router.push('/roles');
+    else if (mode === 'cloud' && role === 'patient') router.push('/pair');
+    else if (mode === 'cloud' && isStaffRole(role)) router.push('/auth/sign-in');
+    else router.push('/setup');
+  };
 
   return (
     <Screen>
@@ -62,7 +86,7 @@ export default function Welcome() {
 
       <View style={styles.spacer} />
 
-      <BigButton size="large" label={t('common.continue')} onPress={() => router.push('/roles')} />
+      <BigButton size="large" label={t('common.continue')} onPress={next} />
     </Screen>
   );
 }

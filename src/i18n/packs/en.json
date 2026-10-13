@@ -659,5 +659,68 @@
     "howTitle": "How to read this report",
     "how": "Every game adapts its difficulty to keep the patient succeeding, so change shows mostly in the level reached. The index (0–100) combines the level (1–5) and the score at that level. Abilities group the games: Memory (Memory pairs, Remember and find, Who is this?), Attention & speed (Catch the fish), Planning & reasoning (Daily routines, Complete the pattern), Recognition & meaning (Find the object, Odd one out). Comparisons are with the patient's own earlier weeks, not with population norms.",
     "disclaimer": "Trend monitoring from games, reminders and ASHA visits recorded on the patient's phone. Not a diagnostic test: please interpret it alongside your clinical assessment."
+  },
+  "setup": {
+    "title": "Who will use this phone?",
+    "subtitle": "Choose once. The phone opens like this every time.",
+    "patient": "Patient's phone",
+    "patientHint": "Games, reminders and family photos for the person we care for",
+    "caregiver": "Family caregiver",
+    "caregiverHint": "Follow your family member's progress, set reminders",
+    "asha": "ASHA worker",
+    "ashaHint": "Your village patients, home visits and check-ups",
+    "doctor": "Doctor",
+    "doctorHint": "Trend reports for your patients",
+    "demoTitle": "Demo on one phone?",
+    "demoBody": "Use the offline demo with all roles on this phone (no accounts, no internet).",
+    "demoYes": "Open demo"
+  },
+  "auth": {
+    "signInTitle": "Sign in",
+    "phoneIsFor": "This phone is set up for: {{role}}",
+    "phone": "Mobile number",
+    "pin": "{{n}}-digit PIN",
+    "newPin": "Choose a {{n}}-digit PIN",
+    "pinAgain": "PIN again",
+    "signIn": "Sign in",
+    "createAccount": "New here? Create an account",
+    "changeRole": "Change this phone's role",
+    "signUpTitle": "New account: {{role}}",
+    "name": "Your name",
+    "organization": {
+      "asha": "Sub-centre / PHC",
+      "doctor": "Hospital or clinic"
+    },
+    "district": "District",
+    "create": "Create account",
+    "privacy": "Health information is shared only with the people a family invites. Your PIN keeps your account safe — don't share it."
+  },
+  "pair": {
+    "title": "Patient's phone",
+    "soon": "Pairing this phone with a family code arrives in the next update."
+  },
+  "settings": {
+    "title": "Settings",
+    "signOutTitle": "Sign out?",
+    "changeRoleTitle": "Change this phone's role?",
+    "signOutBody": "Your data stays safe in your account. You can sign in again with your number and PIN.",
+    "changeRole": "Change this phone's role",
+    "cloudNote": "Signed in to Smriti cloud. Data is shared only with people linked to each patient."
+  },
+  "cloud": {
+    "noFamilyYet": "No family member added yet. Adding one arrives in the next update.",
+    "errors": {
+      "wrongPin": "Wrong mobile number or PIN.",
+      "alreadyRegistered": "This number already has an account. Sign in instead.",
+      "offline": "No internet connection. Check it and try again.",
+      "tooMany": "Too many tries. Please wait a minute and try again.",
+      "invalidPhone": "Enter a 10-digit Indian mobile number.",
+      "invalidPin": "The PIN must be exactly 6 digits.",
+      "pinMismatch": "The two PINs are not the same.",
+      "nameMissing": "Please enter your name.",
+      "wrongRole": "This number is registered as {{accountRole}}, but this phone is set up for {{phoneRole}}. Use the right account, or change this phone's role.",
+      "notConfigured": "The app is not connected to the Smriti cloud yet.",
+      "generic": "Something went wrong. Please try again."
+    }
   }
 }

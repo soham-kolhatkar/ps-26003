@@ -5,13 +5,15 @@ import { StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
 import type { AppUser } from '@/db/models';
+import { useDevice } from '@/store/device';
 import { useSession } from '@/store/session';
 import { space } from '@/theme/tokens';
 
-/** Greeting + role/organisation + sign-out, shared by all staff home screens. */
+/** Greeting + role/organisation + sign-out (demo) or settings (cloud), shared by all staff home screens. */
 export function StaffHeader({ user }: { user: AppUser }) {
   const { t } = useTranslation();
   const signOut = useSession((s) => s.signOut);
+  const cloud = useDevice((s) => s.mode) === 'cloud';
 
   return (
     <View style={styles.wrap}>
@@ -26,15 +28,19 @@ export function StaffHeader({ user }: { user: AppUser }) {
           </AppText>
         </View>
       </View>
-      <BigButton
-        kind="ghost"
-        icon="↩️"
-        label={t('common.signOut')}
-        onPress={() => {
-          signOut();
-          router.replace('/roles');
-        }}
-      />
+      {cloud ? (
+        <BigButton kind="ghost" icon="⚙️" label={t('settings.title')} onPress={() => router.push('/settings')} />
+      ) : (
+        <BigButton
+          kind="ghost"
+          icon="↩️"
+          label={t('common.signOut')}
+          onPress={() => {
+            signOut();
+            router.replace('/roles');
+          }}
+        />
+      )}
     </View>
   );
 }
