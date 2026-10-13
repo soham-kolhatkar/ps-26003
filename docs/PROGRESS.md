@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** F11 trend detection + alerts, on `feat/f11-trend-alerts`: pushed, **waiting for the user's phone test** (checklist at the end of TESTING.md).
-**Next:** F12 ASHA mode.
+**Current feature:** F12 ASHA mode.
+**Next:** F13 doctor view.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -22,7 +22,7 @@
 | F08 | Games: **Odd one out** 🧺 + **Complete the pattern** 🔁 (separate games, D34) | ✅ done (51c5729) |
 | F09 | Game: 🐟 **Catch the fish** (attention / reaction time, go/no-go) | ✅ done (cda05af) |
 | F10 | Game: 🧠 **Remember and find** (delayed picture-word recall) | ✅ done (afb8a9e) |
-| F11 | Trend detection + alerts (engine/trends, `alert` table v4, caregiver/ASHA/doctor views) | 🧪 testing |
+| F11 | Trend detection + alerts (engine/trends, `alert` table v4, caregiver/ASHA/doctor views) | ✅ done (2df3d4e) |
 | F12 | ASHA mode | ⏳ |
 | F13 | Doctor view | ⏳ |
 | F14 | Assamese pack | ⏳ |
