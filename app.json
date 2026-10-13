@@ -43,6 +43,13 @@
           "cameraPermission": "Smriti uses the camera so family can add photos of loved ones for memory games.",
           "microphonePermission": false
         }
+      ],
+      "@react-native-community/datetimepicker",
+      [
+        "expo-notifications",
+        {
+          "color": "#1E6B52"
+        }
       ]
     ],
     "experiments": {
