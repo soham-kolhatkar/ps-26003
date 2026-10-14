@@ -22,6 +22,13 @@ export default function Welcome() {
   const role = useDevice((s) => s.role);
   const status = useAccount((s) => s.status);
   const uid = useAccount((s) => s.uid);
+  const pairedPatient = useDevice((s) => s.patientId);
+  const openPatient = mode === 'cloud' && status === 'signedIn' && role === 'patient' && pairedPatient;
+  useEffect(() => {
+    if (!openPatient || !pairedPatient) return;
+    useSession.getState().signInPatient(pairedPatient);
+    router.replace('/patient');
+  }, [openPatient, pairedPatient]);
 
   // A signed-in cloud phone opens straight into its role (no welcome, no role picker).
   const openRole = mode === 'cloud' && status === 'signedIn' && uid && isStaffRole(role) ? role : null;
@@ -30,7 +37,7 @@ export default function Welcome() {
     useSession.getState().signInStaff(openRole, uid);
     router.replace(`/${openRole}`);
   }, [openRole, uid]);
-  if (openRole) return <Screen>{null}</Screen>;
+  if (openRole || openPatient) return <Screen>{null}</Screen>;
 
   const next = () => {
     if (mode === 'demo') router.push('/roles');

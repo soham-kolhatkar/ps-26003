@@ -10,6 +10,7 @@ export default function DoctorHome() {
       alertsPath="/doctor/alerts"
       patientPath="/doctor/patient"
       withReferrals
+      joinPath="/doctor/join"
     />
   );
 }

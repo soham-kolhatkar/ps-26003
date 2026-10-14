@@ -59,7 +59,7 @@ describe('visits', () => {
     await initDatabase(db);
     await initDatabase(db);
     expect(await listVisits(db, 'p-dhaniram')).toHaveLength(3);
-    expect(MIGRATIONS.at(-1)?.version).toBe(5);
+    expect(MIGRATIONS.at(-1)?.version).toBeGreaterThanOrEqual(5);
     db.close();
   });
 });

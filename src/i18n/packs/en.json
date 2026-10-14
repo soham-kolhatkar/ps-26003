@@ -696,8 +696,14 @@
     "privacy": "Health information is shared only with the people a family invites. Your PIN keeps your account safe — don't share it."
   },
   "pair": {
-    "title": "Patient's phone",
-    "soon": "Pairing this phone with a family code arrives in the next update."
+    "title": "Pair this phone",
+    "how": "On the family's phone: open People → \"Pair the patient's phone\". Type the 6-digit code shown there.",
+    "code": "6-digit code",
+    "pair": "Pair this phone",
+    "pinTitle": "Choose a family PIN",
+    "pinAgain": "Type the family PIN again",
+    "pinHint": "4 digits, for the family only. It opens the family corner on this phone (photos, settings).",
+    "pinMismatch": "The two PINs were different. Please choose again."
   },
   "settings": {
     "title": "Settings",
@@ -708,7 +714,6 @@
     "cloudNote": "Signed in to Smriti cloud. Data is shared only with people linked to each patient."
   },
   "cloud": {
-    "noFamilyYet": "No family member added yet. Adding one arrives in the next update.",
     "errors": {
       "wrongPin": "Wrong mobile number or PIN.",
       "alreadyRegistered": "This number already has an account. Sign in instead.",
@@ -720,7 +725,94 @@
       "nameMissing": "Please enter your name.",
       "wrongRole": "This number is registered as {{accountRole}}, but this phone is set up for {{phoneRole}}. Use the right account, or change this phone's role.",
       "notConfigured": "The app is not connected to the Smriti cloud yet.",
-      "generic": "Something went wrong. Please try again."
+      "generic": "Something went wrong. Please try again.",
+      "notAllowed": "You can't do this for this person.",
+      "lastManager": "Someone else must manage this person first: invite a family member before leaving.",
+      "invalidCode": "That code is not valid or has expired. Ask for a new one.",
+      "codeWrongRole": "This code is for a different kind of account (for example, a code for the patient's phone).",
+      "ageRange": "Please enter an age between 30 and 120.",
+      "invalidInput": "Some details could not be saved. Please check the form and try again."
     }
+  },
+  "people": {
+    "button": "People",
+    "title": "People for {{name}}",
+    "you": "you",
+    "manager": "manager",
+    "noFamilyYet": "No family member yet. Add the person you care for, or join with a code from your family.",
+    "addFamily": "Add your family member",
+    "register": "Register a patient",
+    "joinButton": "Join with a code",
+    "addFamilyTitle": "Add your family member",
+    "registerTitle": "Register a patient",
+    "photosOnPatientPhone": "Family photos are added on {{name}}'s own phone (family corner), and never leave it.",
+    "form": {
+      "name": "Full name",
+      "preferred": "What the family calls them",
+      "preferredHint": "e.g. Aita, Deuta",
+      "age": "Age",
+      "gender": "Gender",
+      "language": "Language for games and reminders",
+      "stage": "Stage (if known)",
+      "relation": "You are their…",
+      "village": "Village / town",
+      "notes": "Notes (optional)",
+      "notesHint": "Interests, health conditions…",
+      "save": "Save"
+    },
+    "gender": {
+      "female": "Female",
+      "male": "Male",
+      "other": "Other"
+    },
+    "joinTitle": "Join with a code",
+    "join": "Join",
+    "joinHow": "Ask the family (or the ASHA worker) to open People → Invite on their phone, and type the 6-digit code here.",
+    "phonePaired": "{{name}}'s phone is paired.",
+    "phoneNotPaired": "{{name}}'s phone is not paired yet.",
+    "addTitle": "Add people",
+    "pairPhone": "Pair {{name}}'s phone",
+    "repairPhone": "Pair a new phone for {{name}}",
+    "familyRelation": "Inviting a family member? They are {{name}}'s…",
+    "invite": {
+      "asha": "Invite the ASHA worker",
+      "doctor": "Invite the doctor",
+      "caregiver": "Invite a family member"
+    },
+    "notManager": "Only the family (or the ASHA worker who registered this patient) can invite people.",
+    "remove": "Remove",
+    "removeTitle": "Remove {{name}}?",
+    "removeBody": "They will no longer see this person's information.",
+    "leave": "Leave",
+    "leaveTitle": "Stop following {{name}}?",
+    "leaveBody": "Their information will be removed from this phone.",
+    "updated": "Updated {{time}}. Only the people listed here can see this person's information.",
+    "code": {
+      "title": {
+        "device": "Pair {{name}}'s phone",
+        "asha": "Invite the ASHA worker",
+        "doctor": "Invite the doctor",
+        "caregiver": "Invite a family member"
+      },
+      "until": "Valid until {{time}}",
+      "days": "Valid for 7 days, for one person",
+      "expired": "This code has expired. Make a new one.",
+      "howDevice": "On {{name}}'s phone: open Smriti → Patient's phone → type this code.",
+      "how": "They open Smriti on their phone → Join with a code → type this code. Send it by WhatsApp or tell them.",
+      "share": "Send the code",
+      "done": "Done",
+      "message": "You are invited to follow {{name}} on Smriti. Open Smriti → Join with a code → {{code}} ({{until}}).",
+      "messageDevice": "Smriti pairing code for {{name}}: {{code}} ({{until}})."
+    }
+  },
+  "family": {
+    "title": "Family corner",
+    "enterPin": "Enter the family PIN",
+    "photos": "Family photos",
+    "hold": "Hold for the family corner",
+    "holdHint": "Family members: press and hold for 2 seconds",
+    "unpair": "Unpair this phone",
+    "unpairTitle": "Unpair this phone?",
+    "unpairBody": "Games and reminders stop on this phone until it is paired again with a new code. Photos stay on the phone."
   }
 }

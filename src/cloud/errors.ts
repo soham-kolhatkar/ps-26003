@@ -13,6 +13,12 @@ export type CloudErrorKey =
   | 'nameMissing'
   | 'wrongRole'
   | 'notConfigured'
+  | 'notAllowed'
+  | 'lastManager'
+  | 'invalidCode'
+  | 'codeWrongRole'
+  | 'ageRange'
+  | 'invalidInput'
   | 'generic';
 
 export class CloudError extends Error {
@@ -30,6 +36,8 @@ export function errorKeyFor(e: unknown): CloudErrorKey {
   if (e instanceof CloudError) return e.key;
   const err = (e ?? {}) as Errorish;
   const msg = (err.message ?? '').toLowerCase();
+  // Postgres check / not-null constraint: the form sent something the database refuses.
+  if (err.code === '23514' || err.code === '23502') return 'invalidInput';
   if (err.code === 'invalid_credentials' || msg.includes('invalid login credentials')) return 'wrongPin';
   if (err.code === 'user_already_exists' || err.code === 'email_exists' || msg.includes('already registered')) {
     return 'alreadyRegistered';

@@ -34,6 +34,7 @@ import { comparableCheckups, concerns } from '@/engine/visits';
 import { GAMES } from '@/games/registry';
 import { refreshAlerts } from '@/services/alerts';
 import { formatDayMonth, formatShortDate } from '@/services/datetime';
+import { useDevice } from '@/store/device';
 import { useSettings } from '@/store/settings';
 import { colors, radius, space } from '@/theme/tokens';
 
@@ -48,6 +49,7 @@ export default function DoctorReport() {
   const { t } = useTranslation();
   const { patientId } = useLocalSearchParams<{ patientId: string }>();
   const language = useSettings((s) => s.language);
+  const cloud = useDevice((s) => s.mode) === 'cloud';
   const { data, reload } = useDbQuery(
     async (db) => {
       const now = Date.now();
@@ -139,6 +141,14 @@ export default function DoctorReport() {
       <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
       <AppText variant="title">{t('doctor.title')}</AppText>
       <PatientCard patient={data.patient} showNotes />
+      {cloud ? (
+        <BigButton
+          kind="secondary"
+          icon="👥"
+          label={t('people.button')}
+          onPress={() => router.push({ pathname: '/doctor/people', params: { patientId } })}
+        />
+      ) : null}
       <AppText tone="muted">{t('doctor.period', { from: date(from), to: date(now) })}</AppText>
 
       {referral ? (

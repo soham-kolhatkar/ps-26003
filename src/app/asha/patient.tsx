@@ -19,6 +19,7 @@ import { CHECKUP_CHANGE_POINTS, comparableCheckups, concerns, isCompleteCheckup,
 import type { LanguageCode } from '@/i18n';
 import { refreshAlerts } from '@/services/alerts';
 import { formatShortDate } from '@/services/datetime';
+import { useDevice } from '@/store/device';
 import { useSettings } from '@/store/settings';
 import { colors, radius, space } from '@/theme/tokens';
 
@@ -29,6 +30,7 @@ export default function AshaPatient() {
   const { t } = useTranslation();
   const { patientId } = useLocalSearchParams<{ patientId: string }>();
   const language = useSettings((s) => s.language);
+  const cloud = useDevice((s) => s.mode) === 'cloud';
   const { data, reload } = useDbQuery(
     async (db) => {
       const now = Date.now();
@@ -66,6 +68,14 @@ export default function AshaPatient() {
         onPress={() => router.push({ pathname: '/asha/visit', params: { patientId } })}
       />
       <AlertsButton counts={data.alerts} patientId={patientId} pathname="/asha/alerts" showClear />
+      {cloud ? (
+        <BigButton
+          kind="secondary"
+          icon="👥"
+          label={t('people.button')}
+          onPress={() => router.push({ pathname: '/asha/people', params: { patientId } })}
+        />
+      ) : null}
 
       <View style={styles.tiles}>
         <StatTile

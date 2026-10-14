@@ -58,11 +58,26 @@ export async function phone(name) {
       await page.getByText(text, { exact: false }).filter({ visible: true }).first().waitFor({ timeout });
     },
     async longPress(testId, ms = 1800) {
-      const box = await page.getByTestId(testId).filter({ visible: true }).first().boundingBox();
+      const el = page.getByTestId(testId).filter({ visible: true }).first();
+      await el.scrollIntoViewIfNeeded();
+      const box = await el.boundingBox();
       await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
       await page.mouse.down();
       await page.waitForTimeout(ms);
       await page.mouse.up();
+    },
+    /** Press and hold something found by its text (HoldButton, long-press). */
+    async holdText(text, ms = 2600) {
+      const el = page.getByText(text, { exact: false }).filter({ visible: true }).first();
+      await el.scrollIntoViewIfNeeded();
+      const box = await el.boundingBox();
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.waitForTimeout(ms);
+      await page.mouse.up();
+    },
+    async text(testId) {
+      return (await page.getByTestId(testId).filter({ visible: true }).first().innerText()).trim();
     },
     async reload() {
       await page.reload({ waitUntil: 'networkidle' });
@@ -74,6 +89,24 @@ export async function phone(name) {
 /** A fresh, valid Indian mobile number for test accounts. */
 export function testPhone() {
   return `9${String(Math.floor(Math.random() * 1e9)).padStart(9, '0')}`;
+}
+
+/** Sign up a staff account on a fresh phone (role: 'Family caregiver' | 'ASHA worker' | 'Doctor'). */
+export async function signUp(p, role, name, number, pin = '246810', extra = {}) {
+  await p.open('/');
+  await p.tap('Continue', { button: true });
+  await p.tap(role);
+  await p.see('Sign in');
+  await p.tap('New here? Create an account', { button: true });
+  await p.see('New account');
+  await p.fill('name', name);
+  await p.fill('phone', number);
+  if (extra.organization) await p.fill('organization', extra.organization);
+  await p.fill('district', extra.district ?? 'Jorhat');
+  await p.fill('pin', pin);
+  await p.fill('pin-again', pin);
+  await p.tap('Create account', { button: true });
+  await p.see(`Hello, ${name.split(' ')[0]}`, 30000);
 }
 
 export function check(cond, msg) {

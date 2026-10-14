@@ -14,6 +14,7 @@ import { useDbQuery } from '@/db/useDbQuery';
 import { GAMES } from '@/games/registry';
 import { dayPart, formatLongDate, formatTime, GREETING_KEY } from '@/services/datetime';
 import { speak } from '@/services/tts';
+import { useDevice } from '@/store/device';
 import { useSession } from '@/store/session';
 import { useSettings } from '@/store/settings';
 import { colors, radius, space } from '@/theme/tokens';
@@ -32,6 +33,7 @@ export default function PatientHome() {
   const { t } = useTranslation();
   const patientId = useSession((s) => s.patientId);
   const signOut = useSession((s) => s.signOut);
+  const cloud = useDevice((s) => s.mode) === 'cloud';
   const language = useSettings((s) => s.language);
   const { data: patient } = useDbQuery((db) => getPatient(db, patientId ?? ''), [patientId]);
   const now = useNow();
@@ -99,14 +101,23 @@ export default function PatientHome() {
 
       <View style={styles.spacer} />
 
-      <HoldButton
-        label={t('patient.holdToExit')}
-        hint={t('patient.holdToExitHint')}
-        onHold={() => {
-          signOut();
-          router.replace('/roles');
-        }}
-      />
+      {cloud ? (
+        // A paired patient's phone has no exit: holding opens the family corner (PIN).
+        <HoldButton
+          label={t('family.hold')}
+          hint={t('family.holdHint')}
+          onHold={() => router.push('/patient/family')}
+        />
+      ) : (
+        <HoldButton
+          label={t('patient.holdToExit')}
+          hint={t('patient.holdToExitHint')}
+          onHold={() => {
+            signOut();
+            router.replace('/roles');
+          }}
+        />
+      )}
     </Screen>
   );
 }

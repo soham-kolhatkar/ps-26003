@@ -19,6 +19,8 @@ type AccountState = {
   boot: () => Promise<void>;
   /** After a successful sign-in / sign-up screen. */
   signedIn: (profile: Profile) => void;
+  /** Patient's phone after pairing (anonymous account, no profile). */
+  signedInDevice: (uid: string) => void;
   signOut: () => Promise<void>;
 };
 
@@ -76,6 +78,11 @@ export const useAccount = create<AccountState>((set, get) => ({
   signedIn: (profile) => {
     kv.set(PROFILE_KEY, JSON.stringify(profile));
     set({ status: 'signedIn', uid: profile.id, profile });
+  },
+
+  signedInDevice: (uid) => {
+    kv.remove(PROFILE_KEY);
+    set({ status: 'signedIn', uid, profile: null });
   },
 
   signOut: async () => {
