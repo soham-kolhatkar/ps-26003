@@ -41,7 +41,7 @@ Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync
 F14 Assamese pack · low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report export · real SMS OTP (MSG91 + DLT) + login lockout · realtime updates · accessibility/animation polish · Play Store signing.
 
 ## Known issues / notes
-- `expo-doctor`'s React Native Directory check fails from the corporate network (reactnative.directory unreachable, HTTP 000). The other 20 checks pass; it is not a project problem.
+- `expo-doctor`'s React Native Directory check sometimes fails (reactnative.directory unreachable from the corporate network, HTTP 000; seen 2026-10-14, passed again later the same day). Retry; it is not a project problem.
 - **Testing is in Chromium during Tier 3** (user's choice; the phone is busy). `npm run web` serves the app at http://localhost:8081 (the same server Expo Go uses). `npm run e2e` drives headless Chromium (Playwright, browser in `~/.cache/ms-playwright`, Noto emoji/Devanagari fonts in `~/.local/share/fonts`). Each browser context = one phone. E2E runs create real **test accounts named "E2E …"** in Supabase (Authentication → Users; safe to delete).
 - On web, `/` is served without the COOP/COEP headers (other routes have them); expo-sqlite works anyway with the async API. Web is a test bed only, never shipped.
 - **Fixed (2026-10-13, see the F16 fix under D45):** Expo Go reloads and language-pack hot updates no longer break the database (fresh native connection + stable init registry). The older note below is kept for history.
