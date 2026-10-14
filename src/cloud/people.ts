@@ -151,6 +151,16 @@ export function leavePatient(patientId: string): Promise<void> {
   });
 }
 
+/** A manager issues a one-time PIN reset code for someone linked to their patient (30 minutes). */
+export function createPinReset(userId: string): Promise<Invite> {
+  return call(async () => {
+    const { data, error } = await supabase().rpc('create_pin_reset', { member: userId });
+    if (error) throw error;
+    const row = (Array.isArray(data) ? data[0] : data) as { code: string; expires_at: string };
+    return { code: row.code, expiresAt: new Date(row.expires_at).getTime() };
+  });
+}
+
 /** The patient's phone: an anonymous account, created once. */
 export function signInDevice(): Promise<string> {
   return call(async () => {

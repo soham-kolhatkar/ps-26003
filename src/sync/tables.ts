@@ -12,7 +12,7 @@ type LocalRow = Record<string, unknown>;
 
 export type TableSpec = {
   local: SyncedTable;
-  cloud: 'reminders' | 'reminder_events' | 'game_sessions' | 'game_levels' | 'visits';
+  cloud: 'reminders' | 'reminder_events' | 'game_sessions' | 'game_levels' | 'visits' | 'doctor_notes';
   /** Outbox row_id for a local row. */
   key: (row: LocalRow) => string;
   /** Cloud column used to page rows that share one updated_at. */
@@ -152,6 +152,23 @@ export const SPECS: Record<SyncedTable, TableSpec> = {
       source: r.source,
     }),
   },
+  doctor_note: {
+    local: 'doctor_note',
+    cloud: 'doctor_notes',
+    key: (r) => String(r.id),
+    pageKey: 'id',
+    pageKeyOf: (r) => String(r.id),
+    onConflict: 'id',
+    readLocal: (db, ids) => byId(db, 'doctor_note', ids),
+    toCloud: (r) => ({
+      id: r.id,
+      patient_id: r.patient_id,
+      author_id: r.author_id,
+      body: r.body,
+      created_at: r.created_at,
+      deleted_at: null,
+    }),
+  },
 };
 
 // ─── Applying pulled rows locally ─────────────────────────────────────────
@@ -280,6 +297,17 @@ export async function applyRows(
            ON CONFLICT(patient_id, game_id) DO UPDATE SET level = excluded.level, updated_at = excluded.updated_at
            WHERE excluded.updated_at >= game_level.updated_at`,
           params(pid, r.game_id, r.level, r.client_updated_at),
+        );
+        break;
+      case 'doctor_note':
+        if (r.deleted_at) {
+          await db.runAsync('DELETE FROM doctor_note WHERE id = ?', params(r.id));
+          break;
+        }
+        await db.runAsync(
+          `INSERT INTO doctor_note (id, patient_id, author_id, body, created_at) VALUES (?, ?, ?, ?, ?)
+           ON CONFLICT(id) DO UPDATE SET body = excluded.body`,
+          params(r.id, pid, userOrNull(ctx, r.author_id), r.body, r.created_at),
         );
         break;
       case 'visit':

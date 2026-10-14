@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AlertCard } from '@/components/AlertCard';
+import { DoctorNotes } from '@/components/DoctorNotes';
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
 import { ChartCard } from '@/components/charts/ChartCard';
@@ -143,6 +144,9 @@ export default function ProgressDashboard() {
           onPress={() => router.push({ pathname: '/caregiver/alerts', params: { patientId } })}
         />
       ) : null}
+
+      {/* The doctor's latest advice, if any (F18). */}
+      <DoctorNotes patientId={patientId} limit={2} />
 
       {/* One filter row, above everything it scopes. */}
       <View style={styles.filters}>

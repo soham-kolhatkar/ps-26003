@@ -10,6 +10,7 @@ import {
   markOccurrence,
   saveReminder,
 } from '@/db/repos/reminders';
+import { addDoctorNote, deleteDoctorNote, listDoctorNotes } from '@/db/repos/notes';
 import { insertVisit, listVisits } from '@/db/repos/visits';
 import { createTestDb } from '@/db/testing/nodeDb';
 import type { DbClient } from '@/db/types';
@@ -140,6 +141,23 @@ describe('sync engine (two phones through the cloud)', () => {
     await pull(carer, cloud, now);
     const [v] = await listVisits(carer, P);
     expect(v).toMatchObject({ note: 'Sleeping badly', refer: true, userId: null, observations: { sleep: 'poor' } });
+  });
+
+  it("a doctor's note reaches the family; deleting it removes it there too", async () => {
+    const cloud = memoryRemote();
+    const doctor = await phone();
+    const carer = await phone();
+    const id = await addDoctorNote(doctor, { patientId: P, authorId: CARER, body: 'Check BP weekly.' }, now);
+    await push(doctor, cloud);
+    await pull(carer, cloud, now);
+    expect((await listDoctorNotes(carer, P))[0]).toMatchObject({
+      body: 'Check BP weekly.',
+      authorName: 'Priya Sharma',
+    });
+    await deleteDoctorNote(doctor, id);
+    await push(doctor, cloud);
+    await pull(carer, cloud, now);
+    expect(await listDoctorNotes(carer, P)).toEqual([]);
   });
 
   it('a local edit made before the pull is not overwritten, and wins on the next push', async () => {
