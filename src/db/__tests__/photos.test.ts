@@ -19,13 +19,13 @@ describe('photos repo', () => {
   it('adds, lists newest first, counts distinct people, deletes', async () => {
     const db = createTestDb();
     await initDatabase(db);
-    const a = await addPhoto(db, { ...base, uri: 'file:///a.jpg', personName: ' Rimjhim ' }, 1);
-    await addPhoto(db, { ...base, uri: 'file:///b.jpg', personName: 'rimjhim' }, 2);
+    const a = await addPhoto(db, { ...base, uri: 'file:///a.jpg', personName: ' Priya ' }, 1);
+    await addPhoto(db, { ...base, uri: 'file:///b.jpg', personName: 'priya' }, 2);
     await addPhoto(db, { ...base, uri: 'file:///c.jpg', personName: 'Bhaskar', relation: 'son' }, 3);
 
     const photos = await listPhotos(db, 'p-aita');
     expect(photos.map((p) => p.uri)).toEqual(['file:///c.jpg', 'file:///b.jpg', 'file:///a.jpg']);
-    expect((await getPhoto(db, a))?.personName).toBe('Rimjhim');
+    expect((await getPhoto(db, a))?.personName).toBe('Priya');
     expect(await countPeople(db, 'p-aita')).toBe(2);
     expect(await countPeople(db, 'p-lakhi')).toBe(0);
 
@@ -37,7 +37,7 @@ describe('photos repo', () => {
   it('resetDemo clears photos', async () => {
     const db = createTestDb();
     await initDatabase(db);
-    await addPhoto(db, { ...base, uri: 'file:///a.jpg', personName: 'Rimjhim' });
+    await addPhoto(db, { ...base, uri: 'file:///a.jpg', personName: 'Priya' });
     await resetDemo(db);
     expect(await listPhotos(db, 'p-aita')).toHaveLength(0);
     db.close();

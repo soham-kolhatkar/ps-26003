@@ -10,8 +10,8 @@ const photo = (id: string, personName: string, relation: string | null = null): 
 });
 
 const family = [
-  photo('1', 'Rimjhim', 'daughter'),
-  photo('2', ' rimjhim ', 'daughter'),
+  photo('1', 'Priya', 'daughter'),
+  photo('2', '  priya ', 'daughter'),
   photo('3', 'Bhaskar', 'son'),
   photo('4', 'Mitali', 'granddaughter'),
   photo('5', 'Dipen', 'husband'),
@@ -22,11 +22,11 @@ describe('photo recall rounds', () => {
   it('groups photos by person, ignoring case and spaces', () => {
     const people = groupPeople(family);
     expect(people).toHaveLength(5);
-    expect(people.find((p) => p.key === 'rimjhim')?.photos).toHaveLength(2);
+    expect(people.find((p) => p.key === 'priya')?.photos).toHaveLength(2);
   });
 
   it('needs at least two people', () => {
-    expect(makeRounds(1, [photo('1', 'Rimjhim'), photo('2', 'RIMJHIM')], 5)).toEqual([]);
+    expect(makeRounds(1, [photo('1', 'Priya'), photo('2', 'PRIYA')], 5)).toEqual([]);
     expect(makeRounds(1, [], 5)).toEqual([]);
   });
 

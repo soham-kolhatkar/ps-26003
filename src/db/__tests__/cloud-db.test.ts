@@ -16,15 +16,15 @@ describe('cloud database', () => {
     const db = createTestDb();
     await initCloudDatabase(db);
     expect((await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM patient', []))?.n).toBe(0);
-    await upsertUser(db, { id: 'u1', role: 'asha', name: 'Pranita Das', phone: '+919876543210', organization: null });
+    await upsertUser(db, { id: 'u1', role: 'asha', name: 'Sunita Devi', phone: '+919876543210', organization: null });
     await upsertUser(db, {
       id: 'u1',
       role: 'asha',
-      name: 'Pranita D.',
+      name: 'Sunita D.',
       phone: '+919876543210',
       organization: 'Teok SC',
     });
-    expect(await getUser(db, 'u1')).toMatchObject({ name: 'Pranita D.', organization: 'Teok SC', avatar: '🧑‍⚕️' });
+    expect(await getUser(db, 'u1')).toMatchObject({ name: 'Sunita D.', organization: 'Teok SC', avatar: '🧑‍⚕️' });
     db.close();
   });
 });

@@ -66,7 +66,7 @@ export async function listPatientsForUser(db: DbClient, userId: string): Promise
   return rows.map((r) => ({ ...toPatient(r), relation: r.relation }));
 }
 
-/** Name to greet the patient with: preferred name (e.g. "Aita") or first name. */
+/** Name to greet the patient with: preferred name (e.g. "Kamala") or first name. */
 export function displayName(p: Pick<Patient, 'name' | 'preferredName'>): string {
   return p.preferredName?.trim() || p.name.split(' ')[0];
 }

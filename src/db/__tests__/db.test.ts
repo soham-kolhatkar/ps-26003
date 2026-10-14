@@ -31,12 +31,12 @@ describe('initDatabase + demo seed', () => {
     db.close();
   });
 
-  it('loads Aita with household location and the device patient setting', async () => {
+  it('loads Kamala with household location and the device patient setting', async () => {
     const db = createTestDb();
     await initDatabase(db);
     const aita = await getPatient(db, 'p-aita');
-    expect(aita).toMatchObject({ name: 'Hemoprova Bora', age: 72, district: 'Jorhat', village: 'Cinnamara' });
-    expect(displayName(aita!)).toBe('Aita');
+    expect(aita).toMatchObject({ name: 'Kamala Sharma', age: 72, district: 'Jorhat', village: 'Cinnamara' });
+    expect(displayName(aita!)).toBe('Kamala');
     expect(await getSetting(db, 'device_patient_id')).toBe('p-aita');
     db.close();
   });
@@ -48,7 +48,7 @@ describe('initDatabase + demo seed', () => {
     expect(caregiverPatients.map((p) => [p.id, p.relation])).toEqual([['p-aita', 'daughter']]);
     expect(await listPatientsForUser(db, 'u-pranita')).toHaveLength(3);
     expect(await listPatientsForUser(db, 'u-anjali')).toHaveLength(3);
-    expect((await listUsersByRole(db, 'asha')).map((u) => u.name)).toEqual(['Pranita Das']);
+    expect((await listUsersByRole(db, 'asha')).map((u) => u.name)).toEqual(['Sunita Devi']);
     expect((await getUser(db, 'u-anjali'))?.role).toBe('doctor');
     db.close();
   });
@@ -76,7 +76,7 @@ describe('initDatabase + demo seed', () => {
 
 describe('displayName', () => {
   it('falls back to first name', () => {
-    expect(displayName({ name: 'Lakhi Gogoi', preferredName: null })).toBe('Lakhi');
-    expect(displayName({ name: 'Lakhi Gogoi', preferredName: '  ' })).toBe('Lakhi');
+    expect(displayName({ name: 'Lakshmi Iyer', preferredName: null })).toBe('Lakshmi');
+    expect(displayName({ name: 'Lakshmi Iyer', preferredName: '  ' })).toBe('Lakshmi');
   });
 });

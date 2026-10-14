@@ -6,14 +6,14 @@ await start();
 try {
   const run = Date.now().toString().slice(-4);
   const c = await phone('caregiver');
-  await signUp(c, 'Family caregiver', `E2E Rimjhim ${run}`, testPhone());
+  await signUp(c, 'Family caregiver', `E2E Priya ${run}`, testPhone());
   await c.see('No family member yet');
 
   // 1. Caregiver adds her mother.
   await c.tap('Add your family member', { button: true });
   await c.see('Full name');
-  await c.fill('patient-name', `E2E Hemoprova ${run}`);
-  await c.fill('patient-preferred', 'Aita');
+  await c.fill('patient-name', `E2E Kamala ${run}`);
+  await c.fill('patient-preferred', 'Kamala');
   await c.fill('patient-age', '72');
   await c.tap('Female');
   await c.tap('Early stage');
@@ -21,14 +21,14 @@ try {
   await c.fill('patient-village', 'Cinnamara');
   await c.shot('add-family-form');
   await c.tap('Save', { button: true, exact: true });
-  await c.see(`E2E Hemoprova ${run}`, 30000);
+  await c.see(`E2E Kamala ${run}`, 30000);
   await c.shot('caregiver-home-with-patient');
   check(true, 'caregiver adds a family member (patient + manager membership, pulled into the local DB)');
 
   // 2. Invite the ASHA worker.
   await c.tap('People', { button: true, exact: true });
-  await c.see('People for Aita');
-  await c.see("Aita's phone is not paired yet");
+  await c.see('People for Kamala');
+  await c.see("Kamala's phone is not paired yet");
   await c.tap('Invite the ASHA worker', { button: true });
   const ashaCode = (await c.text('invite-code')).replace(/\s/g, '');
   await c.shot('asha-code');
@@ -36,7 +36,7 @@ try {
   await c.tap('Done', { button: true, exact: true });
 
   const a = await phone('asha');
-  await signUp(a, 'ASHA worker', `E2E Pranita ${run}`, testPhone(), '246810', { organization: 'Cinnamara SC' });
+  await signUp(a, 'ASHA worker', `E2E Sunita ${run}`, testPhone(), '246810', { organization: 'Cinnamara SC' });
   await a.tap('Join with a code', { button: true });
   await a.fill('join-code', '000001');
   await a.tap('Join', { button: true, exact: true });
@@ -44,19 +44,19 @@ try {
   check(true, 'a wrong code is refused with a clear message');
   await a.fill('join-code', ashaCode);
   await a.tap('Join', { button: true, exact: true });
-  await a.see(`E2E Hemoprova ${run}`, 30000);
+  await a.see(`E2E Kamala ${run}`, 30000);
   await a.shot('asha-list');
   check(true, 'the ASHA worker joins with the code and sees the patient in her list');
 
   // The ASHA is not a manager: she can see people but not invite.
-  await a.tap(`E2E Hemoprova ${run}`);
+  await a.tap(`E2E Kamala ${run}`);
   await a.tap('People', { button: true, exact: true });
-  await a.see(`E2E Rimjhim ${run}`);
+  await a.see(`E2E Priya ${run}`);
   await a.see('Only the family');
   check(true, 'the ASHA worker sees who is linked, but cannot invite (not a manager)');
 
   // 3. Pair the patient's phone.
-  await c.tap('Pair Aita', { button: true });
+  await c.tap('Pair Kamala', { button: true });
   const deviceCode = (await c.text('invite-code')).replace(/\s/g, '');
   await c.see('Valid until');
   check(/^\d{6}$/.test(deviceCode), `a 15-minute pairing code is shown (${deviceCode})`);
@@ -76,10 +76,10 @@ try {
   for (const d of '1357') await p.tap(d, { button: true, exact: true });
   await p.see('Type the family PIN again');
   for (const d of '1357') await p.tap(d, { button: true, exact: true });
-  await p.see('Aita', 40000);
+  await p.see('Kamala', 40000);
   await p.see('Choose a game');
   await p.shot('patient-home');
-  check(true, "the patient's phone pairs with the code + family PIN and opens Aita's home");
+  check(true, "the patient's phone pairs with the code + family PIN and opens Kamala's home");
 
   await p.open('/'); // restart
   await p.see('Choose a game', 30000);
@@ -93,7 +93,7 @@ try {
   check(true, 'holding the button + family PIN opens the family corner');
 
   await c.tap('Done', { button: true, exact: true });
-  await c.see("Aita's phone is paired", 20000);
+  await c.see("Kamala's phone is paired", 20000);
   check(true, 'the caregiver sees that the patient phone is paired');
 
   // 4. Doctor joins, then is removed.
@@ -105,12 +105,12 @@ try {
   await d.tap('Join with a code', { button: true });
   await d.fill('join-code', docCode);
   await d.tap('Join', { button: true, exact: true });
-  await d.see(`E2E Hemoprova ${run}`, 30000);
+  await d.see(`E2E Kamala ${run}`, 30000);
   check(true, 'the doctor joins with a doctor code');
 
   await c.open('/caregiver/people?patientId=x'); // re-open via home instead (fresh list)
   await c.open('/');
-  await c.see(`E2E Hemoprova ${run}`, 30000);
+  await c.see(`E2E Kamala ${run}`, 30000);
   await c.tap('People', { button: true, exact: true });
   await c.see(`E2E Anjali ${run}`);
   await c.shot('people-full');
@@ -123,8 +123,8 @@ try {
 
   // 5. The ASHA worker leaves.
   await a.open('/');
-  await a.see(`E2E Hemoprova ${run}`, 30000);
-  await a.tap(`E2E Hemoprova ${run}`);
+  await a.see(`E2E Kamala ${run}`, 30000);
+  await a.tap(`E2E Kamala ${run}`);
   await a.tap('People', { button: true, exact: true });
   await a.tap('Leave', { button: true, exact: true });
   await a.see('No patients linked yet', 30000);

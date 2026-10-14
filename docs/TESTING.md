@@ -30,24 +30,24 @@
 
 1. Welcome → pick **हिन्दी** → **Continue**. You see the role picker in Hindi.
 2. **Kill the app and reopen it.** The language is still Hindi (it's now saved).
-3. The role picker shows 4 cards: **Patient · Aita** (highlighted, 👵), **Rimjhim Bora** (Family caregiver), **Pranita Das** (ASHA worker), **Dr. Anjali Sharma** (Doctor).
-4. Tap **Aita**: you go straight in with no PIN. You see a big "Namaskar, Aita!" and Read aloud speaks it. Tap the 🔒 "Hold to exit" button once: nothing happens. Hold it for 2 seconds: you return to the role picker.
+3. The role picker shows 4 cards: **Patient · Kamala** (highlighted, 👵), **Priya Sharma** (Family caregiver), **Sunita Devi** (ASHA worker), **Dr. Anjali Mehta** (Doctor).
+4. Tap **Kamala**: you go straight in with no PIN. You see a big "Namaskar, Kamala!" and Read aloud speaks it. Tap the 🔒 "Hold to exit" button once: nothing happens. Hold it for 2 seconds: you return to the role picker.
 5. In patient mode, press the Android back button: the app goes to the background and does **not** return to the welcome screen.
-6. Tap **Rimjhim** → PIN pad. Enter `1111`: you see "That PIN is not correct" and the dots clear. Enter `1234`: you see the caregiver home with the Aita card (72 years · Cinnamara, Jorhat · Early stage · Daughter, plus her notes).
+6. Tap **Priya** → PIN pad. Enter `1111`: you see "That PIN is not correct" and the dots clear. Enter `1234`: you see the caregiver home with the Kamala card (72 years · Cinnamara, Jorhat · Early stage · Daughter, plus her notes).
 7. **Reset demo data** → confirm → "Demo data restored". Everything still shows.
-8. **Sign out** → role picker. Tap **Pranita** → 1234 → "Your patients (3)": Aita, Dhaniram Saikia (Middle stage), Lakhi Gogoi.
+8. **Sign out** → role picker. Tap **Sunita** → 1234 → "Your patients (3)": Kamala, Ramesh Kumar (Middle stage), Lakshmi Iyer.
 9. Sign out → **Dr. Anjali** → 1234 → the same 3 patients, with a "reports in Tier 2" note.
 10. **Airplane mode on**, kill and reopen the app, and repeat steps 3–6: everything works offline.
 
 ---
 
 ## F02 Patient home + game framework checklist
-1. Roles → **Aita**. The home shows a greeting for the time of day ("Good morning/afternoon/evening, Aita!"), a green card with **today's date and the time**, a Read aloud button and **Choose a game** with one tile: 🔍 **Find the object**.
+1. Roles → **Kamala**. The home shows a greeting for the time of day ("Good morning/afternoon/evening, Kamala!"), a green card with **today's date and the time**, a Read aloud button and **Choose a game** with one tile: 🔍 **Find the object**.
 2. **Read aloud** speaks the greeting plus today's date ("…Today is Monday, 12 October. Shall we play a game?"). Try it in Hindi too.
 3. Tap the tile → intro: big 🔍, title, instruction spoken automatically, "⭐ Level 1", and the Start button.
 4. **Start**. Level 1 shows **2 pictures**, with the target's picture also shown in the prompt. The prompt is spoken ("Find the banana").
 5. Tap the **wrong** picture: it dims, the right one glows **orange**, and you hear "Here it is — the banana. Tap it." Tap the right one: it goes green with ✓ and you hear praise, then the next round. (No red, no buzzer: errorless design.)
-6. Progress dots fill at the top (6 rounds). After round 6: 🎉 "Well done, Aita!" with 1–3 stars.
+6. Progress dots fill at the top (6 rounds). After round 6: 🎉 "Well done, Kamala!" with 1–3 stars.
 7. **Adaptive difficulty:** play 2 sessions with every answer right the first time. On the 2nd celebration you see 🌟 "Next time: a new level!". Play again: the intro says **Level 2**, and the game shows **3 pictures**.
 8. Keep going to **Level 3**: 4 pictures, and the prompt shows only the **name** (no picture).
 9. **Level down:** at Level 3, get 4+ of 6 wrong on purpose. Play again: back to Level 2, with no "level down" message shown.
@@ -58,7 +58,7 @@
 ---
 
 ## F03 Memory pairs checklist
-1. Aita's home now has two tiles: 🃏 **Memory pairs** (first) and 🔍 Find the object.
+1. Kamala's home now has two tiles: 🃏 **Memory pairs** (first) and 🔍 Find the object.
 2. Open Memory pairs → intro spoken → **Start**. Level 1: **4 cards** (2 pairs), shown **face-up** with "👀 Remember the pictures…" (orange banner) for about 4 s, then they turn over (cream with a red border and ✿ motif, like a gamosa) and you hear "Now find the pairs".
 3. Tap two cards that match: they stay face-up in **green**, you hear praise, and a progress dot fills (dots = pairs).
 4. Tap two that don't match: both show for about 1 s, then turn back. No sound or penalty.
@@ -72,7 +72,7 @@
 ---
 
 ## F04 Daily routines checklist
-1. Aita's home has 3 tiles: 🃏 Memory pairs, 📋 **Daily routines**, 🔍 Find the object.
+1. Kamala's home has 3 tiles: 🃏 Memory pairs, 📋 **Daily routines**, 🔍 Find the object.
 2. Open Daily routines → intro → **Start**. You see a routine header (e.g. ☕ "Making tea"), a row of numbered slots and step cards (emoji + text).
 3. **Level 1:** 3 slots, with the **first step already filled** (green). You hear "Making tea. What comes next?". Two cards remain.
 4. Tap the **wrong** card: it dims, the right card glows orange, and you hear "Next is: Add tea leaves". Tap the right one: it fills the next slot (green) and is spoken.
@@ -91,16 +91,16 @@
 ## F05 Family photos checklist
 > Use real photos of 2–3 people (family, colleagues, or a photo of a photo).
 
-1. Aita's home: there is **no** "Who is this?" tile yet (no photos).
-2. Sign out → Rimjhim (1234). The caregiver home has a **📷 Family photos (0)** button under Aita's card.
+1. Kamala's home: there is **no** "Who is this?" tile yet (no photos).
+2. Sign out → Priya (1234). The caregiver home has a **📷 Family photos (0)** button under Kamala's card.
 3. Open it: an orange banner reads "Add photos of at least 2 different people…", plus Take photo / Choose from gallery and a 🔒 privacy note.
 4. **Take photo**: the camera permission prompt appears the first time → take a photo → square crop → "Who is in this photo?" Type a name (Save stays disabled until you do), pick a relation chip (e.g. Daughter) → **Save photo**. It appears in the grid with name and relation.
-5. Add a 2nd person **from the gallery**. The banner turns green: "✅ Who is this? is ready for Aita (2 people)". Go back: the button shows the count.
+5. Add a 2nd person **from the gallery**. The banner turns green: "✅ Who is this? is ready for Kamala (2 people)". Go back: the button shows the count.
 6. Optional: add a 2nd photo of the same person with different capitalisation ("rimjhim"). It still counts as 2 people.
-7. Sign out → Aita: the **👨‍👩‍👧 Who is this?** tile now appears. Play: you see a big photo, "Who is this?" (spoken), and name buttons **with the relation** under each.
-8. Wrong name → the right one glows orange, "This is Rimjhim." Right name → green, then "Yes! This is Rimjhim, your daughter." heard in full before the next photo.
-9. Levels (2 perfect sessions each): L3 drops the relation text; L5 asks "Where is Rimjhim?" and you tap the **photo**. With only 2 people there are always 2 choices; add 4 people to see 4.
-10. Caregiver: tap a photo → "Delete this photo?" → Delete. Drop below 2 people and the tile disappears from Aita's home again.
+7. Sign out → Kamala: the **👨‍👩‍👧 Who is this?** tile now appears. Play: you see a big photo, "Who is this?" (spoken), and name buttons **with the relation** under each.
+8. Wrong name → the right one glows orange, "This is Priya." Right name → green, then "Yes! This is Priya, your daughter." heard in full before the next photo.
+9. Levels (2 perfect sessions each): L3 drops the relation text; L5 asks "Where is Priya?" and you tap the **photo**. With only 2 people there are always 2 choices; add 4 people to see 4.
+10. Caregiver: tap a photo → "Delete this photo?" → Delete. Drop below 2 people and the tile disappears from Kamala's home again.
 11. **Reset demo data** removes all photos.
 12. Airplane mode: everything works (photos are local).
 
@@ -109,10 +109,10 @@
 ## F06 Reminders checklist
 > On first launch after this update the app asks **"Allow Expo Go to send notifications?"** → Allow.
 
-1. **Caregiver home** (Rimjhim): under Aita's card there is **🔔 Reminders · X/Y today**.
-2. Open it: a green summary "Today: X of Y done", then 4 reminders: 💊 Metformin 500 mg (every day 8:30 am, 8:30 pm), 💧 Drink a glass of water (10, 1, 4), 🚶 Evening walk (5:30 pm), 🩺 Check-up with Dr. Anjali Sharma (date 3 days from now, 10:30).
-3. **Test in 10 s** on Metformin → lock the phone → within about 10 s a notification appears: "💊 Time for your medicine — Aita: Metformin 500 mg".
-4. **Tap the notification**: the app opens straight to Aita's full-screen prompt (no PIN), which is read aloud: "Aita, it is time to take your medicine: Metformin 500 mg." Tap **✅ I took it** → "Thank you, Aita! Well done." (heard in full) → Aita's home.
+1. **Caregiver home** (Priya): under Kamala's card there is **🔔 Reminders · X/Y today**.
+2. Open it: a green summary "Today: X of Y done", then 4 reminders: 💊 Metformin 500 mg (every day 8:30 am, 8:30 pm), 💧 Drink a glass of water (10, 1, 4), 🚶 Evening walk (5:30 pm), 🩺 Check-up with Dr. Anjali Mehta (date 3 days from now, 10:30).
+3. **Test in 10 s** on Metformin → lock the phone → within about 10 s a notification appears: "💊 Time for your medicine — Kamala: Metformin 500 mg".
+4. **Tap the notification**: the app opens straight to Kamala's full-screen prompt (no PIN), which is read aloud: "Kamala, it is time to take your medicine: Metformin 500 mg." Tap **✅ I took it** → "Thank you, Kamala! Well done." (heard in full) → Kamala's home.
 5. Test again → tap the notification → **⏰ Remind me in 10 minutes** → it says it will remind you → a notification comes back about 10 min later.
 6. **Patient home:** a due reminder (within 30 min before to 2 h after its time) shows as a **red "🔔 Now" card**. Tap it → same prompt. Below it, one line: "Later · 4:00 pm · Drink a glass of water". When nothing is left: "No more reminders today 🎉".
 7. **Add:** ➕ Add reminder → type 💊 → title "Vitamin D" → Add time (native time picker) → Save. It appears in the list. Test it.
@@ -123,7 +123,7 @@
 12. Your existing photos are still there (no reset was needed to get the demo reminders).
 
 ### F06 fix round 2 (from logs)
-- **Cold start from a notification:** Test in 10 s → swipe Expo Go away from Recents → tap the notification. Aita's prompt opens over her home screen, and ✅ returns to her home. (Previously logged `POP_TO_TOP was not handled`.)
+- **Cold start from a notification:** Test in 10 s → swipe Expo Go away from Recents → tap the notification. Kamala's prompt opens over her home screen, and ✅ returns to her home. (Previously logged `POP_TO_TOP was not handled`.)
 - **Time picker:** Add time / pick a date. Cancel does nothing; choosing adds the time. (The `onChange is deprecated` warning is gone.)
 
 ---
@@ -131,7 +131,7 @@
 ## F07 Caregiver dashboard checklist
 > Your phone already has 30 days of demo play history (added automatically on update).
 
-1. Rimjhim → under Aita's card, a green **📊 Progress · N games this week** button. Open it.
+1. Priya → under Kamala's card, a green **📊 Progress · N games this week** button. Open it.
 2. **Last 7 days** is selected. Four tiles: Games played (+ minutes), Active days "x of 7", Average score (+ "↑/↓/→ … vs previous 7 days" or "No earlier data"), Reminders taken % (taken/decided).
 3. **Daily activity score** line: gaps on days without games, a dot and value at the end. **Tap the chart** anywhere: the line above it changes to "12 Oct · score 71 · 3 games" for the nearest day.
 4. **▦ Table** turns the chart into a Day/Score table (newest first). **📈 Chart** switches back.
@@ -139,7 +139,7 @@
 6. **Reminders taken per day**: thin columns, tap one for "3 of 4 taken". Below: Medicine / Water / Activity meters with % and counts. The table view works here too.
 7. **Recent activity**: latest games (score) and reminders (done / missed), with date and time.
 8. **Last 30 days**: everything recalculates. The score comparison says "No earlier data to compare" (the history is only 30 days long).
-9. Play a game as Aita, come back: games played, today's score and Recent activity update.
+9. Play a game as Kamala, come back: games played, today's score and Recent activity update.
 10. Hindi: all labels, dates (e.g. "13 अक्टू") and the disclaimer at the bottom are in Hindi.
 
 ---
@@ -167,7 +167,7 @@
 # Tier 2
 
 ## F08 Odd one out + Complete the pattern checklist
-> Two new tiles at the bottom of Aita's home: **🧺 Odd one out** and **🔁 Complete the pattern**. Both start at level 1. "Find the object" also uses the new pictures now.
+> Two new tiles at the bottom of Kamala's home: **🧺 Odd one out** and **🔁 Complete the pattern**. Both start at level 1. "Find the object" also uses the new pictures now.
 1. **Odd one out**: intro reads the instruction → Start. Three pictures with names (e.g. 2 fruits + 1 animal); "Which one is different?" is spoken.
 2. Tap the right one: green tick, the card explains *"This one is an animal: the cow. The others are all fruits."* and it is read in full before the next round.
 3. Tap a wrong one: it fades, the odd one glows amber, "This one is different — the …". Tap it to continue. No red, no buzzer.
@@ -182,7 +182,7 @@
 ---
 
 ## F09 Catch the fish checklist
-> New tile on Aita's home: **🐟 Catch the fish**. It starts at level 1.
+> New tile on Kamala's home: **🐟 Catch the fish**. It starts at level 1.
 1. Intro reads the instruction → Start. "Tap the fish as soon as you see it." is spoken, then **Watch the pond…** shows above a blue-green pond.
 2. Level 1: one big spot. After a short, varying wait a big 🐟 appears. Tap it: "✓ Caught it!" (green), a soft vibration, and the next fish comes after a moment.
 3. Don't tap: after about 5 s, "The fish swam away. Get ready for the next one." is spoken. There's no red and no buzzer, and the game carries on.
@@ -197,7 +197,7 @@
 ---
 
 ## F10 Remember and find checklist
-> New tile on Aita's home: **🧠 Remember and find**. It starts at level 1 (remember 2 pictures).
+> New tile on Kamala's home: **🧠 Remember and find**. It starts at level 1 (remember 2 pictures).
 1. Intro → Start. "Remember these pictures." Then each picture appears big with its name, and the name is spoken ("Remember: 1 of 2"). Every word is heard in full.
 2. A recap shows the whole list together: "Remember: rice, chilli."
 3. Break: "Now a short break. Tap all the stars." Tap each ⭐; they disappear.
@@ -210,20 +210,20 @@
 10. Hindi: "याद करें और ढूँढें", "इन चित्रों को याद रखें।", "अब थोड़ा आराम। सारे तारे छुएँ।", "आपने सब ढूँढ लिए!" sound natural.
 
 ## F11 Trend alerts checklist
-> **Fix round 1:** the caregiver home was blank (two alert refreshes collided). Open Rimjhim first and check that her home loads.
-> **First: Rimjhim → ♻️ Reset demo data.** Your phone's older demo history mixes with your test games, so it shows a decline for Aita that the clean demo story doesn't have. The reset also deletes the family photos you added.
-1. Sign out → **Pranita (ASHA)** → 1234. **Dhaniram is listed first**, with a 🔴 "Things to look at: 3 (3 new)" button. Aita and Lakhi show "✅ No concerns in the trends".
+> **Fix round 1:** the caregiver home was blank (two alert refreshes collided). Open Priya first and check that her home loads.
+> **First: Priya → ♻️ Reset demo data.** Your phone's older demo history mixes with your test games, so it shows a decline for Kamala that the clean demo story doesn't have. The reset also deletes the family photos you added.
+1. Sign out → **Sunita (ASHA)** → 1234. **Ramesh is listed first**, with a 🔴 "Things to look at: 3 (3 new)" button. Kamala and Lakshmi show "✅ No concerns in the trends".
 2. Open it: **Please review soon · Lower results in "Find the object"** and **"Daily routines"** (≈45% lower, usual level 2 → 1, numbers of games), and **🟠 Needs attention · Medicines often missed** (3 of 6 doses, 50%). Each has a 💡 tip and "Noticed <date>". At the bottom: "How Smriti notices these" and the "not a diagnosis" note.
 3. Back: the button now says "Things to look at: 3" (no longer "new").
 4. Sign out → **Dr. Anjali** → the same list order and badges.
-5. Rimjhim (caregiver): Aita's card shows no alert button. 📊 Progress has no alert cards at the top.
-6. Optional, to see one appear: play **Daily routines** as Aita 3 times on purpose badly (tap wrong steps first). Rimjhim's home may then show "Things to look at" and the dashboard shows the alert cards. It clears by itself once results recover.
+5. Priya (caregiver): Kamala's card shows no alert button. 📊 Progress has no alert cards at the top.
+6. Optional, to see one appear: play **Daily routines** as Kamala 3 times on purpose badly (tap wrong steps first). Priya's home may then show "Things to look at" and the dashboard shows the alert cards. It clears by itself once results recover.
 7. Hindi: "ध्यान देने वाली बातें", "जल्द देखें", "दवाइयाँ अक्सर छूट रही हैं" and the explanations read naturally.
 
 ## F12 ASHA mode checklist
-> Start with **Rimjhim → ♻️ Reset demo data**, so the past visits are the clean demo ones.
-1. **Pranita (ASHA)** → 1234. List order: **Dhaniram** first, with "🏠 Visit overdue by 2 days" (amber) and the 🔴 alerts button. Then Aita ("Next visit in 4 days · <date>", "✅ No concerns") and Lakhi (in 9 days).
-2. Tap **Dhaniram's card** → his page: notes, overdue line, **🏠 Start home visit**, alerts button, **Check-up score 63, "↓ 14 since last visit"**, a falling sparkline, "Games this week". **Past visits (3)**, each with date, score, amber chips (Sleep: Poor, Mood: Low / sad, Medicines: Sometimes) and the note.
+> Start with **Priya → ♻️ Reset demo data**, so the past visits are the clean demo ones.
+1. **Sunita (ASHA)** → 1234. List order: **Ramesh** first, with "🏠 Visit overdue by 2 days" (amber) and the 🔴 alerts button. Then Kamala ("Next visit in 4 days · <date>", "✅ No concerns") and Lakshmi (in 9 days).
+2. Tap **Ramesh's card** → his page: notes, overdue line, **🏠 Start home visit**, alerts button, **Check-up score 63, "↓ 14 since last visit"**, a falling sparkline, "Games this week". **Past visits (3)**, each with date, score, amber chips (Sleep: Poor, Mood: Low / sad, Medicines: Sometimes) and the note.
 3. **Start home visit** → intro ("about 5 minutes…", hand over the phone) → **Start check-up**.
 4. Task 1 of 3 **Today's date**: the instruction is spoken → Start → "Which day is it today?" with 3 big answers, then month, then year. A wrong answer shows the right one ("The answer is …").
 5. Task 2 **Remember and find**: one list of 3 pictures → stars → find them. Task 3 **Catch the fish**: 6 fish, 4 spots.
@@ -235,16 +235,16 @@
 > Dev note: if you edit while Expo Go is open and see red "NativeDatabase … NullPointerException" errors, cold-restart Expo Go (see Known issues in PROGRESS.md).
 
 ## F13 Doctor view checklist
-> Start with **Rimjhim → ♻️ Reset demo data**: the seeded Dhaniram visit now includes a referral to the doctor.
-1. **Dr. Anjali** → 1234. **Dhaniram** is first, with "🩺 Referred by the ASHA worker on <date>" (amber) and the 🔴 alerts button. The other patients follow. The footer explains the order.
-2. Tap **Dhaniram** → **Cognitive trend report**: patient card, "Last 30 days · <from> – <to>", an amber **Referred by Pranita Das on <date>** box with "Sleep: Poor", "Mood: Low / sad", "Medicines: Sometimes" and her note.
+> Start with **Priya → ♻️ Reset demo data**: the seeded Ramesh visit now includes a referral to the doctor.
+1. **Dr. Anjali** → 1234. **Ramesh** is first, with "🩺 Referred by the ASHA worker on <date>" (amber) and the 🔴 alerts button. The other patients follow. The footer explains the order.
+2. Tap **Ramesh** → **Cognitive trend report**: patient card, "Last 30 days · <from> – <to>", an amber **Referred by Sunita Devi on <date>** box with "Sleep: Poor", "Mood: Low / sad", "Medicines: Sometimes" and her note.
 3. Alert cards (Find the object, Daily routines, Medicines often missed).
 4. **Abilities**: tiles for "Planning & reasoning" and "Recognition & meaning" with an index and "↓ N points", with the games named under each.
 5. **Performance index by week**: a line falling in recent weeks. Tap it to see "Week from <date> · index N · N games". **▦ Table** shows the weeks as rows.
 6. **By game (30 days)**: rows with games played, level and change.
 7. **Reminders taken (30 days)**: Medicine ≈ 36–50% with counts. **ASHA check-ups**: 63, 77, 100 with dates.
 8. **📤 Share summary (text)** → the Android share sheet (WhatsApp, Messages, Gmail…). The message lists the patient, period, abilities, medicines, last check-up, referral, alerts and the disclaimer. (Send it to yourself to check.)
-9. Open **Aita**'s report: no referral and no alerts. Abilities show Memory etc. (or "Too few games to compare").
+9. Open **Kamala**'s report: no referral and no alerts. Abilities show Memory etc. (or "Too few games to compare").
 10. Hindi: "संज्ञानात्मक रुझान रिपोर्ट", ability names, the table headers and the shared text are in Hindi.
 
 ---
@@ -261,19 +261,19 @@
 6. New window → **ASHA worker** → sign in with the *caregiver's* number → "This number is registered as Family caregiver, but this phone is set up for ASHA worker…". Create an ASHA account instead: there is a "Sub-centre / PHC" field.
 7. Doctor: same, with a "Hospital or clinic" field.
 8. **Patient's phone** → "Pairing this phone with a family code arrives in the next update" → Change this phone's role.
-9. **Hidden demo:** on "Who will use this phone?", press and hold the 🌼 for 2 seconds → "Demo on one phone?" → Open demo → today's role picker, with Aita and the full offline demo as before.
+9. **Hidden demo:** on "Who will use this phone?", press and hold the 🌼 for 2 seconds → "Demo on one phone?" → Open demo → today's role picker, with Kamala and the full offline demo as before.
 10. Supabase dashboard → **Authentication → Users**: your accounts appear as `p91XXXXXXXXXX@phone.smriti.app`. **Table Editor → profiles**: name, role, phone, district.
 
 ## F16 People, codes and pairing checklist
 > Use 3–4 separate windows (one per "phone"). Accounts from F15 can be reused.
-1. **Caregiver window** → home → **➕ Add your family member** → full name, "What the family calls them" (e.g. Aita), age, gender, language, stage, **You are their… Daughter**, village → **Save** → the patient card appears, with Progress, Reminders and **👥 People**, and a note that family photos are added on the patient's own phone.
-2. **👥 People** → you are listed as "Daughter · ⭐ manager". "Aita's phone is not paired yet" (amber).
+1. **Caregiver window** → home → **➕ Add your family member** → full name, "What the family calls them" (e.g. Kamala), age, gender, language, stage, **You are their… Daughter**, village → **Save** → the patient card appears, with Progress, Reminders and **👥 People**, and a note that family photos are added on the patient's own phone.
+2. **👥 People** → you are listed as "Daughter · ⭐ manager". "Kamala's phone is not paired yet" (amber).
 3. **Invite the ASHA worker** → a big 6-digit code, "Valid for 7 days, for one person", **Send the code** (share sheet) → Done.
 4. **ASHA window** → sign up as ASHA → **🔑 Join with a code** → try `000001`: "That code is not valid or has expired" → the real code → the patient appears in her list. Her People screen shows everyone, but "Only the family … can invite people".
-5. **Caregiver → People → Pair Aita's phone** → a code "Valid until <time>" (15 minutes).
-6. **Patient window** → Continue → **Patient's phone** → type the code → **Pair this phone** → choose a 4-digit family PIN, twice → **Aita's home** (greeting, date, games). Reload at `/`: it opens straight into Aita's home.
+5. **Caregiver → People → Pair Kamala's phone** → a code "Valid until <time>" (15 minutes).
+6. **Patient window** → Continue → **Patient's phone** → type the code → **Pair this phone** → choose a 4-digit family PIN, twice → **Kamala's home** (greeting, date, games). Reload at `/`: it opens straight into Kamala's home.
 7. On the patient window: **Hold for the family corner** (bottom, 2 seconds) → PIN → **Family corner**: Family photos, Unpair this phone.
-8. Caregiver → People: "Aita's phone is paired" (green).
+8. Caregiver → People: "Kamala's phone is paired" (green).
 9. **Invite the doctor** → **Doctor window** → sign up as doctor → Join with a code → the patient appears. Caregiver → People → **Remove** the doctor → the doctor's list (reload at `/`) shows "No patients linked yet".
 10. ASHA → patient → People → **Leave** → back to her list, without the patient.
 11. Optional: ASHA **➕ Register a patient** (a family without a smartphone): she becomes the manager and can pair that patient's phone herself.

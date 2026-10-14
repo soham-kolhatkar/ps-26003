@@ -17,7 +17,7 @@ try {
   await a.shot('demo-roles');
   check(true, 'long-press on the flower opens the single-phone demo');
 
-  await a.tap('Aita');
+  await a.tap('Kamala');
   await a.see('Choose a game', 20000);
   await a.shot('demo-patient-home');
   check(true, 'demo patient home works on web (seeded SQLite)');

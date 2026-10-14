@@ -11,30 +11,30 @@
 - [ ] PIN for every staff role: **1234**.
 
 ## The story (say this first, about 30 s)
-> "Meet **Aita**, Hemoprova Bora, 72, a retired tea-garden school teacher from Cinnamara, Jorhat. She has early-stage dementia. Her daughter **Rimjhim** looks after her; **Pranita**, the ASHA worker, visits; **Dr. Anjali** sees her at the district hospital. Specialist memory care is far away and the network is patchy. Smriti puts gentle, culturally familiar brain games and reminders on one ordinary phone, offline, in her language."
+> "Meet **Kamala Sharma**, 72, a retired tea-garden school teacher from Cinnamara, Jorhat. She has early-stage dementia. Her daughter **Priya** looks after her; **Sunita**, the ASHA worker, visits; **Dr. Anjali** sees her at the district hospital. Specialist memory care is far away and the network is patchy. Smriti puts gentle, culturally familiar brain games and reminders on one ordinary phone, offline, in her language."
 
 ## Walkthrough
 | # | Do | Say (talking point) |
 |---|---|---|
 | 1 | Welcome → tap **हिन्दी** → **सुनाएँ** | Multilingual, voice-first. Everything on the patient side is read aloud, slowly. Assamese comes next. |
-| 2 | Continue → tap **Aita** (no PIN) | No logins for the patient. Big text, one action per screen. Exiting needs a 2-second hold so she can't leave by accident. |
-| 3 | Point at the **date and time card** and the greeting | Reality orientation, a standard dementia-care aid: "Good morning, Aita. Today is Tuesday, 13 October." |
+| 2 | Continue → tap **Kamala** (no PIN) | No logins for the patient. Big text, one action per screen. Exiting needs a 2-second hold so she can't leave by accident. |
+| 3 | Point at the **date and time card** and the greeting | Reality orientation, a standard dementia-care aid: "Good morning, Kamala. Today is Tuesday, 13 October." |
 | 4 | Play **🃏 Memory pairs** (1 round) | Cards look like an Assamese gamosa. Errorless design: no red crosses, no buzzer. We only count a mistake when she'd already seen the matching card. |
 | 5 | Show the **🌟 "new level"** moment (or explain) | **AI: adaptive difficulty.** A staircase keeps her at about 75–80% success: up after two strong sessions, down immediately after a rough one, never announced. |
 | 6 | Play **📋 Daily routines** (making tea ☕) | Familiar tasks: making tea, cooking rice, planting in the kitchen garden, washing clothes. Sequencing trains everyday function. |
-| 7 | Hold-to-exit → **Rimjhim** (1234) → **📷 Family photos** → take a photo of a judge, name them | Photos stay on this phone; nothing is uploaded. |
-| 8 | Back to Aita → **👨‍👩‍👧 Who is this?** | Recognising family is the most meaningful memory exercise. Only real family names are ever offered as choices. |
-| 9 | Rimjhim → **🔔 Reminders** → Metformin → **Test in 10 s** → lock the phone | Medicine, water, activity and appointment reminders as **local** notifications: they work with no internet. |
-| 10 | Tap the notification → Aita's spoken prompt → **✅ मैंने ले ली** | Opens straight to her, no PIN. Adherence is recorded automatically. |
-| 11 | Rimjhim → **📊 Progress** | The family sees play, scores per game, trends, and medicine adherence. Tap a chart, or switch to the table. |
+| 7 | Hold-to-exit → **Priya** (1234) → **📷 Family photos** → take a photo of a judge, name them | Photos stay on this phone; nothing is uploaded. |
+| 8 | Back to Kamala → **👨‍👩‍👧 Who is this?** | Recognising family is the most meaningful memory exercise. Only real family names are ever offered as choices. |
+| 9 | Priya → **🔔 Reminders** → Metformin → **Test in 10 s** → lock the phone | Medicine, water, activity and appointment reminders as **local** notifications: they work with no internet. |
+| 10 | Tap the notification → Kamala's spoken prompt → **✅ मैंने ले ली** | Opens straight to her, no PIN. Adherence is recorded automatically. |
+| 11 | Priya → **📊 Progress** | The family sees play, scores per game, trends, and medicine adherence. Tap a chart, or switch to the table. |
 | 12 | Point at the **disclaimer** | We show trends to support the doctor's judgement. We never diagnose. |
 | 13 | Show airplane mode is still on | All of it ran offline. Data lives in SQLite on the phone. |
 
 ## Close (about 30 s): Tier 2 highlights and what's next
 - **More games** (done): odd one out, complete the pattern, catch the fish (attention/reaction time), remember and find (delayed recall).
-- **Trend alerts** (done): Pranita's (ASHA) list puts Dhaniram first with "Please review soon": lower results in 2 games and missed blood-pressure medicine, each explained with its numbers.
-- **ASHA mode** (done): Pranita's list is a triage list (Dhaniram first: alerts + visit overdue). His page shows check-ups slipping 100 → 77 → 63 across visits, with sleep and mood worries. **Start home visit** runs a fixed 5-minute check-up (date, remember-and-find, catch the fish) and quick observations, with a referral and the next visit date.
-- **Doctor view** (done): Dr. Anjali's list puts Dhaniram first ("Referred by the ASHA worker"). His report shows the abilities (Planning & reasoning ↓, Recognition & meaning ↓), a weekly index chart, a per-game table, medicines 36%, falling ASHA check-ups, and **Share summary** sends it as text over WhatsApp.
+- **Trend alerts** (done): Sunita's (ASHA) list puts Ramesh first with "Please review soon": lower results in 2 games and missed blood-pressure medicine, each explained with its numbers.
+- **ASHA mode** (done): Sunita's list is a triage list (Ramesh first: alerts + visit overdue). His page shows check-ups slipping 100 → 77 → 63 across visits, with sleep and mood worries. **Start home visit** runs a fixed 5-minute check-up (date, remember-and-find, catch the fish) and quick observations, with a referral and the next visit date.
+- **Doctor view** (done): Dr. Anjali's list puts Ramesh first ("Referred by the ASHA worker"). His report shows the abilities (Planning & reasoning ↓, Recognition & meaning ↓), a weekly index chart, a per-game table, medicines 36%, falling ASHA check-ups, and **Share summary** sends it as text over WhatsApp.
 - **Next (Tier 3)**: Assamese, then Manipuri / Khasi / Mizo with recorded voices, and optional cloud sync (Firebase) so family members on other phones can follow along.
 
 ## Likely judge questions

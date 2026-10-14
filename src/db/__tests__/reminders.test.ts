@@ -32,7 +32,7 @@ describe('reminders repo', () => {
     db.close();
   });
 
-  it('seeds demo reminders with ~85% history adherence for Aita', async () => {
+  it('seeds demo reminders with ~85% history adherence for Kamala', async () => {
     const db = await freshDb();
     const aita = await listReminders(db, 'p-aita');
     expect(aita.map((r) => r.type)).toEqual(['medicine', 'hydration', 'activity', 'appointment']);
@@ -147,8 +147,8 @@ describe('upgrade from schema v2', () => {
       await db.execAsync(`PRAGMA user_version = ${m.version}`);
     }
     await db.execAsync(
-      "INSERT INTO household (id, name, created_at) VALUES ('h-bora', 'Bora family', 0);" +
-        "INSERT INTO patient (id, household_id, name, language, created_at, updated_at) VALUES ('p-aita', 'h-bora', 'Hemoprova Bora', 'hi', 0, 0);",
+      "INSERT INTO household (id, name, created_at) VALUES ('h-bora', 'Sharma family', 0);" +
+        "INSERT INTO patient (id, household_id, name, language, created_at, updated_at) VALUES ('p-aita', 'h-bora', 'Kamala Sharma', 'hi', 0, 0);",
     );
 
     await initDatabase(db);

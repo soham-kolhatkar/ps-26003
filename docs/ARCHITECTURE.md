@@ -45,7 +45,7 @@ Schema v4 (F11): `alert` (patient, alert_key, kind game_decline|adherence_low|in
 Planned migrations: v4 `alert` (F11), v5 `sync_outbox` (F15).
 
 ## Demo story (src/db/seed/demo.ts)
-Device patient **Hemoprova Bora "Aita"** (72, Cinnamara, Jorhat). Caregiver daughter **Rimjhim Bora**. ASHA **Pranita Das** (Aita, Lakhi Gogoi, Dhaniram Saikia). Doctor **Dr. Anjali Sharma** (all three). PIN 1234.
+Device patient **Kamala Sharma "Kamala"** (72, Cinnamara, Jorhat). Caregiver daughter **Priya Sharma**. ASHA **Sunita Devi** (Kamala, Lakshmi Iyer, Ramesh Kumar). Doctor **Dr. Anjali Mehta** (all three). PIN 1234.
 
 ## Game session flow
 Patient home tile → `/patient/game/[id]` → GameShell loads `game_level` → intro (spoken instruction) → game component calls `onTrial` once per round (first try) and `onComplete` → `finishSession`: computeSessionStats → insert `game_session` → `recentOutcomes` → `nextLevel` → upsert `game_level` → celebration (stars, "new level" if up).

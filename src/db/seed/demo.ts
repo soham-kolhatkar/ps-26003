@@ -14,16 +14,16 @@ import type { DbClient } from '../types';
  */
 export const DEMO = {
   households: [
-    { id: 'h-bora', name: 'Bora family', village: 'Cinnamara', district: 'Jorhat', state: 'Assam' },
-    { id: 'h-gogoi', name: 'Gogoi family', village: 'Titabar', district: 'Jorhat', state: 'Assam' },
-    { id: 'h-saikia', name: 'Saikia family', village: 'Teok', district: 'Jorhat', state: 'Assam' },
+    { id: 'h-bora', name: 'Sharma family', village: 'Cinnamara', district: 'Jorhat', state: 'Assam' },
+    { id: 'h-gogoi', name: 'Iyer family', village: 'Titabar', district: 'Jorhat', state: 'Assam' },
+    { id: 'h-saikia', name: 'Kumar family', village: 'Teok', district: 'Jorhat', state: 'Assam' },
   ],
   patients: [
     {
       id: 'p-aita',
       householdId: 'h-bora',
-      name: 'Hemoprova Bora',
-      preferredName: 'Aita',
+      name: 'Kamala Sharma',
+      preferredName: 'Kamala',
       age: 72,
       gender: 'female',
       language: 'hi',
@@ -34,7 +34,7 @@ export const DEMO = {
     {
       id: 'p-lakhi',
       householdId: 'h-gogoi',
-      name: 'Lakhi Gogoi',
+      name: 'Lakshmi Iyer',
       preferredName: null,
       age: 68,
       gender: 'female',
@@ -46,7 +46,7 @@ export const DEMO = {
     {
       id: 'p-dhaniram',
       householdId: 'h-saikia',
-      name: 'Dhaniram Saikia',
+      name: 'Ramesh Kumar',
       preferredName: null,
       age: 75,
       gender: 'male',
@@ -57,11 +57,11 @@ export const DEMO = {
     },
   ],
   users: [
-    { id: 'u-rimjhim', role: 'caregiver', name: 'Rimjhim Bora', phone: null, organization: null, avatar: '👩' },
+    { id: 'u-rimjhim', role: 'caregiver', name: 'Priya Sharma', phone: null, organization: null, avatar: '👩' },
     {
       id: 'u-pranita',
       role: 'asha',
-      name: 'Pranita Das',
+      name: 'Sunita Devi',
       phone: null,
       organization: 'ASHA, Cinnamara sub-centre',
       avatar: '🧑‍⚕️',
@@ -69,7 +69,7 @@ export const DEMO = {
     {
       id: 'u-anjali',
       role: 'doctor',
-      name: 'Dr. Anjali Sharma',
+      name: 'Dr. Anjali Mehta',
       phone: null,
       organization: 'Geriatric OPD, District Hospital Jorhat',
       avatar: '🩺',
@@ -136,7 +136,7 @@ export const DEMO = {
     {
       id: 'r-aita-checkup',
       patientId: 'p-aita',
-      title: 'Check-up with Dr. Anjali Sharma',
+      title: 'Check-up with Dr. Anjali Mehta',
       note: 'District Hospital Jorhat',
       inDays: 3,
       time: '10:30',
@@ -172,9 +172,9 @@ export const DEMO = {
   ],
   gameHistoryDays: 30,
   /**
-   * Pranita's past home visits. Check-up results as [right, asked] per task,
-   * tap = [caught, of 6, avg ms]. Dhaniram's check-ups slip and his next visit
-   * is overdue; Aita and Lakhi are on schedule.
+   * Sunita's past home visits. Check-up results as [right, asked] per task,
+   * tap = [caught, of 6, avg ms]. Ramesh's check-ups slip and his next visit
+   * is overdue; Kamala and Lakshmi are on schedule.
    */
   visits: [
     {
@@ -498,7 +498,7 @@ export async function backfillDemoGames(db: DbClient, now: number = Date.now()):
   return true;
 }
 
-/** Pranita's past home visits with check-up results (see DEMO.visits). */
+/** Sunita's past home visits with check-up results (see DEMO.visits). */
 export async function seedVisits(db: DbClient, now: number): Promise<void> {
   const today = startOfDay(now);
   const existing = new Set((await db.getAllAsync<{ id: string }>('SELECT id FROM patient', [])).map((p) => p.id));

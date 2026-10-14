@@ -24,7 +24,7 @@ await start();
 try {
   const number = testPhone();
   const c = await phone('caregiver');
-  await signUpCaregiver(c, number, 'E2E Rimjhim');
+  await signUpCaregiver(c, number, 'E2E Priya');
   await c.see('Hello, E2E', 30000);
   await c.shot('caregiver-home');
   check(true, `sign-up works and opens the caregiver home (${number})`);
@@ -36,7 +36,7 @@ try {
   check(true, 'a restart opens the caregiver home directly (session kept)');
 
   await c.tap('Settings', { button: true });
-  await c.see('E2E Rimjhim');
+  await c.see('E2E Priya');
   await c.shot('settings');
   await c.tap('Sign out', { button: true, exact: true });
   await c.see('Welcome to Smriti', 20000);

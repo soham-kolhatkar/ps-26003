@@ -12,7 +12,7 @@ export type LevelParams = {
   options: number;
   /** Show the relation ("Daughter") under each name as a cue. */
   showRelation: boolean;
-  /** Level 5: "Where is Rimjhim?" — pick the photo instead of the name. */
+  /** Level 5: "Where is Priya?" — pick the photo instead of the name. */
   reverse: boolean;
 };
 

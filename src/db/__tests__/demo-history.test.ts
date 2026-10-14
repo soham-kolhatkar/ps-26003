@@ -20,7 +20,7 @@ async function points(db: ReturnType<typeof createTestDb>, patientId: string) {
 }
 
 describe('demo game history', () => {
-  it('gives Aita a month of play across three games, all before today', async () => {
+  it('gives Kamala a month of play across three games, all before today', async () => {
     const db = createTestDb();
     await initDatabase(db);
     const rows = await points(db, 'p-aita');
@@ -38,7 +38,7 @@ describe('demo game history', () => {
     db.close();
   });
 
-  it("shows Dhaniram's gradual decline", async () => {
+  it("shows Ramesh's gradual decline", async () => {
     const db = createTestDb();
     await initDatabase(db);
     const rows = await points(db, 'p-dhaniram');
@@ -55,8 +55,8 @@ describe('demo game history', () => {
       await db.execAsync(`PRAGMA user_version = ${m.version}`);
     }
     await db.execAsync(
-      "INSERT INTO household (id, name, created_at) VALUES ('h-bora', 'Bora family', 0);" +
-        "INSERT INTO patient (id, household_id, name, language, created_at, updated_at) VALUES ('p-aita', 'h-bora', 'Hemoprova Bora', 'hi', 0, 0);" +
+      "INSERT INTO household (id, name, created_at) VALUES ('h-bora', 'Sharma family', 0);" +
+        "INSERT INTO patient (id, household_id, name, language, created_at, updated_at) VALUES ('p-aita', 'h-bora', 'Kamala Sharma', 'hi', 0, 0);" +
         "INSERT INTO game_level (patient_id, game_id, level, updated_at) VALUES ('p-aita', 'memory_match', 4, 0);",
     );
     await initDatabase(db);

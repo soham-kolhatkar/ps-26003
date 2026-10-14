@@ -23,7 +23,7 @@ const patient = (id: string, name: string) => ({
 });
 
 const snap = (over: Partial<PeopleSnapshot> = {}): PeopleSnapshot => ({
-  patients: [patient('p1', 'Hemoprova Bora')],
+  patients: [patient('p1', 'Kamala Sharma')],
   members: [
     { patient_id: 'p1', user_id: 'u-rim', role: 'caregiver', relation: 'daughter', is_manager: true },
     { patient_id: 'p1', user_id: 'u-asha', role: 'asha', relation: 'asha', is_manager: false },
@@ -33,7 +33,7 @@ const snap = (over: Partial<PeopleSnapshot> = {}): PeopleSnapshot => ({
     {
       id: 'u-rim',
       role: 'caregiver',
-      name: 'Rimjhim Bora',
+      name: 'Priya Sharma',
       phone: '+919800000001',
       organization: null,
       district: 'Jorhat',
@@ -41,7 +41,7 @@ const snap = (over: Partial<PeopleSnapshot> = {}): PeopleSnapshot => ({
     {
       id: 'u-asha',
       role: 'asha',
-      name: 'Pranita Das',
+      name: 'Sunita Devi',
       phone: '+919800000002',
       organization: 'Cinnamara SC',
       district: 'Jorhat',
@@ -56,7 +56,7 @@ describe('applyPeople', () => {
     await initCloudDatabase(db);
     const r = await applyPeople(db, snap());
     expect(r).toEqual({ patients: 1, added: ['p1'], removed: [] });
-    expect(await getPatient(db, 'p1')).toMatchObject({ name: 'Hemoprova Bora', village: 'Cinnamara', avatar: '👵' });
+    expect(await getPatient(db, 'p1')).toMatchObject({ name: 'Kamala Sharma', village: 'Cinnamara', avatar: '👵' });
     expect((await listPatientsForUser(db, 'u-rim'))[0]).toMatchObject({ id: 'p1', relation: 'daughter' });
     expect((await listPatientsForUser(db, 'u-asha'))[0].relation).toBe('asha');
     // A caregiver who chose no relation gets no tag (not the raw word "caregiver").
@@ -80,11 +80,11 @@ describe('applyPeople', () => {
     await applyPeople(db, snap());
     await applyPeople(db, snap());
     const s = snap();
-    s.patients[0].name = 'Hemoprova B.';
+    s.patients[0].name = 'Kamala B.';
     s.members = s.members.filter((m) => m.user_id !== 'u-asha');
     const r = await applyPeople(db, s);
     expect(r.added).toEqual([]);
-    expect((await getPatient(db, 'p1'))?.name).toBe('Hemoprova B.');
+    expect((await getPatient(db, 'p1'))?.name).toBe('Kamala B.');
     expect(await listPatientsForUser(db, 'u-asha')).toEqual([]);
     db.close();
   });

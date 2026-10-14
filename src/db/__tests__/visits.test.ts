@@ -34,7 +34,7 @@ describe('visits', () => {
     db.close();
   });
 
-  it("demo: Dhaniram's check-ups slip and his visit is overdue; Aita and Lakhi are on schedule", async () => {
+  it("demo: Ramesh's check-ups slip and his visit is overdue; Kamala and Lakshmi are on schedule", async () => {
     const db = createTestDb();
     await initDatabase(db);
     const now = Date.now();
@@ -44,7 +44,7 @@ describe('visits', () => {
     expect(scores[0]).toBeGreaterThan(scores[1]);
     expect(scores[1]).toBeGreaterThan(scores[2]);
     expect(visitStatus(d[0], now)).toMatchObject({ state: 'overdue', days: 2 });
-    // Pranita referred him to Dr. Anjali at the last visit.
+    // Sunita referred him to Dr. Anjali at the last visit.
     expect(d[0].refer).toBe(true);
     expect(d.slice(1).every((v) => !v.refer)).toBe(true);
     expect(visitStatus(await lastVisit(db, 'p-aita'), now)).toMatchObject({ state: 'ok', days: 4 });

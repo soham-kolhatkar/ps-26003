@@ -19,7 +19,7 @@ describe('cloud error mapping', () => {
 });
 
 describe('sign-up form', () => {
-  const ok = { role: 'asha' as const, name: 'Pranita Das', phone: '98765 43210', pin: '135790', pinAgain: '135790' };
+  const ok = { role: 'asha' as const, name: 'Sunita Devi', phone: '98765 43210', pin: '135790', pinAgain: '135790' };
   it('normalises the phone when everything is valid', () => {
     expect(validateSignUp(ok)).toEqual({ phone: '+919876543210' });
   });

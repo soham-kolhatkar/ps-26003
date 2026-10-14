@@ -127,9 +127,9 @@ The working agreement is unchanged: one feature per branch → `npm run check` �
 ### F19 Cloud demo story, 4-phone demo, and T3
 - **Hidden "Demo tools"** (from Settings):
   1. Build the existing demo story into a temporary SQLite DB, reusing `seedDemo` / `seedGameHistory` / `seedVisits` in `src/db/seed/demo.ts`.
-  2. Sign up or sign in the 3 demo staff accounts (fixed demo phones, PIN 123456). Create the patients through the RPCs: Rimjhim manages Aita; Pranita manages Lakhi and Dhaniram.
+  2. Sign up or sign in the 3 demo staff accounts (fixed demo phones, PIN 123456). Create the patients through the RPCs: Priya manages Kamala; Sunita manages Lakshmi and Ramesh.
   3. Link the members by invites. Upload the history in pages.
-  4. Show the pairing code for Aita's phone.
+  4. Show the pairing code for Kamala's phone.
 - **Reset cloud demo:** managers delete their patients (cascade), then re-run.
 - **Docs:** `docs/DEMO.md` gets a 4-phone script plus the single-phone fallback; `docs/TESTING.md` gets the checklists.
 - **T3:** APK v0.3.0 (versionCode 3, `npm run build:apk`), tag `v0.3.0`.
@@ -156,7 +156,7 @@ The working agreement is unchanged: one feature per branch → `npm run check` �
 - **Access rules:** a small SQL test script (`supabase/tests/rls.sql`) the user can run in the SQL Editor, plus a manual two-account check.
 - **F15:** sign up on the phone → restart (still signed in) → sign out and in → demo mode still works. Run with airplane mode on, and confirm demo mode still works fully offline.
 - **F16/F17:** use **the phone (patient, in Expo Go) plus Chromium contexts** for the caregiver, ASHA and doctor. Playwright e2e scripts cover the browser-only flows, and the user repeats them by hand on the phone:
-  1. The caregiver creates Aita, invites the ASHA, and pairs the patient's phone.
+  1. The caregiver creates Kamala, invites the ASHA, and pairs the patient's phone.
   2. The patient plays a game. Within about 30 s it shows on the caregiver's dashboard and the ASHA list.
   3. The caregiver adds a reminder, and the patient's phone schedules it.
   4. The patient's phone, offline, plays and marks a dose taken. When it comes back online, everything syncs.

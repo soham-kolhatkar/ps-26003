@@ -72,7 +72,7 @@ describe('alerts repo', () => {
     db.close();
   });
 
-  it('demo story: Dhaniram is flagged (two games + medicine), Aita and Lakhi are not', async () => {
+  it('demo story: Ramesh is flagged (two games + medicine), Kamala and Lakshmi are not', async () => {
     const db = createTestDb();
     await initDatabase(db);
     const now = Date.now();

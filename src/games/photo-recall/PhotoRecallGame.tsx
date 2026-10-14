@@ -25,7 +25,7 @@ export function PhotoRecallGame(props: GameProps) {
 
 /**
  * "Who is this?": a family photo is shown and the patient taps the person's
- * name (level 5 reverses it: "Where is Rimjhim?" → tap the photo).
+ * name (level 5 reverses it: "Where is Priya?" → tap the photo).
  * Choices are only real family members. Errorless, first try counts.
  */
 function PhotoRecallPlay({

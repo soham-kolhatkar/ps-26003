@@ -346,7 +346,7 @@
     "cameraDenied": "Please allow camera access to take photos.",
     "addTitle": "Who is in this photo?",
     "nameLabel": "Name",
-    "namePlaceholder": "e.g. Rimjhim",
+    "namePlaceholder": "e.g. Priya",
     "relationLabel": "Relation to {{name}}",
     "save": "Save photo",
     "saveFailed": "Could not save the photo. Please try again."
@@ -749,7 +749,7 @@
     "form": {
       "name": "Full name",
       "preferred": "What the family calls them",
-      "preferredHint": "e.g. Aita, Deuta",
+      "preferredHint": "e.g. Amma, Dadaji",
       "age": "Age",
       "gender": "Gender",
       "language": "Language for games and reminders",
