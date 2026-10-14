@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { useSyncStore } from '@/store/sync';
+
 import { getDb } from './client';
 import type { DbClient } from './types';
 
@@ -14,7 +16,9 @@ type Settled<T> = { key: string; data?: T; error: Error | null };
 export function useDbQuery<T>(query: (db: DbClient) => Promise<T>, deps: readonly unknown[]): QueryState<T> {
   const [nonce, setNonce] = useState(0);
   const [settled, setSettled] = useState<Settled<T>>({ key: '', error: null });
-  const key = JSON.stringify([...deps, nonce]);
+  // A sync that changed local data (cloud mode) re-runs every query on screen.
+  const syncVersion = useSyncStore((s) => s.version);
+  const key = JSON.stringify([...deps, nonce, syncVersion]);
 
   useEffect(() => {
     let cancelled = false;

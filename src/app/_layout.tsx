@@ -19,6 +19,7 @@ import { useAccount } from '@/store/account';
 import { useDevice } from '@/store/device';
 import { useSettings } from '@/store/settings';
 import { refreshPeople } from '@/sync/refresh';
+import { SyncLoop } from '@/sync/SyncLoop';
 import { colors } from '@/theme/tokens';
 
 configureNotifications();
@@ -144,6 +145,7 @@ export default function RootLayout() {
             }}
           />
           <NotificationResponder />
+          <SyncLoop />
         </SQLiteProvider>
       )}
     </SafeAreaProvider>

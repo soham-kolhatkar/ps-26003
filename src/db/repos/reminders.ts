@@ -106,6 +106,12 @@ export async function deleteReminder(db: DbClient, id: string): Promise<void> {
   await db.runAsync('DELETE FROM reminder WHERE id = ?', [id]);
 }
 
+/**
+ * One id per reminder and due time, on every phone (D42): the caregiver's phone,
+ * the patient's phone and the cloud all agree on which dose a row is.
+ */
+export const eventIdFor = (reminderId: string, dueAt: number) => `${reminderId}:${dueAt}`;
+
 /** Creates (idempotently) the occurrence rows for [from, to) for a patient's enabled reminders. */
 export async function ensureEvents(db: DbClient, patientId: string, from: number, to: number): Promise<void> {
   const reminders = (await listReminders(db, patientId)).filter((r) => r.enabled);
@@ -113,7 +119,7 @@ export async function ensureEvents(db: DbClient, patientId: string, from: number
     for (const dueAt of occurrencesBetween(r.schedule, from, to)) {
       await db.runAsync(
         'INSERT OR IGNORE INTO reminder_event (id, reminder_id, patient_id, due_at, status) VALUES (?, ?, ?, ?, ?)',
-        [newId(), r.id, patientId, dueAt, 'pending'],
+        [eventIdFor(r.id, dueAt), r.id, patientId, dueAt, 'pending'],
       );
     }
   }
@@ -175,7 +181,7 @@ export async function occurrenceFor(
   if (!reminder) return null;
   await db.runAsync(
     'INSERT OR IGNORE INTO reminder_event (id, reminder_id, patient_id, due_at, status) VALUES (?, ?, ?, ?, ?)',
-    [newId(), reminderId, reminder.patientId, dueAt, 'pending'],
+    [eventIdFor(reminderId, dueAt), reminderId, reminder.patientId, dueAt, 'pending'],
   );
   const row = await db.getFirstAsync<OccurrenceRow>(`${SELECT_OCCURRENCE} WHERE e.reminder_id = ? AND e.due_at = ?`, [
     reminderId,

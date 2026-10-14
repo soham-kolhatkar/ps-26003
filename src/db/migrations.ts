@@ -181,6 +181,30 @@ ALTER TABLE patient_user ADD COLUMN member_role TEXT;
 ALTER TABLE patient_user ADD COLUMN is_manager INTEGER NOT NULL DEFAULT 0;
 `,
   },
+  {
+    version: 7,
+    name: 'sync outbox + cursors (Tier 3, F17)',
+    sql: `
+CREATE TABLE sync_outbox (
+  seq        INTEGER PRIMARY KEY AUTOINCREMENT,
+  tbl        TEXT NOT NULL,
+  row_id     TEXT NOT NULL,
+  op         TEXT NOT NULL CHECK (op IN ('upsert', 'delete')),
+  created_at INTEGER NOT NULL DEFAULT (CAST(strftime('%s', 'now') AS INTEGER) * 1000)
+);
+CREATE TABLE sync_cursor (
+  tbl     TEXT PRIMARY KEY NOT NULL,
+  updated TEXT NOT NULL,
+  row_key TEXT NOT NULL DEFAULT ''
+);
+-- 1 while a pull is being applied, so the outbox triggers ignore those writes.
+CREATE TABLE sync_flag (
+  id       INTEGER PRIMARY KEY CHECK (id = 1),
+  applying INTEGER NOT NULL DEFAULT 0
+);
+INSERT INTO sync_flag (id, applying) VALUES (1, 0);
+`,
+  },
 ];
 
 export const LATEST_VERSION = MIGRATIONS[MIGRATIONS.length - 1].version;

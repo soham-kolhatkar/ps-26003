@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { SyncChip } from '@/components/SyncChip';
 import type { AppUser } from '@/db/models';
 import { useDevice } from '@/store/device';
 import { useSession } from '@/store/session';
@@ -28,6 +29,7 @@ export function StaffHeader({ user }: { user: AppUser }) {
           </AppText>
         </View>
       </View>
+      {cloud ? <SyncChip /> : null}
       {cloud ? (
         <BigButton kind="ghost" icon="⚙️" label={t('settings.title')} onPress={() => router.push('/settings')} />
       ) : (

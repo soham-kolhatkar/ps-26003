@@ -1,12 +1,13 @@
-import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
 import { Screen } from '@/components/Screen';
+import { confirm, notify } from '@/services/confirm';
+import { pickDateTime } from '@/services/pickDateTime';
 import { TextField } from '@/components/TextField';
 import { getDb } from '@/db/client';
 import type { Reminder } from '@/db/models';
@@ -72,27 +73,23 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
   const addTime = () => {
     const base = new Date();
     base.setHours(9, 0, 0, 0);
-    DateTimePickerAndroid.open({
-      value: base,
-      mode: 'time',
-      onValueChange: (_event, date) => {
-        setTimes((prev) => normalizeTimes([...prev, hhmm({ hour: date.getHours(), minute: date.getMinutes() })]));
-      },
-    });
+    pickDateTime(base, 'time', (date) =>
+      setTimes((prev) => normalizeTimes([...prev, hhmm({ hour: date.getHours(), minute: date.getMinutes() })])),
+    );
   };
 
   const pickOnce = (mode: 'date' | 'time') => {
-    DateTimePickerAndroid.open({
-      value: new Date(onceAt),
+    pickDateTime(
+      new Date(onceAt),
       mode,
-      minimumDate: mode === 'date' ? new Date() : undefined,
-      onValueChange: (_event, date) => {
+      (date) => {
         const d = new Date(onceAt);
         if (mode === 'date') d.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
         else d.setHours(date.getHours(), date.getMinutes(), 0, 0);
         setOnceAt(d.getTime());
       },
-    });
+      mode === 'date' ? new Date() : undefined,
+    );
   };
 
   const isOnce = type === 'appointment';
@@ -100,7 +97,7 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
 
   const save = async () => {
     if (!isOnce && times.length === 0) {
-      Alert.alert(t('reminders.caregiver.needTime'));
+      notify(t('reminders.caregiver.needTime'));
       return;
     }
     setSaving(true);
@@ -120,18 +117,17 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
 
   const remove = () => {
     if (!existing) return;
-    Alert.alert(t('reminders.caregiver.deleteConfirm'), existing.title, [
-      { text: t('common.cancel'), style: 'cancel' },
-      {
-        text: t('reminders.caregiver.delete'),
-        style: 'destructive',
-        onPress: async () => {
-          await deleteReminder(getDb(), existing.id);
-          await syncReminderNotifications(getDb());
-          router.back();
-        },
-      },
-    ]);
+    confirm(
+      t('reminders.caregiver.deleteConfirm'),
+      existing.title,
+      t('reminders.caregiver.delete'),
+      t('common.cancel'),
+    ).then(async (ok) => {
+      if (!ok) return;
+      await deleteReminder(getDb(), existing.id);
+      await syncReminderNotifications(getDb());
+      router.back();
+    });
   };
 
   return (
@@ -157,6 +153,7 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
 
       <TextField
         label={t('reminders.caregiver.titleLabel')}
+        testID="reminder-title"
         placeholder={t('reminders.caregiver.titlePlaceholder')}
         value={title}
         onChangeText={setTitle}
