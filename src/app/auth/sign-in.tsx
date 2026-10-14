@@ -76,6 +76,7 @@ export default function SignIn() {
         label={t('auth.createAccount')}
         onPress={() => router.push('/auth/sign-up')}
       />
+      <BigButton kind="ghost" icon="🔑" label={t('resetPin.forgot')} onPress={() => router.push('/auth/reset-pin')} />
       <BigButton
         kind="ghost"
         icon="🔁"

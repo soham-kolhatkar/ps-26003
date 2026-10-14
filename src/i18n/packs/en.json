@@ -824,5 +824,26 @@
     "justNow": "Synced just now",
     "ago": "Synced {{n}} min ago",
     "tapToSync": "Tap to sync now"
+  },
+  "notes": {
+    "title": "Doctor's notes",
+    "titleDoctor": "Your notes for the family and the ASHA worker",
+    "add": "New note",
+    "placeholder": "Advice, medicines to watch, next check-up…",
+    "save": "Save note",
+    "delete": "Delete",
+    "deleteTitle": "Delete this note?"
+  },
+  "resetPin": {
+    "forgot": "Forgot your PIN?",
+    "title": "Choose a new PIN",
+    "how": "Ask a family member who manages the patient to open People → your name → \"Reset PIN\". They get a 6-digit code (valid 30 minutes): type it here with a new PIN.",
+    "code": "Reset code",
+    "save": "Save new PIN",
+    "done": "Your PIN was changed",
+    "doneHint": "Sign in with your mobile number and the new PIN.",
+    "make": "Reset PIN",
+    "codeTitle": "PIN reset code for {{name}}",
+    "codeHow": "Tell {{name}} this code in person or on a call (not by message). On their phone: Sign in → \"Forgot your PIN?\" → their number, this code and a new PIN."
   }
 }

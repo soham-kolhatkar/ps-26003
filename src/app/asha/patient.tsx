@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { AlertsButton } from '@/components/AlertsButton';
+import { DoctorNotes } from '@/components/DoctorNotes';
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
 import { StatTile } from '@/components/charts/StatTile';
@@ -76,6 +77,14 @@ export default function AshaPatient() {
           onPress={() => router.push({ pathname: '/asha/people', params: { patientId } })}
         />
       ) : null}
+      {cloud ? (
+        <BigButton
+          kind="secondary"
+          icon="🔔"
+          label={t('reminders.caregiver.title')}
+          onPress={() => router.push({ pathname: '/asha/reminders', params: { patientId } })}
+        />
+      ) : null}
 
       <View style={styles.tiles}>
         <StatTile
@@ -101,6 +110,8 @@ export default function AshaPatient() {
           caption={t('visit.gamesCaption', { name })}
         />
       </View>
+
+      <DoctorNotes patientId={patientId} />
 
       <AppText variant="large" bold>
         {t('visit.history', { count: data.visits.length })}

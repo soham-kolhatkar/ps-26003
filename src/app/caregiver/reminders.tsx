@@ -1,6 +1,6 @@
 import * as Notifications from '@/services/notificationsApi';
 import type { TFunction } from 'i18next';
-import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { router, usePathname, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
@@ -17,6 +17,7 @@ import { startOfDay } from '@/engine/reminders';
 import type { LanguageCode } from '@/i18n';
 import { formatClock, formatShortDate, formatTime } from '@/services/datetime';
 import { REMINDER_ICON, sendTestReminder, syncReminderNotifications } from '@/services/notifications';
+import { useDevice } from '@/store/device';
 import { useSettings } from '@/store/settings';
 import { colors, radius, space } from '@/theme/tokens';
 
@@ -31,6 +32,10 @@ function scheduleText(t: TFunction, r: Reminder, language: LanguageCode): string
 }
 
 export default function CaregiverReminders() {
+  // Also mounted for the ASHA worker (`/asha/reminders`): stay in the group it was opened from.
+  const editPath = usePathname().startsWith('/asha') ? '/asha/reminder-edit' : '/caregiver/reminder-edit';
+  // "Test" fires a notification on THIS phone: meaningful only where the patient uses the phone (demo).
+  const canTest = useDevice((st) => st.mode) !== 'cloud';
   const { t } = useTranslation();
   const { patientId } = useLocalSearchParams<{ patientId: string }>();
   const language = useSettings((s) => s.language);
@@ -86,7 +91,8 @@ export default function CaregiverReminders() {
         </View>
       ) : null}
 
-      {!permissionOk ? (
+      {/* Cloud staff phones never ring: reminders ring on the patient's phone. */}
+      {!permissionOk && canTest ? (
         <View style={styles.warn}>
           <AppText variant="small">{t('reminders.caregiver.permissionDenied')}</AppText>
         </View>
@@ -95,7 +101,7 @@ export default function CaregiverReminders() {
       <BigButton
         icon="➕"
         label={t('reminders.caregiver.add')}
-        onPress={() => router.push({ pathname: '/caregiver/reminder-edit', params: { patientId } })}
+        onPress={() => router.push({ pathname: editPath, params: { patientId } })}
       />
 
       {data && data.reminders.length === 0 ? <AppText tone="muted">{t('reminders.caregiver.empty')}</AppText> : null}
@@ -105,9 +111,7 @@ export default function CaregiverReminders() {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={`${t('reminders.caregiver.editTitle')}: ${r.title}`}
-            onPress={() =>
-              router.push({ pathname: '/caregiver/reminder-edit', params: { patientId, reminderId: r.id } })
-            }
+            onPress={() => router.push({ pathname: editPath, params: { patientId, reminderId: r.id } })}
             style={styles.cardMain}
           >
             <AppText style={styles.emoji} importantForAccessibility="no">
@@ -131,7 +135,7 @@ export default function CaregiverReminders() {
               trackColor={{ true: colors.primary, false: colors.border }}
             />
           </Pressable>
-          {r.enabled ? (
+          {r.enabled && canTest ? (
             <BigButton kind="ghost" icon="🔔" label={t('reminders.caregiver.test')} onPress={() => test(r)} />
           ) : null}
         </View>

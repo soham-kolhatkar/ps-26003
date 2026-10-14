@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Share, StyleSheet, View } from 'react-native';
 
 import { AlertCard } from '@/components/AlertCard';
+import { DoctorNotes } from '@/components/DoctorNotes';
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
 import { ChartCard } from '@/components/charts/ChartCard';
@@ -298,6 +299,8 @@ export default function DoctorReport() {
           </AppText>
         ))}
       </View>
+
+      <DoctorNotes patientId={patientId} canWrite limit={5} />
 
       <BigButton icon="📤" label={t('doctor.share')} onPress={share} />
 

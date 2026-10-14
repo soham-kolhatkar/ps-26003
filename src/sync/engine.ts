@@ -57,8 +57,8 @@ export async function push(db: DbClient, remote: RemoteApi): Promise<PushResult>
       const rows = await spec.readLocal(db, upserts);
       await remote.upsert(spec, rows.map(spec.toCloud));
       pushed += rows.length;
-      // Only reminders are deleted by people; other rows disappear with them.
-      if (tbl === 'reminder' && deletes.length) {
+      // Only reminders and notes are deleted by people; other rows disappear with their patient.
+      if ((tbl === 'reminder' || tbl === 'doctor_note') && deletes.length) {
         await remote.softDelete(spec, deletes);
         pushed += deletes.length;
       }

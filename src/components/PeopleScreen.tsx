@@ -11,6 +11,7 @@ import { Screen } from '@/components/Screen';
 import { CloudError } from '@/cloud/errors';
 import {
   createInvite,
+  createPinReset,
   fetchPeople,
   leavePatient,
   removeMember,
@@ -44,6 +45,7 @@ export function PeopleScreen() {
   const [snap, setSnap] = useState<PeopleSnapshot | null>(null);
   const [error, setError] = useState<CloudError | null>(null);
   const [invite, setInvite] = useState<(Invite & { role: MemberRole }) | null>(null);
+  const [pinReset, setPinReset] = useState<(Invite & { name: string }) | null>(null);
   const [familyRelation, setFamilyRelation] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -114,6 +116,26 @@ export function PeopleScreen() {
     });
   };
 
+  if (pinReset) {
+    return (
+      <Screen>
+        <AppText variant="title">🔑 {t('resetPin.codeTitle', { name: pinReset.name })}</AppText>
+        <View style={styles.codeBox}>
+          <AppText style={styles.code} testID="pin-reset-code">
+            {`${pinReset.code.slice(0, 3)} ${pinReset.code.slice(3)}`}
+          </AppText>
+          <AppText tone="muted" center>
+            {t('people.code.until', { time: formatTime(new Date(pinReset.expiresAt), language) })}
+          </AppText>
+        </View>
+        <View style={styles.member}>
+          <AppText>{t('resetPin.codeHow', { name: pinReset.name })}</AppText>
+        </View>
+        <BigButton kind="secondary" icon="✅" label={t('people.code.done')} onPress={() => setPinReset(null)} />
+      </Screen>
+    );
+  }
+
   if (invite)
     return (
       <InviteCode
@@ -155,7 +177,21 @@ export function PeopleScreen() {
                   .join(' · ')}
               </AppText>
               {amManager && m.user_id !== me ? (
-                <BigButton kind="ghost" icon="➖" label={t('people.remove')} onPress={() => remove(m.user_id, label)} />
+                <>
+                  <BigButton
+                    kind="ghost"
+                    icon="🔑"
+                    label={t('resetPin.make')}
+                    disabled={busy}
+                    onPress={() => run(async () => setPinReset({ ...(await createPinReset(m.user_id)), name: label }))}
+                  />
+                  <BigButton
+                    kind="ghost"
+                    icon="➖"
+                    label={t('people.remove')}
+                    onPress={() => remove(m.user_id, label)}
+                  />
+                </>
               ) : null}
             </View>
           );

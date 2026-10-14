@@ -106,6 +106,27 @@ export function signIn(role: StaffRole, phoneInput: string, pin: string): Promis
   });
 }
 
+/** Forgot PIN: phone + the reset code from a manager + a new PIN (Edge Function `reset-pin`). */
+export function resetPinWithCode(phoneInput: string, code: string, pin: string, pinAgain: string): Promise<void> {
+  return wrap(async () => {
+    const phone = normalizePhone(phoneInput);
+    if (!phone) throw new CloudError('invalidPhone');
+    if (code.replace(/\D/g, '').length !== 6) throw new CloudError('invalidCode');
+    if (!isValidPin(pin)) throw new CloudError('invalidPin');
+    if (pin !== pinAgain) throw new CloudError('pinMismatch');
+    const { data, error } = await supabase().functions.invoke('reset-pin', {
+      body: { phone, code: code.replace(/\D/g, ''), pin },
+    });
+    if (error) {
+      // 4xx from the function = a code that did not fit; anything else = network / server.
+      const status = (error as { context?: { status?: number } }).context?.status;
+      if (status && status < 500) throw new CloudError('invalidCode');
+      throw error;
+    }
+    if (!(data as { ok?: boolean })?.ok) throw new CloudError('invalidCode');
+  });
+}
+
 /** Signs out this phone only (other phones of the same person stay signed in). */
 export async function signOutCloud(): Promise<void> {
   await supabase()

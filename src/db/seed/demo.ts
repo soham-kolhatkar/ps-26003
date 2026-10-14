@@ -267,6 +267,7 @@ export const DEMO = {
 
 /** Tables in child → parent order, for clearing. */
 const ALL_TABLES = [
+  'doctor_note',
   'visit',
   'alert',
   'reminder_event',

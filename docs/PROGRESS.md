@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F18 role extras (ASHA edits reminders, doctor's notes, PIN reset).
+**Current feature:** F18 role extras, on `feat/f18-role-extras`: pushed, **waiting for the user's test** (checklist at the end of TESTING.md). SQL 004 + Edge Function `reset-pin` applied by the user.
 **Next:** F19 cloud demo story + 4-phone demo + APK v0.3.0.
 
 ## Tier 1: core demo
@@ -34,7 +34,7 @@ Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync
 | F15 | Cloud foundation: "Who will use this phone?" setup, phone + PIN accounts, settings and sign-out, hidden single-phone demo mode, web build for testing (Chromium), SQL `001` | ✅ done (63ee663) |
 | F16 | Patients, people, invite codes and patient-phone pairing (+ family corner for photos on the patient phone), membership pull, SQL `002` | ✅ done (fe03cbb) |
 | F17 | Data sync: outbox triggers, push/pull for reminders, doses, games, levels, visits; sync status chip; two-device tests, SQL `003` | ✅ done (f2e057c) |
-| F18 | Role extras: ASHA edits reminders, doctor's notes, PIN reset via manager (Edge Function) | ⏳ |
+| F18 | Role extras: ASHA edits reminders, doctor's notes, PIN reset via manager (Edge Function) | 🧪 testing |
 | F19 | Cloud demo story (Demo tools), 4-phone demo script, APK v0.3.0, tag v0.3.0 | ⏳ |
 
 ## Tier 4: later (moved from Tier 3 by the user)

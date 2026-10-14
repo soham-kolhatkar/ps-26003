@@ -205,6 +205,20 @@ CREATE TABLE sync_flag (
 INSERT INTO sync_flag (id, applying) VALUES (1, 0);
 `,
   },
+  {
+    version: 8,
+    name: "doctor's notes (F18)",
+    sql: `
+CREATE TABLE doctor_note (
+  id         TEXT PRIMARY KEY NOT NULL,
+  patient_id TEXT NOT NULL REFERENCES patient(id) ON DELETE CASCADE,
+  author_id  TEXT REFERENCES app_user(id) ON DELETE SET NULL,
+  body       TEXT NOT NULL,
+  created_at INTEGER NOT NULL
+);
+CREATE INDEX idx_doctor_note_patient ON doctor_note (patient_id, created_at);
+`,
+  },
 ];
 
 export const LATEST_VERSION = MIGRATIONS[MIGRATIONS.length - 1].version;

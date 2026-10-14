@@ -7,7 +7,14 @@
 import type { DbClient } from '@/db/types';
 
 /** Local tables that sync, in push / pull order (parents before children). */
-export const SYNCED_TABLES = ['reminder', 'reminder_event', 'game_session', 'game_level', 'visit'] as const;
+export const SYNCED_TABLES = [
+  'reminder',
+  'reminder_event',
+  'game_session',
+  'game_level',
+  'visit',
+  'doctor_note',
+] as const;
 export type SyncedTable = (typeof SYNCED_TABLES)[number];
 
 const QUIET = '(SELECT applying FROM sync_flag WHERE id = 1) = 0';
@@ -30,6 +37,7 @@ export const OUTBOX_TRIGGERS_SQL = [
   triggers('game_session', 'NEW.id', 'OLD.id'),
   triggers('game_level', "NEW.patient_id || '|' || NEW.game_id", "OLD.patient_id || '|' || OLD.game_id"),
   triggers('visit', 'NEW.id', 'OLD.id'),
+  triggers('doctor_note', 'NEW.id', 'OLD.id'),
 ].join('\n');
 
 export async function installOutboxTriggers(db: DbClient): Promise<void> {
