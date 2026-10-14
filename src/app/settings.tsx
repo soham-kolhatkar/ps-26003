@@ -1,6 +1,6 @@
 import { Redirect, router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
@@ -41,7 +41,9 @@ export default function Settings() {
   return (
     <Screen>
       <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
-      <AppText variant="title">⚙️ {t('settings.title')}</AppText>
+      <Pressable onLongPress={() => router.push('/demo-tools')} delayLongPress={1500}>
+        <AppText variant="title">⚙️ {t('settings.title')}</AppText>
+      </Pressable>
 
       <View style={styles.card}>
         <AppText variant="large" bold>

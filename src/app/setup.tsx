@@ -59,9 +59,12 @@ export default function Setup() {
             🌼
           </AppText>
         </Pressable>
-        <AppText variant="title" center>
-          {t('setup.title')}
-        </AppText>
+        {/* Hidden: hold the title for the presenter's Demo tools (cloud demo story). */}
+        <Pressable onLongPress={() => router.push('/demo-tools')} delayLongPress={1500} testID="setup-title">
+          <AppText variant="title" center>
+            {t('setup.title')}
+          </AppText>
+        </Pressable>
         <AppText tone="muted" center>
           {t('setup.subtitle')}
         </AppText>
