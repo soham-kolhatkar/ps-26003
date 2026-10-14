@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 import { fetchProfile, signOutCloud, type Profile } from '@/cloud/account';
 import { supabase } from '@/cloud/client';
+import { exclusive } from '@/sync/engine';
 import { kv } from '@/services/kv';
 
 /**
@@ -86,6 +87,8 @@ export const useAccount = create<AccountState>((set, get) => ({
   },
 
   signOut: async () => {
+    // Let a running sync finish first: signing out switches the database file.
+    await exclusive(async () => {}).catch(() => {});
     await signOutCloud();
     kv.remove(PROFILE_KEY);
     set({ status: 'signedOut', uid: null, profile: null });

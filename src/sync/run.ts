@@ -26,6 +26,11 @@ export function canSync(): boolean {
   return useDevice.getState().mode === 'cloud' && useAccount.getState().status === 'signedIn';
 }
 
+/** Resolves when no sync is running (call before signing out: the database file is about to change). */
+export function syncIdle(): Promise<void> {
+  return exclusive(async () => {});
+}
+
 export function syncNow(): Promise<SyncResult | null> {
   return exclusive(async () => {
     if (!canSync()) return null;
@@ -51,6 +56,8 @@ export function syncNow(): Promise<SyncResult | null> {
       if (people.added.length || people.removed.length || pulled.changed) status.bump();
       return { people, pushed, pulled: pulled.applied };
     } catch (e) {
+      // Signed out (or switched account) while this ran: the old database is gone, nothing to report.
+      if (!canSync() || getDb() !== db) return null;
       const offline = errorKeyFor(e) === 'offline';
       status.set({ state: offline ? 'offline' : 'error', pending: await pendingChanges(db).catch(() => 0) });
       if (!offline) console.warn('Sync failed', e);

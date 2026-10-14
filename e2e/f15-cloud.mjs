@@ -28,7 +28,7 @@ try {
   await c.see('Hello, E2E', 30000);
   await c.shot('caregiver-home');
   check(true, `sign-up works and opens the caregiver home (${number})`);
-  await c.see('No family member added yet');
+  await c.see('No family member yet');
   check(true, 'empty cloud home shows the "no family member yet" note (no demo data)');
 
   await c.open('/'); // app restart

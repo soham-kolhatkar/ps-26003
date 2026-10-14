@@ -23,7 +23,9 @@ export async function phone(name) {
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
+  const warnings = [];
   page.on('console', (m) => {
+    if (m.type() === 'warning' || m.type() === 'error') warnings.push(`${m.type()}: ${m.text()}`);
     if (m.type() === 'error' || (m.type() === 'warning' && /DB query failed|failed/i.test(m.text()))) {
       errors.push(`${m.type()}: ${m.text()}`);
     }
@@ -37,6 +39,7 @@ export async function phone(name) {
     name,
     page,
     errors,
+    warnings,
     async open(path = '/') {
       await page.goto(BASE + path, { waitUntil: 'networkidle', timeout: 180000 });
     },

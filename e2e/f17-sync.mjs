@@ -70,7 +70,7 @@ try {
   check(arrived, "the reminder reaches the patient's phone");
   await p.tap('Drink a glass of water');
   await p.tap('I drank it', { button: true });
-  await p.see('Thank you', 15000);
+  await p.see('Choose a game', 30000); // "Thank you" is spoken, then back home
   await p.page.waitForTimeout(6000);
   check(true, 'the patient marks it done on her phone');
 
@@ -95,8 +95,14 @@ try {
   check(true, 'the patient plays a game on her phone');
 
   // 4. Both reach the caregiver.
-  const dose = await eventually(c, '/', 'Reminders · 1/1 today');
-  check(dose, "the caregiver sees today's dose as done (1/1)");
+  // Water comes with default times (10:00, 13:00, 16:00) plus the one added: 1 of 4 taken.
+  const dose = await eventually(c, '/', 'Reminders · 1/');
+  if (!dose) {
+    console.log('--- patient warnings ---\n' + p.warnings.slice(-15).join('\n'));
+    console.log('--- caregiver warnings ---\n' + c.warnings.slice(-15).join('\n'));
+    await c.shot('caregiver-dose-missing');
+  }
+  check(dose, "the caregiver sees the dose taken on the patient's phone (1 of today's doses)");
   const game = await eventually(c, '/', 'Progress · 1 games this week');
   await c.shot('caregiver-after-sync');
   check(game, "the caregiver sees the patient's game");

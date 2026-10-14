@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F17 data sync.
+**Current feature:** F17 data sync, on `feat/f17-data-sync`: pushed, **waiting for the user's test** (checklist at the end of TESTING.md). SQL 003 applied by the user.
 **Next:** F18 role extras.
 
 ## Tier 1: core demo
@@ -33,7 +33,7 @@ Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync
 |---|---|---|
 | F15 | Cloud foundation: "Who will use this phone?" setup, phone + PIN accounts, settings and sign-out, hidden single-phone demo mode, web build for testing (Chromium), SQL `001` | ✅ done (63ee663) |
 | F16 | Patients, people, invite codes and patient-phone pairing (+ family corner for photos on the patient phone), membership pull, SQL `002` | ✅ done (fe03cbb) |
-| F17 | Data sync: outbox triggers, push/pull for reminders, doses, games, levels, visits; sync status chip; two-device tests, SQL `003` | ⏳ |
+| F17 | Data sync: outbox triggers, push/pull for reminders, doses, games, levels, visits; sync status chip; two-device tests, SQL `003` | 🧪 testing |
 | F18 | Role extras: ASHA edits reminders, doctor's notes, PIN reset via manager (Edge Function) | ⏳ |
 | F19 | Cloud demo story (Demo tools), 4-phone demo script, APK v0.3.0, tag v0.3.0 | ⏳ |
 
@@ -41,6 +41,7 @@ Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync
 F14 Assamese pack · low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report export · real SMS OTP (MSG91 + DLT) + login lockout · realtime updates · accessibility/animation polish · Play Store signing.
 
 ## Known issues / notes
+- `expo-doctor`'s React Native Directory check fails from the corporate network (reactnative.directory unreachable, HTTP 000). The other 20 checks pass; it is not a project problem.
 - **Testing is in Chromium during Tier 3** (user's choice; the phone is busy). `npm run web` serves the app at http://localhost:8081 (the same server Expo Go uses). `npm run e2e` drives headless Chromium (Playwright, browser in `~/.cache/ms-playwright`, Noto emoji/Devanagari fonts in `~/.local/share/fonts`). Each browser context = one phone. E2E runs create real **test accounts named "E2E …"** in Supabase (Authentication → Users; safe to delete).
 - On web, `/` is served without the COOP/COEP headers (other routes have them); expo-sqlite works anyway with the async API. Web is a test bed only, never shipped.
 - **Fixed (2026-10-13, see the F16 fix under D45):** Expo Go reloads and language-pack hot updates no longer break the database (fresh native connection + stable init registry). The older note below is kept for history.
