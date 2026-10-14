@@ -279,3 +279,16 @@
 11. Optional: ASHA **➕ Register a patient** (a family without a smartphone): she becomes the manager and can pair that patient's phone herself.
 12. Hindi: switch language in ⚙️ Settings (staff) and check the People and code screens.
 
+## F17 Data sync checklist
+> Two windows are enough: one **caregiver**, one **patient's phone**, paired as in F16 (you can reuse that pair). The sync chip on the caregiver's home shows what is happening; tap it to sync at once.
+1. Caregiver → **Reminders** → **Add reminder** → Water (or Medicine) → **Add time** (in the browser a box asks for HH:MM: type the current time) → **Save**. The chip shows "⏳ 1 change waiting", then "✓ Synced just now" within a few seconds.
+2. Patient window → reload at `/`: the reminder is on Kamala's home as **Now** within about 30 seconds (reload again if needed).
+3. Patient: tap the reminder → **I drank it** / **I took it** → back home.
+4. Caregiver → home: **Reminders · 1/N today** within about 30 seconds (or tap the chip).
+5. Patient: play any game to the end → caregiver: **Progress · 1 games this week**; open **📊 Progress**: the game and today's score are there.
+6. Offline: in the caregiver window open DevTools → Network → **Offline**, add another reminder: the chip says "📴 Offline: 1 change saved on this phone". Back **Online**: it syncs and reaches the patient window.
+7. Edit the reminder's time on the caregiver → after a sync the patient window shows the new time. **Delete** it → it disappears from the patient window.
+8. ASHA (from F16): record a **home visit** for the patient → the caregiver and doctor windows see it (ASHA patient page / doctor report, "Past visits" / "ASHA check-ups").
+9. Sign out (⚙️ Settings) right after making a change: no error; signing in again shows the change.
+10. Phone (optional, `npm run usb`): the same with Expo Go as the patient's phone, plus a real notification for the reminder.
+

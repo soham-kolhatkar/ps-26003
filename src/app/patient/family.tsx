@@ -7,7 +7,6 @@ import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
 import { PinPad } from '@/components/PinPad';
 import { Screen } from '@/components/Screen';
-import { signOutCloud } from '@/cloud/account';
 import { FAMILY_PIN_ID, PIN_LENGTH, verifyPin } from '@/services/auth';
 import { confirm } from '@/services/confirm';
 import { useAccount } from '@/store/account';
@@ -44,8 +43,7 @@ export default function FamilyCorner() {
     }
     router.replace('/');
     useSession.getState().signOut();
-    await signOutCloud();
-    await useAccount.getState().signOut();
+    await useAccount.getState().signOut(); // waits for a running sync, then signs out
     useDevice.getState().reset();
   };
 

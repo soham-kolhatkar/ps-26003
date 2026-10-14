@@ -23,18 +23,23 @@ export async function phone(name) {
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
+  const warnings = [];
   page.on('console', (m) => {
+    if (m.type() === 'warning' || m.type() === 'error') warnings.push(`${m.type()}: ${m.text()}`);
     if (m.type() === 'error' || (m.type() === 'warning' && /DB query failed|failed/i.test(m.text()))) {
       errors.push(`${m.type()}: ${m.text()}`);
     }
   });
   // window.confirm / alert → accept (our confirm() helper uses them on web).
-  page.on('dialog', (d) => d.accept());
+  // confirm/alert → accept; prompt → the value queued with answerNextPrompt() (else its default).
+  const prompts = [];
+  page.on('dialog', (d) => (d.type() === 'prompt' ? d.accept(prompts.shift() ?? d.defaultValue()) : d.accept()));
   let n = 0;
   const p = {
     name,
     page,
     errors,
+    warnings,
     async open(path = '/') {
       await page.goto(BASE + path, { waitUntil: 'networkidle', timeout: 180000 });
     },
@@ -49,7 +54,10 @@ export async function phone(name) {
       const loc = opts.button
         ? page.getByRole('button', { name: text, exact: opts.exact ?? false })
         : page.getByText(text, { exact: opts.exact ?? false });
-      await loc.filter({ visible: true }).first().click({ timeout: opts.timeout ?? 15000 });
+      await loc
+        .filter({ visible: true })
+        .first()
+        .click({ timeout: opts.timeout ?? 15000 });
     },
     async fill(testId, value) {
       await page.getByTestId(testId).filter({ visible: true }).first().fill(value);
@@ -78,6 +86,9 @@ export async function phone(name) {
     },
     async text(testId) {
       return (await page.getByTestId(testId).filter({ visible: true }).first().innerText()).trim();
+    },
+    answerNextPrompt(value) {
+      prompts.push(value);
     },
     async reload() {
       await page.reload({ waitUntil: 'networkidle' });

@@ -814,5 +814,15 @@
     "unpair": "Unpair this phone",
     "unpairTitle": "Unpair this phone?",
     "unpairBody": "Games and reminders stop on this phone until it is paired again with a new code. Photos stay on the phone."
+  },
+  "sync": {
+    "syncing": "Syncing…",
+    "offline": "Offline: {{count}} change(s) saved on this phone",
+    "error": "Couldn't sync. Tap to try again",
+    "waiting": "{{count}} change(s) waiting to sync",
+    "notYet": "Not synced yet",
+    "justNow": "Synced just now",
+    "ago": "Synced {{n}} min ago",
+    "tapToSync": "Tap to sync now"
   }
 }
