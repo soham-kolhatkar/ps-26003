@@ -91,7 +91,8 @@ export default function CaregiverReminders() {
         </View>
       ) : null}
 
-      {!permissionOk ? (
+      {/* Cloud staff phones never ring: reminders ring on the patient's phone. */}
+      {!permissionOk && canTest ? (
         <View style={styles.warn}>
           <AppText variant="small">{t('reminders.caregiver.permissionDenied')}</AppText>
         </View>

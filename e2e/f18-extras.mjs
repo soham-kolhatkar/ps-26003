@@ -64,9 +64,10 @@ try {
   await a.page.waitForTimeout(6000);
   await a.shot('asha-reminders');
   check(true, 'the ASHA worker adds a reminder');
-  await c.open('/');
-  await c.tap('Reminders', { button: true });
-  const seen = await eventually(c, c.page.url().replace(/^https?:\/\/[^/]+/, ''), 'Amlodipine 5 mg');
+  // A fresh page load starts at the home (session is per launch): check the home's reminder count.
+  // Medicine comes with a default 08:00, plus the 09:00 added: 2 doses a day.
+  const seen = await eventually(c, '/', 'Reminders · 0/2 today');
+  if (!seen) console.log('--- asha warnings ---\n' + a.warnings.slice(-10).join('\n'));
   check(seen, "the ASHA worker's reminder reaches the caregiver");
 
   // 2. The doctor writes a note; the family and the ASHA worker read it.
@@ -79,8 +80,19 @@ try {
   check(true, 'the doctor saves a note on the report');
   await c.open('/');
   await c.see(patient, 30000);
-  await c.tap('Progress', { button: true });
-  const note = await eventually(c, c.page.url().replace(/^https?:\/\/[^/]+/, ''), 'Check blood pressure every week');
+  let note = false;
+  for (let i = 0; i < 8 && !note; i++) {
+    await c.open('/');
+    await c.see(patient, 30000);
+    await c.tap('Progress', { button: true });
+    try {
+      await c.see('Check blood pressure every week', 8000);
+      note = true;
+    } catch {
+      await c.page.waitForTimeout(3000);
+    }
+  }
+  if (!note) console.log('--- doctor warnings ---\n' + d.warnings.slice(-10).join('\n'));
   await c.shot('caregiver-note');
   check(note, "the doctor's note shows on the caregiver's Progress screen");
 

@@ -292,3 +292,14 @@
 9. Sign out (⚙️ Settings) right after making a change: no error; signing in again shows the change.
 10. Phone (optional, `npm run usb`): the same with Expo Go as the patient's phone, plus a real notification for the reminder.
 
+## F18 Role extras checklist
+> Windows from F16/F17: **caregiver**, **ASHA**, **doctor** (all linked to the same patient), plus one spare window. SQL 004 and the Edge Function `reset-pin` must be in place.
+1. **ASHA** → the patient → **🔔 Reminders** → **Add reminder** → Medicine, "Amlodipine 5 mg", add a time → **Save**. The caregiver's home shows the extra doses (**Reminders · 0/N today**) after a sync, and the caregiver's Reminders list shows Amlodipine.
+2. Cloud staff phones show neither **Test in 10 s** nor "Notifications are turned off" (reminders ring only on the patient's phone).
+3. **Doctor** → the patient's report → **🩺 Your notes** → write advice → **Save note** → the note appears with your name and today's date. **Delete** removes it again.
+4. **Caregiver** → **📊 Progress**: the doctor's note is at the top (after a sync; tap the chip). **ASHA** → patient page: the same note above "Past visits".
+5. **PIN reset:** caregiver → **People** → next to the ASHA worker → **🔑 Reset PIN** → a big 6-digit code, "Valid until <time>" (30 minutes).
+6. Spare window → Continue → **ASHA worker** → **Forgot your PIN?** → the ASHA's number, a **wrong** code first: "That code is not valid or has expired". Then the right code + a new PIN twice → **Your PIN was changed** → Sign in with the new PIN → her patient list.
+7. The old PIN no longer works. A used code can't be used twice.
+8. Hindi: notes ("डॉक्टर के नोट्स") and the reset screens ("पिन भूल गए?") read naturally.
+
