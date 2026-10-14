@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** F16 patients, people, invites and pairing, on `feat/f16-people-pairing`: pushed, **waiting for the user's test (planned 2026-10-14)** in Chromium or on the phone (checklist at the end of TESTING.md). SQL 002 applied by the user. Dev server stopped for the night: restart with `npm run web` (browser) or `npm run usb` (phone).
-**Next:** F17 data sync.
+**Current feature:** F17 data sync.
+**Next:** F18 role extras.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -32,7 +32,7 @@ Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync
 | ID | Feature | Status |
 |---|---|---|
 | F15 | Cloud foundation: "Who will use this phone?" setup, phone + PIN accounts, settings and sign-out, hidden single-phone demo mode, web build for testing (Chromium), SQL `001` | ✅ done (63ee663) |
-| F16 | Patients, people, invite codes and patient-phone pairing (+ family corner for photos on the patient phone), membership pull, SQL `002` | 🧪 testing |
+| F16 | Patients, people, invite codes and patient-phone pairing (+ family corner for photos on the patient phone), membership pull, SQL `002` | ✅ done (fe03cbb) |
 | F17 | Data sync: outbox triggers, push/pull for reminders, doses, games, levels, visits; sync status chip; two-device tests, SQL `003` | ⏳ |
 | F18 | Role extras: ASHA edits reminders, doctor's notes, PIN reset via manager (Edge Function) | ⏳ |
 | F19 | Cloud demo story (Demo tools), 4-phone demo script, APK v0.3.0, tag v0.3.0 | ⏳ |
