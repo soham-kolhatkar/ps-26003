@@ -355,6 +355,7 @@ export async function seedReminders(db: DbClient, now: number): Promise<void> {
     title: string,
     note: string | null,
     schedule: ReminderSchedule,
+    createdAt = now,
   ) =>
     db.runAsync(
       `INSERT INTO reminder (id, patient_id, type, title, note, schedule_kind, times, once_at, enabled, created_by, created_at, updated_at)
@@ -368,7 +369,7 @@ export async function seedReminders(db: DbClient, now: number): Promise<void> {
         schedule.kind,
         schedule.kind === 'daily' ? schedule.times.join(',') : null,
         schedule.kind === 'once' ? schedule.at : null,
-        now,
+        createdAt,
         now,
       ],
     );
@@ -377,8 +378,10 @@ export async function seedReminders(db: DbClient, now: number): Promise<void> {
   for (const r of DEMO.reminders) {
     if (!existing.has(r.patientId)) continue;
     const schedule: ReminderSchedule = { kind: 'daily', times: r.times };
-    await insertReminder(r.id, r.patientId, r.type, r.title, r.note, schedule);
-    const history = occurrencesBetween(schedule, today - DEMO.historyDays * 24 * 3600e3, today);
+    // Created when its history starts: doses before a reminder existed never count as missed.
+    const historyFrom = today - DEMO.historyDays * 24 * 3600e3;
+    await insertReminder(r.id, r.patientId, r.type, r.title, r.note, schedule, historyFrom);
+    const history = occurrencesBetween(schedule, historyFrom, today);
     for (const dueAt of history) {
       const taken = rng() < r.takeRate;
       const actedAt = taken ? dueAt + Math.round(rng() * 40) * 60e3 : null;

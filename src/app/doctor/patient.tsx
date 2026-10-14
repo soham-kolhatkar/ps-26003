@@ -17,7 +17,7 @@ import type { Patient } from '@/db/models';
 import { listAlerts, type StoredAlert } from '@/db/repos/alerts';
 import { listSessions } from '@/db/repos/games';
 import { displayName, getPatient } from '@/db/repos/patients';
-import { listOccurrences } from '@/db/repos/reminders';
+import { ensureEvents, listOccurrences } from '@/db/repos/reminders';
 import { getUser } from '@/db/repos/users';
 import { listVisits } from '@/db/repos/visits';
 import { useDbQuery } from '@/db/useDbQuery';
@@ -66,6 +66,7 @@ export default function DoctorReport() {
           avgReactionMs: s.stats.avgReactionMs,
         }),
       );
+      await ensureEvents(db, patientId, now - 31 * DAY, now + DAY);
       const occurrences = (await listOccurrences(db, patientId, now - 31 * DAY, now + DAY)).map((o) => ({
         dueAt: o.dueAt,
         status: o.status,

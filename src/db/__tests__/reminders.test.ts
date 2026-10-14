@@ -163,3 +163,23 @@ describe('upgrade from schema v2', () => {
     db.close();
   });
 });
+
+describe('ensureEvents and the reminder creation time', () => {
+  it('creates no doses from long before the reminder existed, but keeps one set "for now"', async () => {
+    const db = createTestDb();
+    await initDatabase(db);
+    const day = new Date(2026, 9, 14).getTime();
+    const created = new Date(2026, 9, 14, 11, 28, 40).getTime();
+    await saveReminder(
+      db,
+      { patientId: 'p-lakhi', type: 'medicine', title: 'Test', schedule: { kind: 'daily', times: ['08:30', '11:28'] } },
+      created,
+    );
+    await ensureEvents(db, 'p-lakhi', day - 7 * 24 * 3600e3, day + 24 * 3600e3);
+    const mine = (await listOccurrences(db, 'p-lakhi', day - 7 * 24 * 3600e3, day + 24 * 3600e3)).filter(
+      (o) => o.title === 'Test',
+    );
+    expect(mine.map((o) => new Date(o.dueAt).getHours() * 100 + new Date(o.dueAt).getMinutes())).toEqual([1128]);
+    db.close();
+  });
+});

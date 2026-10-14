@@ -2,7 +2,7 @@
   "expo": {
     "name": "Smriti",
     "slug": "smriti",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "smriti",
@@ -19,7 +19,7 @@
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.smriti.sih26003",
-      "versionCode": 2,
+      "versionCode": 3,
       "permissions": [
         "SCHEDULE_EXACT_ALARM",
         "USE_EXACT_ALARM"

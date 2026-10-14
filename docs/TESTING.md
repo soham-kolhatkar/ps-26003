@@ -303,3 +303,13 @@
 7. The old PIN no longer works. A used code can't be used twice.
 8. Hindi: notes ("डॉक्टर के नोट्स") and the reset screens ("पिन भूल गए?") read naturally.
 
+## F19 Cloud demo + APK v0.3.0 checklist
+> In the browser first, then with the APK on phones.
+1. Fresh window → Continue → **hold the title "Who will use this phone?"** for 2 s → **🎬 Demo tools**: the three demo accounts and PIN 123456 → **Load / reset the cloud demo** → confirm → a log ending with "✅ done" (about a minute).
+2. New window → **Family caregiver** → sign in **90000 10001 / 123456** → **Kamala Sharma** with 30 days of games (Progress · N games this week), reminders and adherence.
+3. New window → **ASHA worker** → **90000 10002 / 123456** → three patients: **Ramesh** first ("Visit overdue by 2 days", 🔴 3 things to look at, including "Medicines often missed"), then Kamala and Lakshmi.
+4. New window → **Doctor** → **90000 10003 / 123456** → Ramesh "Referred by the ASHA worker" → report: referral box, abilities ↓, weekly chart, the doctor's note "Referred by Sunita…".
+5. Run **Load / reset** again → the log says "removed 1 earlier demo patient(s)" / "removed 2…" → the caregiver still has exactly one Kamala.
+6. **APK v0.3.0** (`Download/Smriti-v0.3.0.apk`, installs over v0.2.0 and keeps its data): app opens on "Who will use this phone?"; the hidden single-phone demo (hold the 🌼) still works offline.
+7. **4-phone rehearsal** (if you have the phones): follow Plan A in [DEMO.md](DEMO.md): pair Kamala's phone from Priya's People screen, play a game, set a reminder for now, record Sunita's visit with a referral, Dr. Anjali's note.
+

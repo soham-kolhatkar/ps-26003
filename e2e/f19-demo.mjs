@@ -34,8 +34,10 @@ try {
   await sunita.see('Lakshmi Iyer');
   await sunita.see('Kamala Sharma');
   await sunita.see('Visit overdue');
+  // Two games slipping + blood-pressure medicine often missed (missed doses are computed on her phone).
+  await sunita.see('Things to look at: 3', 30000);
   await sunita.shot('asha-list');
-  check(true, "Sunita sees her three patients, Ramesh's visit overdue");
+  check(true, "Sunita sees her three patients; Ramesh: visit overdue, 3 things to look at (incl. missed medicine)");
 
   const anjali = await phone('anjali');
   await signIn(anjali, 'Doctor', '9000010003');
