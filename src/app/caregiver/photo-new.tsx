@@ -2,10 +2,11 @@ import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { ChipGroup } from '@/components/Chip';
 import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
@@ -17,7 +18,7 @@ import { useDbQuery } from '@/db/useDbQuery';
 import { storePhoto } from '@/services/photos';
 import { usePendingPhoto } from '@/store/pendingPhoto';
 import { useSession } from '@/store/session';
-import { colors, radius, shadow, space } from '@/theme/tokens';
+import { radius, shadow } from '@/theme/tokens';
 
 export default function NewPhoto() {
   const { t } = useTranslation();
@@ -75,24 +76,13 @@ export default function NewPhoto() {
         returnKeyType="done"
       />
 
-      <AppText variant="small" bold>
-        {t('photos.relationLabel', { name: patient ? displayName(patient) : '' })}
-      </AppText>
-      <View style={styles.chips}>
-        {FAMILY_RELATIONS.map((r) => (
-          <Pressable
-            key={r}
-            accessibilityRole="button"
-            accessibilityState={{ selected: relation === r }}
-            onPress={() => setRelation(relation === r ? null : r)}
-            style={[styles.chip, relation === r && styles.chipOn]}
-          >
-            <AppText variant="small" bold tone={relation === r ? 'onPrimary' : 'primary'}>
-              {t(`relation.${r}`)}
-            </AppText>
-          </Pressable>
-        ))}
-      </View>
+      <ChipGroup
+        label={t('photos.relationLabel', { name: patient ? displayName(patient) : '' })}
+        options={FAMILY_RELATIONS}
+        value={relation}
+        onChange={setRelation}
+        labelFor={(r) => t(`relation.${r}`)}
+      />
 
       <BigButton
         size="large"
@@ -113,15 +103,4 @@ const styles = StyleSheet.create({
     boxShadow: shadow.card,
   },
   image: { width: 220, height: 220 },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
-  chip: {
-    minHeight: 48,
-    justifyContent: 'center',
-    paddingHorizontal: space.md,
-    borderRadius: radius.pill,
-    borderWidth: 2,
-    borderColor: colors.primary,
-    backgroundColor: colors.surface,
-  },
-  chipOn: { backgroundColor: colors.primary },
 });

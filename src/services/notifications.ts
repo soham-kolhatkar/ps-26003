@@ -107,6 +107,11 @@ async function cancelReminderNotifications(filter: (id: string) => boolean): Pro
   );
 }
 
+/** Leaving the demo: none of its reminders may ring on this phone any more. */
+export async function cancelAllReminderNotifications(): Promise<void> {
+  await cancelReminderNotifications(() => true);
+}
+
 /**
  * Rebuilds the device patient's reminder notifications from the database. Idempotent —
  * called at startup, after any reminder change, and on language change.

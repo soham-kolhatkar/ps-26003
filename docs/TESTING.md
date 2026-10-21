@@ -392,3 +392,17 @@
 7. **Doctor's notes** (Notes tab, and on the family's Progress / Sunita's Notes tab): a 🩺 title, each note in a soft green box with author · date, and a small red **Delete** pill on your own notes.
 8. **Things to look at** screen: "How Smriti notices these" is the same folded row.
 9. Hindi: the visit questions and answers read naturally ("सवाल 1 / 6", "ध्यान दें", "दौरा पूरा करें").
+
+## F26 Polish and APK v0.4.0 checklist
+> Install `Download/Smriti-v0.4.0.apk` (sha256 below) over v0.3.0 on the phone ("allow unknown apps"); it keeps the phone's sign-in. Browser: `npm run web`.
+> APK: `Smriti-v0.4.0.apk`, 68 MB, versionCode 4, sha256 `25fb152d41024133d117e350736b6ab7f950bcd0dfa8d835ea270f1f405fee3c`.
+1. **About:** the app shows version 0.4.0 (Android Settings → Apps → Smriti → version 0.4.0).
+2. **Leave the demo (new):** "Who will use this phone?" → hold the flower → **Open demo** → "Who is using Smriti?" ends with a red **Leave the demo** button. Tap it → a confirmation explains that the demo reminders stop and the story stays → **Leave the demo** → the welcome screen → **Continue** → "Who will use this phone?". Close and reopen the app: it still asks "Who will use this phone?" (no role picker).
+3. Open the demo again (hold the flower): Kamala, Priya, Sunita and Dr. Anjali are all there, with the same story.
+4. Demo reminders after leaving: set a reminder for a few minutes ahead in the demo (Priya → Reminders), then **Leave the demo**: it does **not** ring. Open the demo again (hold the flower) before that time: now it rings.
+5. The demo's patient card now says just **Kamala Sharma** (not "Kamala · Kamala Sharma").
+6. **Add a family photo** (Priya → Family photos → Take photo / Choose from gallery): the relation choices are the same green chips as elsewhere (a tick on the chosen one), not outlined boxes. TalkBack reads each as "Daughter, button".
+7. **Progress report** → any chart → the **Table / Chart** switch: TalkBack reads "Table" / "Chart".
+8. **Demo script** (`docs/DEMO.md`): walk through Plan A or B once; every button it names is on screen with that name (Read aloud, Call Priya, Today's games, All games, Progress report, Add reminder, Start home visit, Skip check-up, Finish the visit, Save visit, Share summary (text)).
+9. A quick tour of the whole app on the APK (patient, games, caregiver, ASHA, doctor), as in the F20–F24 checklists: fonts (Noto Sans), pictures (Fluent 3D) and icons all load offline in the APK, nothing cut off or overlapping.
+10. Airplane mode: the patient side and the single-phone demo work fully offline.

@@ -33,6 +33,7 @@ export function ChartCard({ title, subtitle, table, tableHeader, showTableLabel,
         </View>
         <Pressable
           accessibilityRole="button"
+          accessibilityLabel={asTable ? showChartLabel : showTableLabel}
           onPress={() => setAsTable(!asTable)}
           style={({ pressed }) => [styles.toggle, pressed && styles.pressed]}
         >
