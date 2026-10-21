@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** F26 polish, accessibility pass, Leave the demo (D58), APK v0.4.0, on `feat/f26-polish-apk`, waiting for the user's test (F25 Assamese skipped by the user, back in Tier 5, D57).
-**Next:** merge F26 and tag v0.4.0 / apk-v0.4.0 once the user approves the APK.
+**Current feature:** none. Tier 4 is complete and tagged **v0.4.0** (APK `apk-v0.4.0`, sha256 25fb152d…ee3c, installed on the user's phone 2026-10-21).
+**Next:** Tier 5, when the user is ready (see the list below).
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -37,7 +37,7 @@ Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync
 | F18 | Role extras: ASHA edits reminders, doctor's notes, PIN reset via manager (Edge Function) | ✅ done (d471b47) |
 | F19 | Cloud demo story (Demo tools), 4-phone demo script, APK v0.3.0, tag v0.3.0 | ✅ done (9cae723), tagged v0.3.0 |
 
-## Tier 4: UI redesign, target v0.4.0
+## Tier 4: UI redesign, v0.4.0 ✅
 The user found the UI cluttered and messy (2026-10-21). Full plan and research: [docs/plans/tier4-ui-redesign.md](plans/tier4-ui-redesign.md); visual direction: https://claude.ai/artifact/4uM8m3uXX8ikDJt35m2Wqt
 | ID | Feature | Status |
 |---|---|---|
@@ -47,7 +47,7 @@ The user found the UI cluttered and messy (2026-10-21). Full plan and research: 
 | F23 | Family caregiver: progress dashboard (D55), reminders, photos, people, alerts | ✅ done (cd2310a) |
 | F24 | ASHA and doctor: home visit one question per screen (D56), report header and explainer, notes, alerts | ✅ done (c2fb87c) |
 | F25 | Assamese pack | ⏭️ skipped by the user (2026-10-21), back in Tier 5 (D57) |
-| F26 | Polish, accessibility pass, **Leave the demo** (D58), demo script and README for the new UI, APK v0.4.0, tag v0.4.0 | ⏳ waiting for the user's test |
+| F26 | Polish, accessibility pass, **Leave the demo** (D58), demo script and README for the new UI, APK v0.4.0, tag v0.4.0 | ✅ done (2d0c345), tagged v0.4.0 |
 
 ## Tier 5: later (the old Tier 4, moved by the user on 2026-10-21)
 Assamese pack (F14/F25; needs a native proofreader) · low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report export · real SMS OTP (MSG91 + DLT) + login lockout · realtime updates · Play Store signing.
