@@ -7,6 +7,7 @@ import { AlertsButton } from '@/components/AlertsButton';
 import { DoctorNotes } from '@/components/DoctorNotes';
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { StatTile } from '@/components/charts/StatTile';
 import { PatientCard } from '@/components/PatientCard';
 import { Screen } from '@/components/Screen';
@@ -22,7 +23,7 @@ import { refreshAlerts } from '@/services/alerts';
 import { formatShortDate } from '@/services/datetime';
 import { useDevice } from '@/store/device';
 import { useSettings } from '@/store/settings';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -59,12 +60,12 @@ export default function AshaPatient() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+      <TopBar />
       <PatientCard patient={data.patient} showNotes />
       <VisitStatusLine status={status} />
       <BigButton
         size="large"
-        icon="🏠"
+        icon="house"
         label={t('visit.start')}
         onPress={() => router.push({ pathname: '/asha/visit', params: { patientId } })}
       />
@@ -72,7 +73,7 @@ export default function AshaPatient() {
       {cloud ? (
         <BigButton
           kind="secondary"
-          icon="👥"
+          icon="users"
           label={t('people.button')}
           onPress={() => router.push({ pathname: '/asha/people', params: { patientId } })}
         />
@@ -80,7 +81,7 @@ export default function AshaPatient() {
       {cloud ? (
         <BigButton
           kind="secondary"
-          icon="🔔"
+          icon="bell"
           label={t('reminders.caregiver.title')}
           onPress={() => router.push({ pathname: '/asha/reminders', params: { patientId } })}
         />
@@ -88,7 +89,7 @@ export default function AshaPatient() {
 
       <View style={styles.tiles}>
         <StatTile
-          icon="📝"
+          icon="note"
           label={t('visit.checkupTile')}
           value={latest ? String(latest.checkupScore) : t('progress.kpi.noData')}
           delta={
@@ -104,7 +105,7 @@ export default function AshaPatient() {
           trend={scored.length > 1 ? [...scored].reverse().map((v) => v.checkupScore!) : undefined}
         />
         <StatTile
-          icon="🎲"
+          icon="game"
           label={t('visit.gamesTile')}
           value={String(data.gamesThisWeek)}
           caption={t('visit.gamesCaption', { name })}
@@ -147,13 +148,13 @@ function VisitCard({ visit, language }: { visit: Visit; language: LanguageCode }
         </View>
       ) : (
         <AppText variant="small" tone="muted">
-          ✅ {t('visit.allWell')}
+          {t('visit.allWell')}
         </AppText>
       )}
       {visit.note ? <AppText variant="small">📝 {visit.note}</AppText> : null}
       {visit.refer ? (
         <AppText variant="small" bold>
-          🩺 {t('visit.referred')}
+          {t('visit.referred')}
         </AppText>
       ) : null}
     </View>
@@ -167,8 +168,7 @@ const styles = StyleSheet.create({
     padding: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
   worries: { flexDirection: 'row', flexWrap: 'wrap', gap: space.xs },
   worry: {

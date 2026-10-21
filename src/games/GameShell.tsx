@@ -5,6 +5,8 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { Picture } from '@/components/Picture';
+import { TopBar } from '@/components/TopBar';
 import { nowMs } from '@/engine/clock';
 import { Screen } from '@/components/Screen';
 import { getDb } from '@/db/client';
@@ -119,12 +121,10 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
   if (phase === 'intro') {
     return (
       <Screen>
-        <BigButton kind="ghost" icon="🏠" label={t('game.home')} onPress={stop} />
+        <TopBar onBack={stop} backLabel={t('game.home')} backIcon="house" />
         <View style={styles.center}>
-          <View style={styles.iconCircle}>
-            <AppText style={styles.bigIcon} importantForAccessibility="no">
-              {game.icon}
-            </AppText>
+          <View style={[styles.iconCircle, { backgroundColor: game.tint }]}>
+            <Picture glyph={game.icon} size={104} />
           </View>
           <AppText variant="hero" center>
             {title}
@@ -139,8 +139,8 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
           </View>
         </View>
         <View style={styles.fill} />
-        <BigButton size="large" icon="▶️" label={t('game.start')} onPress={start} />
-        <BigButton kind="secondary" icon="🔊" label={t('game.hearAgain')} onPress={() => say(instruction)} />
+        <BigButton size="large" icon="play" label={t('game.start')} onPress={start} />
+        <BigButton kind="secondary" icon="speaker" label={t('game.hearAgain')} onPress={() => say(instruction)} />
       </Screen>
     );
   }
@@ -152,7 +152,7 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
       <Screen scroll={false}>
         <View style={styles.topBar}>
           <View style={styles.stop}>
-            <BigButton kind="secondary" icon="✖️" label={t('game.stop')} onPress={stop} />
+            <BigButton kind="secondary" icon="x" label={t('game.stop')} onPress={stop} />
           </View>
           <Progress done={progress.done} total={progress.total} label={t('game.progress', progress)} />
         </View>
@@ -174,9 +174,9 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
   return (
     <Screen>
       <View style={[styles.center, styles.celebrate]}>
-        <AppText style={styles.bigIcon} importantForAccessibility="no">
-          🎉
-        </AppText>
+        <View style={styles.iconCircle}>
+          <Picture glyph="🌼" size={104} />
+        </View>
         <AppText variant="hero" center>
           {t('game.doneTitle', { name: patientName })}
         </AppText>
@@ -193,8 +193,8 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
         ) : null}
       </View>
       <View style={styles.fill} />
-      <BigButton size="large" icon="🔁" label={t('game.playAgain')} onPress={playAgain} />
-      <BigButton kind="secondary" icon="🏠" label={t('game.home')} onPress={() => router.back()} />
+      <BigButton size="large" icon="redo" label={t('game.playAgain')} onPress={playAgain} />
+      <BigButton kind="secondary" icon="house" label={t('game.home')} onPress={() => router.back()} />
     </Screen>
   );
 }
@@ -221,7 +221,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  bigIcon: { fontSize: 72, lineHeight: 86 },
   stars: { fontSize: 48, lineHeight: 60 },
   starOff: { opacity: 0.2 },
   chip: {

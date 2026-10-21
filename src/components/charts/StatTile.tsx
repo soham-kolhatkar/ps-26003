@@ -1,7 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { colors, radius, space } from '@/theme/tokens';
+import { Picture } from '@/components/Picture';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 import { Sparkline } from './Sparkline';
 
@@ -31,10 +32,12 @@ export function StatTile({ label, value, delta, caption, trend, icon }: Props) {
       accessible
       accessibilityLabel={[label, value, delta?.text, caption].filter(Boolean).join(', ')}
     >
-      <AppText variant="caption" tone="muted" numberOfLines={2}>
-        {icon ? `${icon} ` : ''}
-        {label}
-      </AppText>
+      <View style={styles.label}>
+        {icon ? <Picture glyph={icon} size={22} /> : null}
+        <AppText variant="caption" tone="muted" numberOfLines={2} style={styles.labelText}>
+          {label}
+        </AppText>
+      </View>
       <AppText variant="title">{value}</AppText>
       {delta ? (
         <AppText variant="caption" bold style={{ color: DELTA_COLOR[delta.tone] }}>
@@ -52,6 +55,8 @@ export function StatTile({ label, value, delta, caption, trend, icon }: Props) {
 }
 
 const styles = StyleSheet.create({
+  label: { flexDirection: 'row', alignItems: 'center', gap: space.xs + 2 },
+  labelText: { flexShrink: 1 },
   tile: {
     flexBasis: '46%',
     flexGrow: 1,
@@ -59,7 +64,6 @@ const styles = StyleSheet.create({
     padding: space.md,
     borderRadius: radius.md,
     backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
 });

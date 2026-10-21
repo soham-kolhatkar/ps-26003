@@ -42,6 +42,7 @@ npx expo export --platform android --output-dir <scratch>   # bundle smoke test
 - **Every user-visible string goes in i18n packs** (`src/i18n/packs/*.json`) for **all** languages; the parity test enforces identical keys.
 - Medical wording: "cognitive activity / trend monitoring". Never "diagnosis".
 - Family photos stay on the device.
+- **No emoji in UI code** (Tier 4, D50): controls use `<Icon name>` (Phosphor, add new ones to `src/components/Icon.tsx` as deep imports), content uses `<Picture glyph>` (Fluent 3D; add the glyph to `scripts/fluent-pictures.mjs` and run it). Tokens in `src/theme/tokens.ts`; status colours only on staff phones, always with a shape and a word.
 
 ## Layout
 - `src/app/`: expo-router routes only (one group per role from F01).

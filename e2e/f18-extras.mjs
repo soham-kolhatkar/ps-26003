@@ -65,8 +65,9 @@ try {
   await a.shot('asha-reminders');
   check(true, 'the ASHA worker adds a reminder');
   // A fresh page load starts at the home (session is per launch): check the home's reminder count.
-  // Medicine comes with a default 08:00, plus the 09:00 added: 2 doses a day.
-  const seen = await eventually(c, '/', 'Reminders · 0/2 today');
+  // Medicine comes with a default 08:00, plus the 09:00 added. Doses due before the reminder was
+  // created don't count (D49), so later in the day it is 0/1: any dose today proves it arrived.
+  const seen = await eventually(c, '/', /Reminders · 0\/[1-9] today/);
   if (!seen) console.log('--- asha warnings ---\n' + a.warnings.slice(-10).join('\n'));
   check(seen, "the ASHA worker's reminder reaches the caregiver");
 

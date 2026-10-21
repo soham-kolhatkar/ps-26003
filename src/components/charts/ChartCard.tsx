@@ -2,7 +2,8 @@ import { useState, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { colors, radius, space } from '@/theme/tokens';
+import { Icon } from '@/components/Icon';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 type Props = {
   title: string;
@@ -35,8 +36,9 @@ export function ChartCard({ title, subtitle, table, tableHeader, showTableLabel,
           onPress={() => setAsTable(!asTable)}
           style={({ pressed }) => [styles.toggle, pressed && styles.pressed]}
         >
+          <Icon name={asTable ? 'chart' : 'table'} size={18} color={colors.primary} />
           <AppText variant="caption" tone="primary" bold>
-            {asTable ? `📈 ${showChartLabel}` : `▦ ${showTableLabel}`}
+            {asTable ? showChartLabel : showTableLabel}
           </AppText>
         </Pressable>
       </View>
@@ -72,12 +74,14 @@ const styles = StyleSheet.create({
     padding: space.md,
     borderRadius: radius.md,
     backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
   head: { flexDirection: 'row', alignItems: 'flex-start', gap: space.sm },
   titles: { flex: 1 },
   toggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs,
     paddingHorizontal: space.sm,
     paddingVertical: space.xs,
     borderRadius: radius.pill,

@@ -10,6 +10,7 @@ import { PatientCard } from '@/components/PatientCard';
 import { VisitStatusLine } from '@/components/VisitStatusLine';
 import { Screen } from '@/components/Screen';
 import { StaffHeader } from '@/components/StaffHeader';
+import { StatusLine } from '@/components/StatusLine';
 import { alertCounts, type AlertCounts } from '@/db/repos/alerts';
 import { listPatientsForUser } from '@/db/repos/patients';
 import { lastVisit } from '@/db/repos/visits';
@@ -22,7 +23,7 @@ import { useCloudRefresh } from '@/sync/refresh';
 import { useSession } from '@/store/session';
 import { formatShortDate } from '@/services/datetime';
 import { useSettings } from '@/store/settings';
-import { colors, radius, space } from '@/theme/tokens';
+import { space } from '@/theme/tokens';
 
 const DAY = 24 * 60 * 60 * 1000;
 const REFERRAL_DAYS = 30;
@@ -115,20 +116,19 @@ export function StaffPatientList({
           />
           {visit ? <VisitStatusLine status={visit} /> : null}
           {referredAt ? (
-            <View style={styles.referred}>
-              <AppText variant="small" bold>
-                🩺 {t('doctor.referredList', { date: formatShortDate(new Date(referredAt), language) })}
-              </AppText>
-            </View>
+            <StatusLine
+              status="soon"
+              text={t('doctor.referredList', { date: formatShortDate(new Date(referredAt), language) })}
+            />
           ) : null}
           <AlertsButton counts={counts} patientId={patient.id} pathname={alertsPath} showClear />
         </View>
       ))}
       {cloud && registerPath ? (
-        <BigButton icon="➕" label={t('people.register')} onPress={() => router.push(registerPath)} />
+        <BigButton icon="plus" label={t('people.register')} onPress={() => router.push(registerPath)} />
       ) : null}
       {cloud && joinPath ? (
-        <BigButton kind="secondary" icon="🔑" label={t('people.joinButton')} onPress={() => router.push(joinPath)} />
+        <BigButton kind="secondary" icon="key" label={t('people.joinButton')} onPress={() => router.push(joinPath)} />
       ) : null}
       {footer ? <AppText tone="muted">{footer}</AppText> : null}
     </Screen>
@@ -137,11 +137,4 @@ export function StaffPatientList({
 
 const styles = StyleSheet.create({
   patient: { gap: space.sm },
-  referred: {
-    alignSelf: 'flex-start',
-    paddingVertical: space.xs,
-    paddingHorizontal: space.sm,
-    borderRadius: radius.sm,
-    backgroundColor: colors.warningSoft,
-  },
 });

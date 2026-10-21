@@ -6,6 +6,7 @@ import { StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { AuthErrorText } from '@/components/AuthErrorText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
 import { signUp } from '@/cloud/account';
@@ -47,7 +48,7 @@ export default function SignUp() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+      <TopBar />
       <AppText variant="title">{t('auth.signUpTitle', { role: roleName })}</AppText>
       <TextField label={t('auth.name')} value={name} onChangeText={setName} autoComplete="name" testID="name" />
       <TextField
@@ -93,12 +94,12 @@ export default function SignUp() {
         testID="pin-again"
       />
       <View style={styles.note}>
-        <AppText variant="small">🔒 {t('auth.privacy')}</AppText>
+        <AppText variant="small">{t('auth.privacy')}</AppText>
       </View>
       <AuthErrorText error={error} phoneRole={roleName} />
       <BigButton
         size="large"
-        icon="✨"
+        icon="user-plus"
         label={busy ? t('common.loading') : t('auth.create')}
         disabled={busy}
         onPress={submit}

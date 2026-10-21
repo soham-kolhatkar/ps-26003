@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { formatPhone } from '@/cloud/phone';
 import { LANGUAGE_CODES, LANGUAGES } from '@/i18n';
@@ -12,7 +13,7 @@ import { useAccount } from '@/store/account';
 import { useDevice } from '@/store/device';
 import { useSession } from '@/store/session';
 import { useSettings } from '@/store/settings';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 /** Cloud-mode settings for a staff phone: account, language, sign out, change the phone's role. */
 export default function Settings() {
@@ -40,9 +41,9 @@ export default function Settings() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+      <TopBar />
       <Pressable onLongPress={() => router.push('/demo-tools')} delayLongPress={1500}>
-        <AppText variant="title">⚙️ {t('settings.title')}</AppText>
+        <AppText variant="title">{t('settings.title')}</AppText>
       </Pressable>
 
       <View style={styles.card}>
@@ -52,7 +53,7 @@ export default function Settings() {
         <AppText tone="muted">
           {[t(`roles.${profile.role}`), profile.organization, profile.district].filter(Boolean).join(' · ')}
         </AppText>
-        <AppText>📱 {formatPhone(profile.phone)}</AppText>
+        <AppText>{formatPhone(profile.phone)}</AppText>
       </View>
 
       <AppText variant="large" bold>
@@ -73,12 +74,12 @@ export default function Settings() {
 
       <View style={styles.card}>
         <AppText variant="small" tone="muted">
-          ☁️ {t('settings.cloudNote')}
+          {t('settings.cloudNote')}
         </AppText>
       </View>
 
-      <BigButton kind="secondary" icon="↩️" label={t('common.signOut')} onPress={() => leave(false)} />
-      <BigButton kind="ghost" icon="🔁" label={t('settings.changeRole')} onPress={() => leave(true)} />
+      <BigButton kind="secondary" icon="sign-out" label={t('common.signOut')} onPress={() => leave(false)} />
+      <BigButton kind="ghost" icon="redo" label={t('settings.changeRole')} onPress={() => leave(true)} />
     </Screen>
   );
 }
@@ -89,8 +90,7 @@ const styles = StyleSheet.create({
     padding: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
   row: { flexDirection: 'row', gap: space.md },
   flex: { flex: 1 },

@@ -65,21 +65,21 @@ export default function SignIn() {
       <AuthErrorText error={error} phoneRole={roleName} />
       <BigButton
         size="large"
-        icon="🔓"
+        icon="lock-open"
         label={busy ? t('common.loading') : t('auth.signIn')}
         disabled={busy}
         onPress={submit}
       />
       <BigButton
         kind="secondary"
-        icon="✨"
+        icon="user-plus"
         label={t('auth.createAccount')}
         onPress={() => router.push('/auth/sign-up')}
       />
-      <BigButton kind="ghost" icon="🔑" label={t('resetPin.forgot')} onPress={() => router.push('/auth/reset-pin')} />
+      <BigButton kind="ghost" icon="key" label={t('resetPin.forgot')} onPress={() => router.push('/auth/reset-pin')} />
       <BigButton
         kind="ghost"
-        icon="🔁"
+        icon="redo"
         label={t('auth.changeRole')}
         onPress={() => {
           reset();

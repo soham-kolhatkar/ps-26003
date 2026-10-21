@@ -42,8 +42,10 @@ export type GameProps = {
 
 export type GameDefinition = {
   id: GameId;
-  /** Emoji shown on the home tile and intro. */
+  /** Glyph of the game's picture (Fluent 3D, see components/Picture) on the home tile and intro. */
   icon: string;
+  /** Soft colour behind the picture (decorative, colors.tint.*). */
+  tint: string;
   maxLevel: number;
   trialsPerSession: number;
   /** Comfortable answer time used by scoring (ms). */

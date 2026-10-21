@@ -1,14 +1,18 @@
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
+import { useSettings } from '@/store/settings';
+import { fontFamily, lineHeightFactor, scriptFor, type FontWeight } from '@/theme/fonts';
 import { colors, font } from '@/theme/tokens';
 
 type Variant = 'hero' | 'title' | 'large' | 'body' | 'small' | 'caption';
-type Tone = 'default' | 'muted' | 'primary' | 'accent' | 'onPrimary';
+type Tone = 'default' | 'muted' | 'primary' | 'accent' | 'onPrimary' | 'onPrimarySoft' | 'onClay';
 
 export type AppTextProps = TextProps & {
   variant?: Variant;
   tone?: Tone;
+  /** Semibold. Titles and hero text are bold already. */
   bold?: boolean;
+  weight?: FontWeight;
   center?: boolean;
 };
 
@@ -18,25 +22,45 @@ const toneColor: Record<Tone, string> = {
   primary: colors.primary,
   accent: colors.accent,
   onPrimary: colors.textOnPrimary,
+  onPrimarySoft: colors.onPrimarySoft,
+  onClay: colors.onClay,
 };
 
-export function AppText({ variant = 'body', tone = 'default', bold, center, style, ...rest }: AppTextProps) {
+const DISPLAY: Record<Variant, boolean> = {
+  hero: true,
+  title: true,
+  large: true,
+  body: false,
+  small: false,
+  caption: false,
+};
+
+/** Text in the language's font (Noto Sans, Devanagari build), with room for matras. */
+export function AppText({ variant = 'body', tone = 'default', bold, weight, center, style, ...rest }: AppTextProps) {
+  const language = useSettings((s) => s.language);
+  const resolved: FontWeight =
+    weight ?? (DISPLAY[variant] && variant !== 'large' ? 'bold' : bold ? 'semibold' : 'regular');
+  const size = font.size[variant];
   return (
     <Text
       maxFontSizeMultiplier={1.6}
-      style={[styles[variant], { color: toneColor[tone] }, bold && styles.bold, center && styles.center, style]}
+      style={[
+        styles.base,
+        {
+          fontSize: size,
+          lineHeight: Math.round(size * lineHeightFactor(scriptFor(language), DISPLAY[variant])),
+          fontFamily: fontFamily(language, resolved),
+          color: toneColor[tone],
+        },
+        center && styles.center,
+        style,
+      ]}
       {...rest}
     />
   );
 }
 
 const styles = StyleSheet.create({
-  hero: { fontSize: font.size.hero, lineHeight: font.size.hero * 1.2, fontWeight: font.weight.bold },
-  title: { fontSize: font.size.title, lineHeight: font.size.title * 1.25, fontWeight: font.weight.bold },
-  large: { fontSize: font.size.large, lineHeight: font.size.large * 1.35 },
-  body: { fontSize: font.size.body, lineHeight: font.size.body * 1.4 },
-  small: { fontSize: font.size.small, lineHeight: font.size.small * 1.4 },
-  caption: { fontSize: font.size.caption, lineHeight: font.size.caption * 1.4 },
-  bold: { fontWeight: font.weight.bold },
+  base: { includeFontPadding: true },
   center: { textAlign: 'center' },
 });

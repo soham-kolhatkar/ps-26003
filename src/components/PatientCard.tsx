@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { Card } from '@/components/Card';
+import { Picture } from '@/components/Picture';
 import type { LinkedPatient, Patient } from '@/db/models';
 import { colors, radius, space } from '@/theme/tokens';
 
@@ -25,12 +26,10 @@ export function PatientCard({ patient, onPress, showNotes }: PatientCardProps) {
     <Card onPress={onPress} accessibilityLabel={patient.name}>
       <View style={styles.row}>
         <View style={styles.avatar}>
-          <AppText variant="title" importantForAccessibility="no">
-            {patient.avatar ?? '🙂'}
-          </AppText>
+          <Picture glyph={patient.avatar ?? '🙂'} size={48} />
         </View>
         <View style={styles.body}>
-          <AppText variant="large" bold>
+          <AppText variant="large" weight="bold">
             {patient.name}
           </AppText>
           <AppText variant="small" tone="muted">

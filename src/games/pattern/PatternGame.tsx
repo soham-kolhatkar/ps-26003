@@ -88,7 +88,7 @@ export function PatternGame({ level, totalTrials, onTrial, onComplete, say }: Ga
         <AppText variant="title" center>
           {question}
         </AppText>
-        <BigButton kind="ghost" icon="🔊" label={t('game.hearAgain')} onPress={() => say(prompt)} />
+        <BigButton kind="ghost" icon="speaker" label={t('game.hearAgain')} onPress={() => say(prompt)} />
       </View>
 
       <View style={styles.row} accessible accessibilityLabel={spokenRow}>

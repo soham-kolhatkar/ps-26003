@@ -12,7 +12,7 @@ import { confirm } from '@/services/confirm';
 import { formatShortDate } from '@/services/datetime';
 import { useSession } from '@/store/session';
 import { useSettings } from '@/store/settings';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 /**
  * Doctor's notes for one patient (F18). The doctor writes them on the report
@@ -53,7 +53,7 @@ export function DoctorNotes({
 
   return (
     <View style={styles.card}>
-      <AppText bold>🩺 {t(canWrite ? 'notes.titleDoctor' : 'notes.title')}</AppText>
+      <AppText bold>{t(canWrite ? 'notes.titleDoctor' : 'notes.title')}</AppText>
       {notes?.map((n) => (
         <View key={n.id} style={styles.note}>
           <AppText variant="small">{n.body}</AppText>
@@ -61,7 +61,7 @@ export function DoctorNotes({
             {[n.authorName, formatShortDate(new Date(n.createdAt), language)].filter(Boolean).join(' · ')}
           </AppText>
           {canWrite && n.authorId === userId ? (
-            <BigButton kind="ghost" icon="🗑️" label={t('notes.delete')} onPress={() => remove(n.id)} />
+            <BigButton kind="ghost" icon="trash" label={t('notes.delete')} onPress={() => remove(n.id)} />
           ) : null}
         </View>
       ))}
@@ -76,7 +76,7 @@ export function DoctorNotes({
             maxLength={2000}
             testID="doctor-note"
           />
-          <BigButton icon="💾" label={t('notes.save')} disabled={saving || !draft.trim()} onPress={save} />
+          <BigButton icon="save" label={t('notes.save')} disabled={saving || !draft.trim()} onPress={save} />
         </>
       ) : null}
     </View>
@@ -89,8 +89,7 @@ const styles = StyleSheet.create({
     padding: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
   note: { gap: 2, paddingLeft: space.sm, borderLeftWidth: 3, borderLeftColor: colors.primary },
 });

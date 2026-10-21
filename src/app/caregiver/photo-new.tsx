@@ -16,7 +16,7 @@ import { useDbQuery } from '@/db/useDbQuery';
 import { storePhoto } from '@/services/photos';
 import { usePendingPhoto } from '@/store/pendingPhoto';
 import { useSession } from '@/store/session';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 export default function NewPhoto() {
   const { t } = useTranslation();
@@ -50,7 +50,7 @@ export default function NewPhoto() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="✖️" label={t('common.cancel')} onPress={close} />
+      <BigButton kind="ghost" icon="x" label={t('common.cancel')} onPress={close} />
       <AppText variant="title">{t('photos.addTitle')}</AppText>
       <View style={styles.preview}>
         {uri ? (
@@ -95,7 +95,7 @@ export default function NewPhoto() {
 
       <BigButton
         size="large"
-        icon="💾"
+        icon="save"
         label={t('photos.save')}
         disabled={!uri || !personName.trim() || saving}
         onPress={save}
@@ -109,8 +109,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: radius.lg,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
   image: { width: 220, height: 220 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },

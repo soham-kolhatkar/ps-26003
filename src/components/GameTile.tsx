@@ -1,42 +1,41 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { colors, radius, space, touch } from '@/theme/tokens';
+import { Icon } from '@/components/Icon';
+import { Picture } from '@/components/Picture';
+import { PressableScale } from '@/components/PressableScale';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 type GameTileProps = {
   icon: string;
   title: string;
+  /** Read out as the hint; not printed (less to read on the tile). */
   description: string;
+  /** Soft colour behind the picture (decorative). */
+  tint?: string;
   onPress: () => void;
 };
 
-/** Large, single-tap game entry on the patient home. */
-export function GameTile({ icon, title, description, onPress }: GameTileProps) {
+/** Large, single-tap game entry: picture, name, play button. */
+export function GameTile({ icon, title, description, tint = colors.tint.leaf, onPress }: GameTileProps) {
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityLabel={title}
       accessibilityHint={description}
       onPress={onPress}
       style={({ pressed }) => [styles.tile, pressed && styles.pressed]}
     >
-      <View style={styles.icon}>
-        <AppText style={styles.emoji} importantForAccessibility="no">
-          {icon}
-        </AppText>
+      <View style={[styles.picture, { backgroundColor: tint }]}>
+        <Picture glyph={icon} size={54} />
       </View>
-      <View style={styles.text}>
-        <AppText variant="large" bold>
-          {title}
-        </AppText>
-        <AppText variant="small" tone="muted">
-          {description}
-        </AppText>
-      </View>
-      <AppText variant="title" tone="primary" importantForAccessibility="no">
-        ▶
+      <AppText variant="large" bold style={styles.title}>
+        {title}
       </AppText>
-    </Pressable>
+      <View style={styles.play}>
+        <Icon name="play" size={22} color={colors.textOnPrimary} weight="fill" />
+      </View>
+    </PressableScale>
   );
 }
 
@@ -45,22 +44,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.md,
-    minHeight: touch.large + space.lg,
-    padding: space.md,
+    minHeight: 100,
+    paddingHorizontal: space.md,
+    paddingVertical: space.sm + 4,
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
-    borderWidth: 2,
-    borderColor: colors.primary,
+    boxShadow: shadow.card,
   },
-  pressed: { backgroundColor: colors.primarySoft },
-  icon: {
-    width: 80,
-    height: 80,
+  pressed: { backgroundColor: colors.primaryWash },
+  picture: {
+    width: 72,
+    height: 72,
     borderRadius: radius.md,
-    backgroundColor: colors.primarySoft,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  emoji: { fontSize: 44, lineHeight: 54 },
-  text: { flex: 1, gap: 2 },
+  title: { flex: 1 },
+  play: {
+    width: 48,
+    height: 48,
+    borderRadius: radius.pill,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

@@ -7,6 +7,7 @@ import { AlertCard } from '@/components/AlertCard';
 import { DoctorNotes } from '@/components/DoctorNotes';
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { ChartCard } from '@/components/charts/ChartCard';
 import { LineChart } from '@/components/charts/LineChart';
 import { Meter } from '@/components/charts/Meter';
@@ -37,7 +38,7 @@ import { refreshAlerts } from '@/services/alerts';
 import { formatDayMonth, formatShortDate } from '@/services/datetime';
 import { useDevice } from '@/store/device';
 import { useSettings } from '@/store/settings';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -140,13 +141,13 @@ export default function DoctorReport() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+      <TopBar />
       <AppText variant="title">{t('doctor.title')}</AppText>
       <PatientCard patient={data.patient} showNotes />
       {cloud ? (
         <BigButton
           kind="secondary"
-          icon="👥"
+          icon="users"
           label={t('people.button')}
           onPress={() => router.push({ pathname: '/doctor/people', params: { patientId } })}
         />
@@ -303,7 +304,7 @@ export default function DoctorReport() {
 
       <DoctorNotes patientId={patientId} canWrite limit={5} />
 
-      <BigButton icon="📤" label={t('doctor.share')} onPress={share} />
+      <BigButton icon="share" label={t('doctor.share')} onPress={share} />
 
       <View style={styles.about}>
         <AppText variant="small" bold>
@@ -367,14 +368,12 @@ const styles = StyleSheet.create({
     padding: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
   table: {
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
     paddingHorizontal: space.sm,
   },
   tr: {

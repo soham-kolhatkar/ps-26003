@@ -6,6 +6,7 @@ import { StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { AuthErrorText } from '@/components/AuthErrorText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
 import { CloudError } from '@/cloud/errors';
@@ -37,8 +38,8 @@ export function JoinWithCode() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
-      <AppText variant="title">🔑 {t('people.joinTitle')}</AppText>
+      <TopBar />
+      <AppText variant="title">{t('people.joinTitle')}</AppText>
       <View style={styles.how}>
         <AppText>{t('people.joinHow')}</AppText>
       </View>
@@ -55,7 +56,7 @@ export function JoinWithCode() {
       <AuthErrorText error={error} phoneRole={role ? t(`roles.${role}`) : ''} />
       <BigButton
         size="large"
-        icon="🔗"
+        icon="link"
         label={busy ? t('common.loading') : t('people.join')}
         disabled={busy || code.length !== 6}
         onPress={join}

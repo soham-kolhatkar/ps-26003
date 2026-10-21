@@ -7,6 +7,7 @@ import { AlertCard } from '@/components/AlertCard';
 import { DoctorNotes } from '@/components/DoctorNotes';
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { ChartCard } from '@/components/charts/ChartCard';
 import { ColumnChart } from '@/components/charts/ColumnChart';
 import { LineChart } from '@/components/charts/LineChart';
@@ -34,7 +35,7 @@ import { formatDayMonth, formatShortDate, formatTime } from '@/services/datetime
 import { refreshAlerts } from '@/services/alerts';
 import { REMINDER_ICON } from '@/services/notifications';
 import { useSettings } from '@/store/settings';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 const DAY = 24 * 60 * 60 * 1000;
 type Period = 7 | 30;
@@ -129,7 +130,7 @@ export default function ProgressDashboard() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+      <TopBar />
       <AppText variant="title">{t('progress.title', { name })}</AppText>
 
       {/* Trend alerts first: they are the reason to open this screen. */}
@@ -139,7 +140,7 @@ export default function ProgressDashboard() {
       {data.alerts.length ? (
         <BigButton
           kind="secondary"
-          icon="⚠️"
+          icon="warning"
           label={t('alerts.seeAll', { count: data.alerts.length })}
           onPress={() => router.push({ pathname: '/caregiver/alerts', params: { patientId } })}
         />
@@ -334,8 +335,7 @@ const styles = StyleSheet.create({
     padding: space.md,
     borderRadius: radius.md,
     backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
   recentRow: { flexDirection: 'row', gap: space.sm, alignItems: 'flex-start' },
   flex: { flex: 1 },

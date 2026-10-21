@@ -1,23 +1,25 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Icon } from '@/components/Icon';
+import { PressableScale } from '@/components/PressableScale';
 import { colors, radius, space, touch } from '@/theme/tokens';
 
 /** Single-choice chip (tap to select). */
 export function Chip({ label, selected, onPress }: { label: string; selected: boolean; onPress: () => void }) {
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityState={{ selected }}
       accessibilityLabel={label}
       onPress={onPress}
       style={[styles.chip, selected && styles.on]}
     >
-      <AppText variant="small" bold tone={selected ? 'onPrimary' : 'primary'}>
-        {selected ? '✓ ' : ''}
+      {selected ? <Icon name="check" size={20} color={colors.textOnPrimary} /> : null}
+      <AppText variant="small" bold tone={selected ? 'onPrimary' : 'onPrimarySoft'}>
         {label}
       </AppText>
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -54,12 +56,12 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   chip: {
     minHeight: touch.min,
-    justifyContent: 'center',
-    paddingHorizontal: space.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs + 2,
+    paddingHorizontal: space.md + 2,
     borderRadius: radius.pill,
-    borderWidth: 2,
-    borderColor: colors.primary,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.primarySoft,
   },
   on: { backgroundColor: colors.primary },
 });

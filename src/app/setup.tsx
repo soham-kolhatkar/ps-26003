@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { ChoiceCard } from '@/components/ChoiceCard';
 import { Screen } from '@/components/Screen';
 import { confirm } from '@/services/confirm';
@@ -41,12 +41,7 @@ export default function Setup() {
 
   return (
     <Screen>
-      <BigButton
-        kind="ghost"
-        icon="⬅️"
-        label={t('common.back')}
-        onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
-      />
+      <TopBar />
       <View style={styles.header}>
         <Pressable
           onLongPress={openDemo}

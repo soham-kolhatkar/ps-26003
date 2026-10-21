@@ -1,11 +1,11 @@
-import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { AlertCard } from '@/components/AlertCard';
 import { AppText } from '@/components/AppText';
-import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { listAlerts, markAlertsSeen } from '@/db/repos/alerts';
 import { displayName, getPatient } from '@/db/repos/patients';
@@ -42,11 +42,11 @@ export function PatientAlerts() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+      <TopBar />
       <AppText variant="title">{t('alerts.title', { name })}</AppText>
       {data && open.length === 0 ? (
         <View style={styles.none}>
-          <AppText variant="large">✅ {t('alerts.none')}</AppText>
+          <AppText variant="large">{t('alerts.none')}</AppText>
         </View>
       ) : null}
       {open.map((a) => (

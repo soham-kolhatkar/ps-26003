@@ -1,7 +1,9 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { colors, radius, space, touch } from '@/theme/tokens';
+import { Icon } from '@/components/Icon';
+import { PressableScale } from '@/components/PressableScale';
+import { colors, radius, shadow, space, touch } from '@/theme/tokens';
 
 type PinPadProps = {
   length: number;
@@ -33,17 +35,25 @@ export function PinPad({ length, value, onChange, deleteLabel, disabled }: PinPa
           key === '' ? (
             <View key={i} style={styles.key} />
           ) : (
-            <Pressable
+            <PressableScale
               key={i}
               accessibilityRole="button"
               accessibilityLabel={key === 'del' ? deleteLabel : key}
               onPress={() => press(key)}
-              style={({ pressed }) => [styles.key, styles.keyButton, pressed && styles.keyPressed]}
+              style={({ pressed }) => [
+                styles.key,
+                key === 'del' ? styles.delButton : styles.keyButton,
+                pressed && styles.keyPressed,
+              ]}
             >
-              <AppText variant="title" tone="primary">
-                {key === 'del' ? '⌫' : key}
-              </AppText>
-            </Pressable>
+              {key === 'del' ? (
+                <Icon name="backspace" size={32} color={colors.onPrimarySoft} />
+              ) : (
+                <AppText variant="title" tone="default">
+                  {key}
+                </AppText>
+              )}
+            </PressableScale>
           ),
         )}
       </View>
@@ -58,8 +68,7 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: radius.pill,
-    borderWidth: 2,
-    borderColor: colors.primary,
+    backgroundColor: colors.surfaceMuted,
   },
   dotFilled: { backgroundColor: colors.primary },
   grid: { flexDirection: 'row', flexWrap: 'wrap', width: 3 * 96 + 2 * space.md, gap: space.md },
@@ -67,8 +76,8 @@ const styles = StyleSheet.create({
   keyButton: {
     borderRadius: radius.md,
     backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
+  delButton: { borderRadius: radius.md, backgroundColor: colors.primarySoft },
   keyPressed: { backgroundColor: colors.primarySoft },
 });

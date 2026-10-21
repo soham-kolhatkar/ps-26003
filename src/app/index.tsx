@@ -68,7 +68,7 @@ export default function Welcome() {
 
       <BigButton
         kind="secondary"
-        icon="🔊"
+        icon="speaker"
         label={t('common.speak')}
         onPress={() => speak(t('welcome.speakSample'), language)}
       />

@@ -7,6 +7,7 @@ import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { getDb } from '@/db/client';
 import type { Reminder } from '@/db/models';
@@ -19,7 +20,7 @@ import { formatClock, formatShortDate, formatTime } from '@/services/datetime';
 import { REMINDER_ICON, sendTestReminder, syncReminderNotifications } from '@/services/notifications';
 import { useDevice } from '@/store/device';
 import { useSettings } from '@/store/settings';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -77,7 +78,7 @@ export default function CaregiverReminders() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+      <TopBar />
       <View>
         <AppText variant="title">{t('reminders.caregiver.title')}</AppText>
         <AppText tone="muted">{t('reminders.caregiver.subtitle', { name })}</AppText>
@@ -86,7 +87,7 @@ export default function CaregiverReminders() {
       {data ? (
         <View style={styles.summary}>
           <AppText variant="large" bold tone="onPrimary">
-            ✅ {t('reminders.caregiver.todaySummary', { done: data.done, total: data.total })}
+            {t('reminders.caregiver.todaySummary', { done: data.done, total: data.total })}
           </AppText>
         </View>
       ) : null}
@@ -99,7 +100,7 @@ export default function CaregiverReminders() {
       ) : null}
 
       <BigButton
-        icon="➕"
+        icon="plus"
         label={t('reminders.caregiver.add')}
         onPress={() => router.push({ pathname: editPath, params: { patientId } })}
       />
@@ -136,7 +137,7 @@ export default function CaregiverReminders() {
             />
           </Pressable>
           {r.enabled && canTest ? (
-            <BigButton kind="ghost" icon="🔔" label={t('reminders.caregiver.test')} onPress={() => test(r)} />
+            <BigButton kind="ghost" icon="bell" label={t('reminders.caregiver.test')} onPress={() => test(r)} />
           ) : null}
         </View>
       ))}
@@ -156,8 +157,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
     padding: space.sm,
   },
   cardOff: { opacity: 0.55 },

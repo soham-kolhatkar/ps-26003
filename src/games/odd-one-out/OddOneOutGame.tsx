@@ -84,7 +84,12 @@ export function OddOneOutGame({ level, totalTrials, onTrial, onComplete, say }: 
         <AppText variant={solved ? 'large' : 'title'} bold={solved} center accessibilityLiveRegion="polite">
           {solved ? explain : prompt}
         </AppText>
-        <BigButton kind="ghost" icon="🔊" label={t('game.hearAgain')} onPress={() => say(solved ? explain : prompt)} />
+        <BigButton
+          kind="ghost"
+          icon="speaker"
+          label={t('game.hearAgain')}
+          onPress={() => say(solved ? explain : prompt)}
+        />
       </View>
 
       <View style={styles.grid}>

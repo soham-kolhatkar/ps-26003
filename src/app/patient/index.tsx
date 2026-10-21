@@ -81,7 +81,7 @@ export default function PatientHome() {
 
       <BigButton
         kind="secondary"
-        icon="🔊"
+        icon="speaker"
         label={t('common.speak')}
         onPress={() => speak(t('patient.greetingSpoken', { greeting, date }), language)}
       />
@@ -93,6 +93,7 @@ export default function PatientHome() {
         <GameTile
           key={game.id}
           icon={game.icon}
+          tint={game.tint}
           title={t(`games.${game.id}.title`)}
           description={t(`games.${game.id}.description`)}
           onPress={() => router.push({ pathname: '/patient/game/[id]', params: { id: game.id } })}

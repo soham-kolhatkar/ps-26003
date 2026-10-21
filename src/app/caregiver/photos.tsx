@@ -6,6 +6,7 @@ import { Alert, Pressable, StyleSheet, useWindowDimensions, View } from 'react-n
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { getDb } from '@/db/client';
 import type { Photo } from '@/db/models';
@@ -15,7 +16,7 @@ import { useDbQuery } from '@/db/useDbQuery';
 import { MIN_PEOPLE } from '@/games/photo-recall/rounds';
 import { deletePhotoFile, pickPhoto } from '@/services/photos';
 import { usePendingPhoto } from '@/store/pendingPhoto';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 /** Also mounted on the patient's phone (family corner, `/patient/photos`): photos stay on that phone. */
 export default function FamilyPhotos() {
@@ -62,7 +63,7 @@ export default function FamilyPhotos() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+      <TopBar />
       <View>
         <AppText variant="title">{t('photos.title')}</AppText>
         <AppText tone="muted">{t('photos.subtitle', { name })}</AppText>
@@ -76,8 +77,8 @@ export default function FamilyPhotos() {
         </AppText>
       </View>
 
-      <BigButton icon="📷" label={t('photos.takePhoto')} onPress={() => add('camera')} />
-      <BigButton kind="secondary" icon="🖼️" label={t('photos.choose')} onPress={() => add('library')} />
+      <BigButton icon="camera" label={t('photos.takePhoto')} onPress={() => add('camera')} />
+      <BigButton kind="secondary" icon="image" label={t('photos.choose')} onPress={() => add('library')} />
       <AppText variant="caption" tone="muted">
         {t('photos.privacy')}
       </AppText>
@@ -130,8 +131,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     overflow: 'hidden',
     backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
   caption: { padding: space.sm },
 });

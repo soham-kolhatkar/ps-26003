@@ -78,7 +78,7 @@ export default function Pair() {
     return (
       <Screen>
         <AppText variant="title" center>
-          🔒 {t(step === 'pin' ? 'pair.pinTitle' : 'pair.pinAgain')}
+          {t(step === 'pin' ? 'pair.pinTitle' : 'pair.pinAgain')}
         </AppText>
         <AppText center tone="muted">
           {t('pair.pinHint')}
@@ -117,14 +117,14 @@ export default function Pair() {
       <AuthErrorText error={error} phoneRole={t('setup.patient')} />
       <BigButton
         size="large"
-        icon="🔗"
+        icon="link"
         label={busy ? t('common.loading') : t('pair.pair')}
         disabled={busy || code.length !== 6}
         onPress={pair}
       />
       <BigButton
         kind="ghost"
-        icon="🔁"
+        icon="redo"
         label={t('auth.changeRole')}
         onPress={() => {
           reset();

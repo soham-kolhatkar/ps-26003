@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { Card } from '@/components/Card';
+import { Picture } from '@/components/Picture';
 import { Screen } from '@/components/Screen';
 import type { AppUser, Patient } from '@/db/models';
 import { displayName, getPatient } from '@/db/repos/patients';
@@ -37,12 +38,7 @@ export default function RolePicker() {
 
   return (
     <Screen>
-      <BigButton
-        kind="ghost"
-        icon="⬅️"
-        label={t('common.back')}
-        onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
-      />
+      <TopBar />
       <AppText variant="title">{t('roles.title')}</AppText>
 
       {error ? <AppText tone="accent">{t('common.error')}</AppText> : null}
@@ -64,7 +60,7 @@ export default function RolePicker() {
           avatar={user.avatar ?? '🙂'}
           role={t(`roles.${user.role}`)}
           name={user.name}
-          hint={`🔒 ${t('roles.staffHint')}`}
+          hint={t('roles.staffHint')}
           onPress={() => openStaff(user)}
         />
       ))}
@@ -86,9 +82,7 @@ function RoleCard({ avatar, role, name, hint, highlight, onPress }: RoleCardProp
     <Card onPress={onPress} accessibilityLabel={`${role}, ${name}`} style={highlight ? styles.highlight : undefined}>
       <View style={styles.row}>
         <View style={[styles.avatar, highlight && styles.avatarHighlight]}>
-          <AppText variant="hero" importantForAccessibility="no">
-            {avatar}
-          </AppText>
+          <Picture glyph={avatar} size={56} />
         </View>
         <View style={styles.body}>
           <AppText variant="small" tone="primary" bold>

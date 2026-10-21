@@ -16,8 +16,9 @@ src/app/            Routes (expo-router). Thin: compose components, call stores/
   caregiver/progress.tsx              Progress dashboard (KPIs, score line, per-game tiles, adherence, recent)
   caregiver/reminders.tsx, reminder-edit.tsx  Reminder list (on/off, test) + editor (type, title, times/date)
   patient/reminder/[eventId].tsx      Full-screen spoken "time for…" prompt (done / later)
-src/components/     Shared elder-friendly UI primitives; charts/ (LineChart, ColumnChart, Sparkline, StatTile, Meter, ChartCard, geometry)
-src/theme/          Design tokens (colors, type scale, spacing, touch sizes)
+src/components/     Shared elder-friendly UI primitives (AppText, BigButton, Card, TopBar, Icon, Picture, StatusLine, PressableScale…); charts/ (LineChart, ColumnChart, Sparkline, StatTile, Meter, ChartCard, geometry)
+src/theme/          Design tokens (colors, type scale, spacing, radii, shadows, motion, touch sizes) + fonts (per language)
+assets/pictures/    Fluent Emoji 3D PNGs (MIT), written by scripts/fluent-pictures.mjs with components/pictureAssets.ts
 src/i18n/           i18next init + LANGUAGES registry + packs/*.json
 src/store/          zustand: settings (language, persisted), session (role/user/patient, in-memory)
 src/services/       Device services: tts (promise-based), auth (PINs), photos (pick/store/delete files), datetime, notifications (local reminder scheduling, snooze/test), sync (F15)
@@ -49,3 +50,5 @@ Device patient **Kamala Sharma "Kamala"** (72, Cinnamara, Jorhat). Caregiver dau
 
 ## Game session flow
 Patient home tile → `/patient/game/[id]` → GameShell loads `game_level` → intro (spoken instruction) → game component calls `onTrial` once per round (first try) and `onComplete` → `finishSession`: computeSessionStats → insert `game_session` → `recentOutcomes` → `nextLevel` → upsert `game_level` → celebration (stars, "new level" if up).
+
+Tier 4 (F20, D50/D51): `theme/tokens` v2 (warm ground, tea-green primary, tonal leaf, clay, staff-only status, `shadow`, `motion`), `theme/fonts` (Noto Sans Devanagari for English and Hindi via `useFonts` in the root layout; `AppText` picks family + line height by language). UI icons = `components/Icon` (Phosphor, one deep import per icon, kebab-case names). Content pictures = `components/Picture` (glyph → bundled Fluent PNG via the generated `pictureAssets`, platform emoji as fallback). `TopBar` (Back/Stop left, help right), `StatusLine` (shape + colour + word), `PressableScale` (press feedback through Reanimated, follows reduce-motion). No emoji in UI code: controls get an `Icon`, content gets a `Picture`.

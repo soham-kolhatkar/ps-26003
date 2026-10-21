@@ -132,7 +132,7 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="✖️" label={t('common.cancel')} onPress={() => router.back()} />
+      <BigButton kind="ghost" icon="x" label={t('common.cancel')} onPress={() => router.back()} />
       <AppText variant="title">
         {existing ? t('reminders.caregiver.editTitle') : t('reminders.caregiver.newTitle')}
       </AppText>
@@ -173,7 +173,7 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
             </AppText>
             <BigButton
               kind="secondary"
-              icon="📅"
+              icon="calendar"
               label={formatShortDate(new Date(onceAt), language)}
               onPress={() => pickOnce('date')}
             />
@@ -184,7 +184,7 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
             </AppText>
             <BigButton
               kind="secondary"
-              icon="🕰️"
+              icon="clock"
               label={formatTime(new Date(onceAt), language)}
               onPress={() => pickOnce('time')}
             />
@@ -209,8 +209,10 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
         </>
       )}
 
-      <BigButton size="large" icon="💾" label={t('reminders.caregiver.save')} onPress={save} disabled={!canSave} />
-      {existing ? <BigButton kind="ghost" icon="🗑️" label={t('reminders.caregiver.delete')} onPress={remove} /> : null}
+      <BigButton size="large" icon="save" label={t('reminders.caregiver.save')} onPress={save} disabled={!canSave} />
+      {existing ? (
+        <BigButton kind="ghost" icon="trash" label={t('reminders.caregiver.delete')} onPress={remove} />
+      ) : null}
     </Screen>
   );
 }

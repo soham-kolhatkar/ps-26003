@@ -12,7 +12,7 @@ export function AuthErrorText({ error, phoneRole }: { error: CloudError | null; 
   const accountRole = error.detail?.role ? t(`roles.${error.detail.role}`) : '';
   return (
     <View style={styles.box} accessibilityLiveRegion="polite">
-      <AppText bold>⚠️ {t(`cloud.errors.${error.key}`, { accountRole, phoneRole })}</AppText>
+      <AppText bold>{t(`cloud.errors.${error.key}`, { accountRole, phoneRole })}</AppText>
     </View>
   );
 }

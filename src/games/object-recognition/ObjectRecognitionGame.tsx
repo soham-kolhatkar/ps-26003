@@ -85,7 +85,7 @@ export function ObjectRecognitionGame({ level, totalTrials, onTrial, onComplete,
         <AppText variant="title" center>
           {prompt}
         </AppText>
-        <BigButton kind="ghost" icon="🔊" label={t('game.hearAgain')} onPress={() => say(prompt)} />
+        <BigButton kind="ghost" icon="speaker" label={t('game.hearAgain')} onPress={() => say(prompt)} />
       </View>
 
       <View style={styles.grid}>

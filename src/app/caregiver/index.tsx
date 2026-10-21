@@ -84,33 +84,33 @@ export default function CaregiverHome() {
           <PatientCard patient={p} showNotes />
           <AlertsButton counts={data.alerts[p.id]} patientId={p.id} pathname="/caregiver/alerts" />
           <BigButton
-            icon="📊"
+            icon="chart"
             label={t('progress.button', { count: data.gamesThisWeek[p.id] ?? 0 })}
             onPress={() => router.push({ pathname: '/caregiver/progress', params: { patientId: p.id } })}
           />
           {cloud ? (
             // Photos never leave the patient's phone: they are added there (family corner).
             <AppText variant="small" tone="muted">
-              📷 {t('people.photosOnPatientPhone', { name: displayName(p) })}
+              {t('people.photosOnPatientPhone', { name: displayName(p) })}
             </AppText>
           ) : (
             <BigButton
               kind="secondary"
-              icon="📷"
+              icon="camera"
               label={t('photos.button', { count: data.photoCounts[p.id] ?? 0 })}
               onPress={() => router.push({ pathname: '/caregiver/photos', params: { patientId: p.id } })}
             />
           )}
           <BigButton
             kind="secondary"
-            icon="🔔"
+            icon="bell"
             label={t('reminders.caregiver.button', data.reminderToday[p.id] ?? { done: 0, total: 0 })}
             onPress={() => router.push({ pathname: '/caregiver/reminders', params: { patientId: p.id } })}
           />
           {cloud ? (
             <BigButton
               kind="secondary"
-              icon="👥"
+              icon="users"
               label={t('people.button')}
               onPress={() => router.push({ pathname: '/caregiver/people', params: { patientId: p.id } })}
             />
@@ -120,17 +120,17 @@ export default function CaregiverHome() {
       {cloud && data.patients.length === 0 ? <AppText tone="muted">{t('people.noFamilyYet')}</AppText> : null}
       {cloud ? (
         <>
-          <BigButton icon="➕" label={t('people.addFamily')} onPress={() => router.push('/caregiver/patient-new')} />
+          <BigButton icon="plus" label={t('people.addFamily')} onPress={() => router.push('/caregiver/patient-new')} />
           <BigButton
             kind="secondary"
-            icon="🔑"
+            icon="key"
             label={t('people.joinButton')}
             onPress={() => router.push('/caregiver/join')}
           />
         </>
       ) : null}
       {/* The demo story lives only in the single-phone demo database. */}
-      {cloud ? null : <BigButton kind="secondary" icon="♻️" label={t('staff.resetDemo')} onPress={confirmReset} />}
+      {cloud ? null : <BigButton kind="secondary" icon="reset" label={t('staff.resetDemo')} onPress={confirmReset} />}
     </Screen>
   );
 }
