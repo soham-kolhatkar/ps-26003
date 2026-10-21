@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { PinPad } from '@/components/PinPad';
+import { Picture } from '@/components/Picture';
 import { Screen } from '@/components/Screen';
 import { getUser } from '@/db/repos/users';
 import { DEMO } from '@/db/seed/demo';
@@ -44,11 +45,9 @@ export default function PinScreen() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+      <TopBar />
       <View style={styles.header}>
-        <AppText variant="hero" importantForAccessibility="no">
-          {user?.avatar ?? '🔒'}
-        </AppText>
+        <Picture glyph={user?.avatar ?? '🙂'} size={72} />
         <AppText variant="title" center>
           {t('pin.title')}
         </AppText>

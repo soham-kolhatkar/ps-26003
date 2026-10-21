@@ -1,10 +1,14 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { StatusLine } from '@/components/StatusLine';
+import { PressableScale } from '@/components/PressableScale';
+import { Icon } from '@/components/Icon';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
 import { getDb } from '@/db/client';
@@ -32,7 +36,7 @@ import { formatShortDate } from '@/services/datetime';
 import { stopSpeaking } from '@/services/tts';
 import { useSession } from '@/store/session';
 import { useSettings } from '@/store/settings';
-import { colors, radius, space, touch } from '@/theme/tokens';
+import { colors, radius, shadow, space, touch } from '@/theme/tokens';
 
 const DAY = 24 * 60 * 60 * 1000;
 type Phase = 'intro' | 'checkup' | 'form' | 'saved';
@@ -110,14 +114,14 @@ export default function HomeVisit() {
   if (phase === 'intro') {
     return (
       <Screen>
-        <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+        <TopBar />
         <AppText variant="title">{t('visit.title', { name })}</AppText>
         <AppText variant="large">{t('visit.intro', { name })}</AppText>
         <View style={styles.hint}>
-          <AppText>🤝 {t('visit.handOver', { name })}</AppText>
+          <AppText>{t('visit.handOver', { name })}</AppText>
         </View>
-        <BigButton size="large" icon="▶️" label={t('visit.startCheckup')} onPress={() => setPhase('checkup')} />
-        <BigButton kind="secondary" icon="⏭️" label={t('visit.skipCheckup')} onPress={() => setPhase('form')} />
+        <BigButton size="large" icon="play" label={t('visit.startCheckup')} onPress={() => setPhase('checkup')} />
+        <BigButton kind="secondary" icon="skip" label={t('visit.skipCheckup')} onPress={() => setPhase('form')} />
       </Screen>
     );
   }
@@ -127,7 +131,7 @@ export default function HomeVisit() {
     const change = score != null && prev != null && isCompleteCheckup(tasks) ? score - prev : null;
     return (
       <Screen>
-        <AppText variant="title">✅ {t('visit.saved')}</AppText>
+        <AppText variant="title">{t('visit.saved')}</AppText>
         <View style={styles.card}>
           <AppText variant="large" bold>
             {score != null ? t('visit.scoreLine', { score }) : t('visit.noCheckup')}
@@ -143,10 +147,10 @@ export default function HomeVisit() {
             </AppText>
           ) : null}
           <AppText>{t('visit.nextOn', { date: formatShortDate(new Date(nowMs() + days * DAY), language) })}</AppText>
-          {refer ? <AppText bold>🩺 {t('visit.referred')}</AppText> : null}
+          {refer ? <StatusLine status="urgent" text={t('visit.referred')} /> : null}
         </View>
         <BigButton
-          icon="⬅️"
+          icon="arrow-left"
           label={t('visit.backToPatient')}
           onPress={() => {
             stopSpeaking();
@@ -194,7 +198,7 @@ export default function HomeVisit() {
 
       <BigButton
         kind="secondary"
-        icon={refer ? '☑️' : '⬜'}
+        icon={refer ? 'check-square' : 'square'}
         selected={refer}
         label={t('visit.refer')}
         onPress={() => setRefer(!refer)}
@@ -214,7 +218,7 @@ export default function HomeVisit() {
         </AppText>
       ) : null}
 
-      <BigButton size="large" icon="💾" label={t('visit.save')} disabled={saving} onPress={save} />
+      <BigButton size="large" icon="save" label={t('visit.save')} disabled={saving} onPress={save} />
     </Screen>
   );
 }
@@ -259,17 +263,22 @@ function Chip({
   onPress: () => void;
 }) {
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityState={{ selected }}
+      accessibilityLabel={label}
       onPress={onPress}
       style={[styles.chip, selected && (warn ? styles.chipWarn : styles.chipOn)]}
     >
-      <AppText variant="small" bold tone={selected && !warn ? 'onPrimary' : 'primary'}>
-        {selected ? '✓ ' : ''}
+      {selected ? <Icon name="check" size={20} color={warn ? colors.warning : colors.textOnPrimary} /> : null}
+      <AppText
+        variant="small"
+        bold
+        style={[styles.chipText, { color: selected ? (warn ? colors.warning : colors.textOnPrimary) : colors.onPrimarySoft }]}
+      >
         {label}
       </AppText>
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -280,21 +289,21 @@ const styles = StyleSheet.create({
     padding: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
   obs: { gap: space.xs },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   chip: {
     minHeight: touch.min,
-    justifyContent: 'center',
-    paddingHorizontal: space.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs + 2,
+    paddingHorizontal: space.md + 2,
     borderRadius: radius.pill,
-    borderWidth: 2,
-    borderColor: colors.primary,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.primarySoft,
   },
+  chipText: { flexShrink: 1 },
   chipOn: { backgroundColor: colors.primary },
-  chipWarn: { backgroundColor: colors.warningSoft, borderColor: colors.warning },
+  chipWarn: { backgroundColor: colors.warningSoft },
   note: { minHeight: 96, textAlignVertical: 'top', paddingTop: space.sm },
 });

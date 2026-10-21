@@ -53,7 +53,17 @@
     "resetDemo": "Reset demo data",
     "resetConfirmTitle": "Reset demo data?",
     "resetConfirmBody": "This restores the demo patients and clears all played games and changes.",
-    "resetDone": "Demo data restored."
+    "resetDone": "Demo data restored.",
+    "summaryAttention_one": "{{count}} person needs attention.",
+    "summaryAttention_other": "{{count}} people need attention.",
+    "summaryWell_one": "{{count}} is doing well.",
+    "summaryWell_other": "{{count}} are doing well.",
+    "summaryReferred_one": "{{count}} patient was referred to you.",
+    "summaryReferred_other": "{{count}} patients were referred to you.",
+    "allWell": "Everyone is doing well.",
+    "sectionReferred": "Referred to you",
+    "sectionAttention": "Needs attention",
+    "sectionWell": "Doing well"
   },
   "stage": {
     "mild": "Early stage",
@@ -209,7 +219,7 @@
     "chair": "chair",
     "bicycle": "bicycle",
     "mango": "mango",
-    "lamp": "oil lamp",
+    "teapot": "teapot",
     "bell": "bell",
     "drum": "drum",
     "rhino": "rhino",
@@ -331,12 +341,11 @@
     }
   },
   "photos": {
-    "button": "Family photos ({{count}})",
     "title": "Family photos",
     "subtitle": "Photos of people {{name}} knows",
-    "privacy": "🔒 Photos stay only on this phone. They are never uploaded.",
+    "privacy": "Photos stay only on this phone. They are never uploaded.",
     "unlockHint": "Add photos of at least 2 different people to unlock “Who is this?” for {{name}}.",
-    "unlocked": "✅ “Who is this?” is ready for {{name}} ({{count}} people).",
+    "unlocked": "“Who is this?” is ready for {{name}} ({{count}} people).",
     "takePhoto": "Take photo",
     "choose": "Choose from gallery",
     "empty": "No photos yet.",
@@ -349,7 +358,10 @@
     "namePlaceholder": "e.g. Priya",
     "relationLabel": "Relation to {{name}}",
     "save": "Save photo",
-    "saveFailed": "Could not save the photo. Please try again."
+    "saveFailed": "Could not save the photo. Please try again.",
+    "count_one": "{{count}} photo",
+    "count_other": "{{count}} photos",
+    "none": "No photos yet"
   },
   "reminders": {
     "type": {
@@ -383,15 +395,14 @@
     "later": "Remind me in 10 minutes",
     "laterSpoken": "All right, I will remind you in 10 minutes.",
     "thanks": "Thank you, {{name}}! Well done.",
-    "alreadyDone": "Already done ✓",
-    "nothingToday": "No more reminders today 🎉",
+    "alreadyDone": "Already done",
+    "nothingToday": "No more reminders today",
     "state": {
       "upcoming": "Later",
       "due": "Now"
     },
     "notifBody": "{{name}}: {{title}}",
     "caregiver": {
-      "button": "Reminders · {{done}}/{{total}} today",
       "title": "Reminders",
       "subtitle": "for {{name}}",
       "add": "Add reminder",
@@ -422,11 +433,13 @@
       "defaultTitle": {
         "hydration": "Drink a glass of water",
         "activity": "Evening walk"
-      }
+      },
+      "today": "{{done}} of {{total}} done today",
+      "noneToday": "None for today"
     }
   },
   "progress": {
-    "button": "Progress · {{count}} games this week",
+    "button": "Progress report",
     "title": "{{name}}'s progress",
     "last7": "Last 7 days",
     "last30": "Last 30 days",
@@ -459,7 +472,8 @@
       "never": "Not played in this period",
       "up": "↑ Improving",
       "down": "↓ Lower than before",
-      "steady": "→ Steady"
+      "steady": "→ Steady",
+      "notPlayed": "Not played in this period: {{games}}"
     },
     "reminders": {
       "title": "Reminders taken per day",
@@ -483,7 +497,10 @@
       "score": "Score",
       "taken": "Taken"
     },
-    "disclaimer": "These scores show how game performance changes over time, to support conversations with the doctor. They are not a medical diagnosis."
+    "disclaimer": "These scores show how game performance changes over time, to support conversations with the doctor. They are not a medical diagnosis.",
+    "rowHint": "Games, scores and reminders",
+    "weekGames_one": "This week: {{count}} game played",
+    "weekGames_other": "This week: {{count}} games played"
   },
   "alerts": {
     "title": "Things to look at: {{name}}",
@@ -519,7 +536,11 @@
     },
     "howTitle": "How Smriti notices these",
     "how": "For each game, Smriti compares the last 7 days with the 3 weeks before. Results combine the level reached and the score at that level, because the games get easier or harder by themselves. Medicines: below 70% taken in 7 days. Alerts clear by themselves when things improve.",
-    "disclaimer": "This is trend monitoring from games and reminders on this phone, not a diagnosis. Please talk to a doctor about any health worries."
+    "disclaimer": "This is trend monitoring from games and reminders on this phone, not a diagnosis. Please talk to a doctor about any health worries.",
+    "badge": "{{count}} things to look at",
+    "badgeNew": "{{count}} things to look at, {{unseen}} new",
+    "tab": "Things to look at",
+    "tabShort": "Alerts"
   },
   "checkup": {
     "step": "Check-up task {{n}} of {{total}}",
@@ -612,7 +633,8 @@
         "often": "Often"
       }
     },
-    "partial": "(partial)"
+    "partial": "(partial)",
+    "tab": "Visits"
   },
   "doctor": {
     "title": "Cognitive trend report",
@@ -658,7 +680,13 @@
     "shareCheckup": "Last ASHA check-up: {{score}} on {{date}}",
     "howTitle": "How to read this report",
     "how": "Every game adapts its difficulty to keep the patient succeeding, so change shows mostly in the level reached. The index (0–100) combines the level (1–5) and the score at that level. Abilities group the games: Memory (Memory pairs, Remember and find, Who is this?), Attention & speed (Catch the fish), Planning & reasoning (Daily routines, Complete the pattern), Recognition & meaning (Find the object, Odd one out). Comparisons are with the patient's own earlier weeks, not with population norms.",
-    "disclaimer": "Trend monitoring from games, reminders and ASHA visits recorded on the patient's phone. Not a diagnostic test: please interpret it alongside your clinical assessment."
+    "disclaimer": "Trend monitoring from games, reminders and ASHA visits recorded on the patient's phone. Not a diagnostic test: please interpret it alongside your clinical assessment.",
+    "tab": {
+      "summary": "Summary",
+      "games": "Games",
+      "care": "Care"
+    },
+    "alertsTitle": "Things to look at"
   },
   "setup": {
     "title": "Who will use this phone?",
@@ -683,7 +711,7 @@
     "newPin": "Choose a {{n}}-digit PIN",
     "pinAgain": "PIN again",
     "signIn": "Sign in",
-    "createAccount": "New here? Create an account",
+    "createAccount": "Create a new account",
     "changeRole": "Change this phone's role",
     "signUpTitle": "New account: {{role}}",
     "name": "Your name",
@@ -745,7 +773,7 @@
     "joinButton": "Join with a code",
     "addFamilyTitle": "Add your family member",
     "registerTitle": "Register a patient",
-    "photosOnPatientPhone": "Family photos are added on {{name}}'s own phone (family corner), and never leave it.",
+    "photosOnPatientPhone": "Added on {{name}}'s phone, never uploaded",
     "form": {
       "name": "Full name",
       "preferred": "What the family calls them",
@@ -803,7 +831,8 @@
       "done": "Done",
       "message": "You are invited to follow {{name}} on Smriti. Open Smriti → Join with a code → {{code}} ({{until}}).",
       "messageDevice": "Smriti pairing code for {{name}}: {{code}} ({{until}})."
-    }
+    },
+    "rowHint": "Who can see {{name}}'s progress"
   },
   "family": {
     "title": "Family corner",
@@ -832,7 +861,8 @@
     "placeholder": "Advice, medicines to watch, next check-up…",
     "save": "Save note",
     "delete": "Delete",
-    "deleteTitle": "Delete this note?"
+    "deleteTitle": "Delete this note?",
+    "tab": "Notes"
   },
   "resetPin": {
     "forgot": "Forgot your PIN?",
@@ -850,7 +880,7 @@
     "title": "Demo tools",
     "intro": "For the presenter: puts the full demo story in the cloud (30 days of games, doses, ASHA visits, alerts, a referral and a doctor's note), so each phone can sign in as one person. Running it again resets the story.",
     "patients": "Patients: Kamala Sharma (managed by Priya), Lakshmi Iyer and Ramesh Kumar (registered by Sunita). Dr. Anjali follows all three.",
-    "load": "Load / reset the cloud demo",
+    "load": "Load the demo story",
     "loading": "Loading… (about a minute)",
     "lastLoaded": "Last loaded on this phone: {{at}}",
     "confirmTitle": "Load the cloud demo?",

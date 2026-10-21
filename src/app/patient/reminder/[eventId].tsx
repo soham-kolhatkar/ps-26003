@@ -15,7 +15,7 @@ import { formatLongDate, formatTime } from '@/services/datetime';
 import { REMINDER_ICON, snoozeReminder } from '@/services/notifications';
 import { speak, stopSpeaking } from '@/services/tts';
 import { useSettings } from '@/store/settings';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 const THANKS_MIN_MS = 1500;
 
@@ -102,21 +102,21 @@ export default function ReminderPrompt() {
           <AppText variant="large" tone="primary" bold center>
             {t('reminders.alreadyDone')}
           </AppText>
-          <BigButton size="large" icon="🏠" label={t('game.home')} onPress={goHome} />
+          <BigButton size="large" icon="house" label={t('game.home')} onPress={goHome} />
         </>
       ) : (
         <>
           <BigButton
             size="large"
-            icon="✅"
+            icon="check"
             label={t(`reminders.prompt.${occ.type}.done`)}
             onPress={done}
             disabled={busy}
           />
           {occ.type !== 'appointment' ? (
-            <BigButton kind="secondary" icon="⏰" label={t('reminders.later')} onPress={later} disabled={busy} />
+            <BigButton kind="secondary" icon="alarm" label={t('reminders.later')} onPress={later} disabled={busy} />
           ) : null}
-          <BigButton kind="ghost" icon="🔊" label={t('common.speak')} onPress={() => speak(spoken, language)} />
+          <BigButton kind="ghost" icon="speaker" label={t('common.speak')} onPress={() => speak(spoken, language)} />
         </>
       )}
     </Screen>
@@ -139,8 +139,7 @@ const styles = StyleSheet.create({
     gap: space.xs,
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
     padding: space.lg,
   },
   fill: { flex: 1 },

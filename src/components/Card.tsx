@@ -1,26 +1,35 @@
 import type { ReactNode } from 'react';
-import { Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
+import { StyleSheet, View, type ViewStyle } from 'react-native';
 
-import { colors, radius, space, touch } from '@/theme/tokens';
+import { PressableScale } from '@/components/PressableScale';
+import { colors, radius, shadow, space, touch } from '@/theme/tokens';
 
 type CardProps = {
   children: ReactNode;
   onPress?: () => void;
   accessibilityLabel?: string;
   style?: ViewStyle;
+  testID?: string;
 };
 
-export function Card({ children, onPress, accessibilityLabel, style }: CardProps) {
-  if (!onPress) return <View style={[styles.card, style]}>{children}</View>;
+/** A white surface on the ground with a soft shadow (no border). Groups things; tappable when `onPress`. */
+export function Card({ children, onPress, accessibilityLabel, style, testID }: CardProps) {
+  if (!onPress)
+    return (
+      <View style={[styles.card, style]} testID={testID}>
+        {children}
+      </View>
+    );
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       onPress={onPress}
+      testID={testID}
       style={({ pressed }) => [styles.card, styles.pressable, pressed && styles.pressed, style]}
     >
       {children}
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -28,11 +37,10 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
     padding: space.md,
     gap: space.sm,
+    boxShadow: shadow.card,
   },
   pressable: { minHeight: touch.min },
-  pressed: { backgroundColor: colors.primarySoft, borderColor: colors.primary },
+  pressed: { backgroundColor: colors.primaryWash },
 });

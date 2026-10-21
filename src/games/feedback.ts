@@ -1,5 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import type { TFunction } from 'i18next';
+import { Platform } from 'react-native';
 
 import { pick } from '@/engine/random';
 
@@ -9,14 +10,25 @@ export function randomPraise(t: TFunction): string {
   return t(pick(PRAISE_KEYS));
 }
 
-/** Haptics are best-effort: never let them break a game. */
+/**
+ * Haptics are best-effort: never let them break a game. Android uses the system's
+ * own gentle patterns (no VIBRATE permission); never Error/Reject/Heavy (D50).
+ */
 export function hapticSuccess(): void {
-  Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+  const done =
+    Platform.OS === 'android'
+      ? Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Confirm)
+      : Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  done.catch(() => {});
 }
 
 /** Deliberately soft — a wrong answer is not punished. */
 export function hapticGentle(): void {
-  Haptics.selectionAsync().catch(() => {});
+  const done =
+    Platform.OS === 'android'
+      ? Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Segment_Tick)
+      : Haptics.selectionAsync();
+  done.catch(() => {});
 }
 
 /** 1–3 stars, never zero: every finished session is celebrated. */

@@ -26,6 +26,6 @@ export function Screen({ children, scroll = true }: ScreenProps) {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
-  content: { padding: space.lg, gap: space.lg, flexGrow: 1 },
+  content: { paddingHorizontal: 20, paddingTop: space.md, paddingBottom: space.lg, gap: 20, flexGrow: 1 },
   fill: { flex: 1 },
 });

@@ -21,7 +21,7 @@ describe('phone numbers', () => {
   });
 
   it('formats for display and maps to a stable email', () => {
-    expect(formatPhone('+919876543210')).toBe('98765 43210');
+    expect(formatPhone('+919876543210')).toBe('98765\u00A043210');
     expect(phoneToEmail('+919876543210')).toBe('p919876543210@phone.smriti.app');
   });
 });

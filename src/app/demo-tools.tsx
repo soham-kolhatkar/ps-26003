@@ -1,16 +1,17 @@
-import { router } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Icon } from '@/components/Icon';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { DEMO_ACCOUNTS, DEMO_PIN, loadCloudDemo } from '@/cloud/demoSeed';
 import { formatPhone } from '@/cloud/phone';
 import { confirm } from '@/services/confirm';
 import { kv } from '@/services/kv';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 const LOADED_KEY = 'demo.cloudLoadedAt';
 
@@ -49,22 +50,26 @@ export default function DemoTools() {
 
   return (
     <Screen>
-      <BigButton
-        kind="ghost"
-        icon="⬅️"
-        label={t('common.back')}
-        onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
-      />
-      <AppText variant="title">🎬 {t('demoTools.title')}</AppText>
+      <TopBar />
+      <AppText variant="title">{t('demoTools.title')}</AppText>
       <AppText tone="muted">{t('demoTools.intro')}</AppText>
 
       <View style={styles.card}>
         {DEMO_ACCOUNTS.map((a) => (
-          <AppText key={a.key}>
-            <AppText bold>{t(`roles.${a.role}`)}</AppText> · {a.name} · 📱 {formatPhone(a.phone)}
-          </AppText>
+          <View key={a.key} style={styles.account}>
+            <AppText variant="small" tone="muted">
+              {t(`roles.${a.role}`)} · {a.name}
+            </AppText>
+            <View style={styles.line}>
+              <Icon name="phone-device" size={20} color={colors.textMuted} />
+              <AppText weight="semibold">{formatPhone(a.phone)}</AppText>
+            </View>
+          </View>
         ))}
-        <AppText bold>🔒 PIN {DEMO_PIN}</AppText>
+        <View style={styles.line}>
+          <Icon name="lock" size={20} color={colors.textMuted} />
+          <AppText weight="semibold">PIN {DEMO_PIN}</AppText>
+        </View>
         <AppText variant="small" tone="muted">
           {t('demoTools.patients')}
         </AppText>
@@ -77,7 +82,7 @@ export default function DemoTools() {
       ) : null}
       <BigButton
         size="large"
-        icon="☁️"
+        icon="cloud"
         label={busy ? t('demoTools.loading') : t('demoTools.load')}
         disabled={busy}
         onPress={load}
@@ -94,7 +99,7 @@ export default function DemoTools() {
       ) : null}
       {error ? (
         <View style={styles.error}>
-          <AppText bold>⚠️ {error}</AppText>
+          <AppText bold>{error}</AppText>
         </View>
       ) : null}
       {log.at(-1)?.startsWith('✅') ? (
@@ -108,13 +113,14 @@ export default function DemoTools() {
 }
 
 const styles = StyleSheet.create({
+  account: { gap: 2 },
+  line: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   card: {
     gap: space.xs,
     padding: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
   log: { gap: 2, padding: space.md, backgroundColor: colors.surfaceMuted, borderRadius: radius.md },
   error: { padding: space.md, backgroundColor: colors.warningSoft, borderRadius: radius.md },

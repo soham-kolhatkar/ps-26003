@@ -214,7 +214,7 @@ export function WordRecallGame({ level, totalTrials, onTrial, onProgress, onComp
           {phase === 'recall' ? (
             <BigButton
               kind="ghost"
-              icon="🔊"
+              icon="speaker"
               label={t('game.hearAgain')}
               onPress={() => say(t('games.word_recall.findSpoken', { count: round.words.length }))}
             />

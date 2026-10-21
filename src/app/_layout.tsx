@@ -1,3 +1,4 @@
+import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite';
@@ -20,6 +21,7 @@ import { useDevice } from '@/store/device';
 import { useSettings } from '@/store/settings';
 import { refreshPeople } from '@/sync/refresh';
 import { SyncLoop } from '@/sync/SyncLoop';
+import { FONT_SOURCES } from '@/theme/fonts';
 import { colors } from '@/theme/tokens';
 
 configureNotifications();
@@ -115,12 +117,17 @@ export default function RootLayout() {
   const mode = useDevice((s) => s.mode);
   const status = useAccount((s) => s.status);
   const uid = useAccount((s) => s.uid);
+  // Noto Sans Devanagari for English and Hindi (D50). If loading fails, the system font is used.
+  const [fontsLoaded, fontError] = useFonts(FONT_SOURCES);
+  useEffect(() => {
+    if (fontError) console.warn('Fonts not loaded, using the system font', fontError);
+  }, [fontError]);
 
   useEffect(() => {
     if (mode === 'cloud') useAccount.getState().boot();
   }, [mode]);
 
-  const restoring = mode === 'cloud' && (status === 'idle' || status === 'loading');
+  const restoring = (mode === 'cloud' && (status === 'idle' || status === 'loading')) || (!fontsLoaded && !fontError);
   const dbName = databaseNameFor(mode, mode === 'cloud' && status === 'signedIn' ? uid : null);
 
   return (

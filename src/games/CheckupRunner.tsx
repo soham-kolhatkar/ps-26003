@@ -21,7 +21,7 @@ const TASK_COMPONENT: Record<CheckupGameId, ComponentType<GameProps>> = {
   reaction_tap: ReactionTapGame,
 };
 
-const TASK_ICON: Record<CheckupGameId, string> = { orientation: '📅', word_recall: '🧠', reaction_tap: '🐟' };
+const TASK_ICON: Record<CheckupGameId, string> = { orientation: '📅', word_recall: '💡', reaction_tap: '🐟' };
 
 /**
  * The ASHA visit check-up: CHECKUP_STEPS one after another, each with a short
@@ -78,9 +78,9 @@ export function CheckupRunner({ patientId, onDone }: { patientId: string; onDone
           {instruction}
         </AppText>
         <View style={styles.fill} />
-        <BigButton size="large" icon="▶️" label={t('game.start')} onPress={() => setPlaying(true)} />
-        <BigButton kind="secondary" icon="🔊" label={t('game.hearAgain')} onPress={() => say(instruction)} />
-        <BigButton kind="ghost" icon="⏭️" label={t('checkup.skipTask')} onPress={() => finish(null)} />
+        <BigButton size="large" icon="play" label={t('game.start')} onPress={() => setPlaying(true)} />
+        <BigButton kind="secondary" icon="speaker" label={t('game.hearAgain')} onPress={() => say(instruction)} />
+        <BigButton kind="ghost" icon="skip" label={t('checkup.skipTask')} onPress={() => finish(null)} />
       </View>
     );
   }
@@ -92,7 +92,7 @@ export function CheckupRunner({ patientId, onDone }: { patientId: string; onDone
         <AppText variant="small" tone="muted" bold style={styles.topLabel}>
           {stepLabel} · {title}
         </AppText>
-        <BigButton kind="secondary" icon="⏭️" label={t('checkup.skip')} onPress={() => finish(null)} />
+        <BigButton kind="secondary" icon="skip" label={t('checkup.skip')} onPress={() => finish(null)} />
       </View>
       <Task
         key={index}

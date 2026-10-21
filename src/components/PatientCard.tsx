@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { Card } from '@/components/Card';
+import { Picture } from '@/components/Picture';
 import type { LinkedPatient, Patient } from '@/db/models';
 import { colors, radius, space } from '@/theme/tokens';
 
@@ -11,11 +12,15 @@ type PatientCardProps = {
   onPress?: () => void;
   /** Show the free-text notes (caregiver view). */
   showNotes?: boolean;
+  /** Show "Daughter" etc. (family only; on staff phones it is the same for every patient). */
+  showRelation?: boolean;
+  /** One highlight line at the bottom, e.g. "This week: 10 games played". */
+  footer?: string;
 };
 
-export function PatientCard({ patient, onPress, showNotes }: PatientCardProps) {
+export function PatientCard({ patient, onPress, showNotes, showRelation, footer }: PatientCardProps) {
   const { t } = useTranslation();
-  const relation = 'relation' in patient ? patient.relation : null;
+  const relation = showRelation && 'relation' in patient ? patient.relation : null;
   const meta = [
     patient.age != null ? t('staff.years', { count: patient.age }) : null,
     [patient.village, patient.district].filter(Boolean).join(', ') || null,
@@ -25,12 +30,10 @@ export function PatientCard({ patient, onPress, showNotes }: PatientCardProps) {
     <Card onPress={onPress} accessibilityLabel={patient.name}>
       <View style={styles.row}>
         <View style={styles.avatar}>
-          <AppText variant="title" importantForAccessibility="no">
-            {patient.avatar ?? '🙂'}
-          </AppText>
+          <Picture glyph={patient.avatar ?? '🙂'} size={48} />
         </View>
         <View style={styles.body}>
-          <AppText variant="large" bold>
+          <AppText variant="large" weight="bold">
             {patient.name}
           </AppText>
           <AppText variant="small" tone="muted">
@@ -46,6 +49,13 @@ export function PatientCard({ patient, onPress, showNotes }: PatientCardProps) {
         <AppText variant="small" tone="muted">
           {patient.notes}
         </AppText>
+      ) : null}
+      {footer ? (
+        <View style={styles.footer}>
+          <AppText variant="small" weight="semibold" tone="onPrimarySoft">
+            {footer}
+          </AppText>
+        </View>
       ) : null}
     </Card>
   );
@@ -80,4 +90,5 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   tagMuted: { backgroundColor: colors.surfaceMuted },
+  footer: { borderRadius: radius.sm, backgroundColor: colors.primaryWash, paddingHorizontal: space.sm + 4, paddingVertical: space.sm },
 });

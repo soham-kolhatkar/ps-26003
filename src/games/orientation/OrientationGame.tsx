@@ -65,7 +65,7 @@ export function OrientationGame({ onTrial, onComplete, say }: GameProps) {
         <AppText variant="title" center>
           {prompt}
         </AppText>
-        <BigButton kind="ghost" icon="🔊" label={t('game.hearAgain')} onPress={() => say(prompt)} />
+        <BigButton kind="ghost" icon="speaker" label={t('game.hearAgain')} onPress={() => say(prompt)} />
       </View>
       {q.options.map((value) => {
         const isAnswer = value === q.answer;
@@ -78,7 +78,7 @@ export function OrientationGame({ onTrial, onComplete, say }: GameProps) {
             <BigButton
               size="large"
               kind="secondary"
-              icon={show && isAnswer ? '✓' : undefined}
+              icon={show && isAnswer ? 'check' : undefined}
               label={optionLabel(q.kind, value, locale)}
               onPress={() => onPick(value)}
             />

@@ -16,6 +16,7 @@ import { MAX_LEVEL as WORD_MAX_LEVEL } from './word-recall/rounds';
 import { WordRecallGame } from './word-recall/WordRecallGame';
 import type { GameDefinition, GameId } from './types';
 import { countPeople } from '@/db/repos/photos';
+import { colors } from '@/theme/tokens';
 
 /**
  * Games shown on the patient home, in display order. A game appears here only
@@ -24,7 +25,8 @@ import { countPeople } from '@/db/repos/photos';
 export const GAMES: readonly GameDefinition[] = [
   {
     id: 'memory_match',
-    icon: '🃏',
+    icon: '🎴',
+    tint: colors.tint.lilac,
     maxLevel: MEMORY_MAX_LEVEL,
     // Not a fixed round count: the game reports pairs via onProgress.
     trialsPerSession: 0,
@@ -33,7 +35,8 @@ export const GAMES: readonly GameDefinition[] = [
   },
   {
     id: 'routine_sequence',
-    icon: '📋',
+    icon: '🍵',
+    tint: colors.tint.sun,
     maxLevel: ROUTINE_MAX_LEVEL,
     // Progress = real decisions across 2 routines, reported via onProgress.
     trialsPerSession: 0,
@@ -42,7 +45,8 @@ export const GAMES: readonly GameDefinition[] = [
   },
   {
     id: 'photo_recall',
-    icon: '👨‍👩‍👧',
+    icon: '🫂',
+    tint: colors.tint.clay,
     maxLevel: PHOTO_MAX_LEVEL,
     trialsPerSession: 5,
     targetReactionMs: 5000,
@@ -53,6 +57,7 @@ export const GAMES: readonly GameDefinition[] = [
   {
     id: 'object_recognition',
     icon: '🔍',
+    tint: colors.tint.leaf,
     maxLevel: OBJECT_MAX_LEVEL,
     trialsPerSession: 6,
     targetReactionMs: 4000,
@@ -61,6 +66,7 @@ export const GAMES: readonly GameDefinition[] = [
   {
     id: 'odd_one_out',
     icon: '🧺',
+    tint: colors.tint.sun,
     maxLevel: ODD_MAX_LEVEL,
     trialsPerSession: 6,
     targetReactionMs: 6000,
@@ -68,7 +74,8 @@ export const GAMES: readonly GameDefinition[] = [
   },
   {
     id: 'pattern',
-    icon: '🔁',
+    icon: '🧮',
+    tint: colors.tint.lilac,
     maxLevel: PATTERN_MAX_LEVEL,
     trialsPerSession: 5,
     // The row is read aloud first (about 4–6 s), and timing starts with it.
@@ -78,6 +85,7 @@ export const GAMES: readonly GameDefinition[] = [
   {
     id: 'reaction_tap',
     icon: '🐟',
+    tint: colors.tint.pond,
     maxLevel: REACTION_MAX_LEVEL,
     trialsPerSession: 10,
     // Tapping a fish within 1.5 s earns the full speed score (older adults' simple reaction time).
@@ -86,7 +94,8 @@ export const GAMES: readonly GameDefinition[] = [
   },
   {
     id: 'word_recall',
-    icon: '🧠',
+    icon: '💡',
+    tint: colors.tint.leaf,
     maxLevel: WORD_MAX_LEVEL,
     // Not a fixed round count: one trial per tap, progress = pictures found (onProgress).
     trialsPerSession: 0,

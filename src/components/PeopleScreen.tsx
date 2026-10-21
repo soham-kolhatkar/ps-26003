@@ -6,8 +6,11 @@ import { Share, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { AuthErrorText } from '@/components/AuthErrorText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { ChipGroup } from '@/components/Chip';
+import { Picture } from '@/components/Picture';
 import { Screen } from '@/components/Screen';
+import { StatusLine } from '@/components/StatusLine';
 import { CloudError } from '@/cloud/errors';
 import {
   createInvite,
@@ -27,7 +30,7 @@ import { formatTime } from '@/services/datetime';
 import { useAccount } from '@/store/account';
 import { useSettings } from '@/store/settings';
 import { refreshPeople } from '@/sync/refresh';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 const ROLE_ICON: Record<MemberRole, string> = { caregiver: '👩', asha: '🧑‍⚕️', doctor: '🩺', device: '📱' };
 const INVITABLE = ['asha', 'doctor', 'caregiver'] as const;
@@ -119,9 +122,9 @@ export function PeopleScreen() {
   if (pinReset) {
     return (
       <Screen>
-        <AppText variant="title">🔑 {t('resetPin.codeTitle', { name: pinReset.name })}</AppText>
+        <AppText variant="title">{t('resetPin.codeTitle', { name: pinReset.name })}</AppText>
         <View style={styles.codeBox}>
-          <AppText style={styles.code} testID="pin-reset-code">
+          <AppText weight="bold" style={styles.code} testID="pin-reset-code">
             {`${pinReset.code.slice(0, 3)} ${pinReset.code.slice(3)}`}
           </AppText>
           <AppText tone="muted" center>
@@ -131,7 +134,7 @@ export function PeopleScreen() {
         <View style={styles.member}>
           <AppText>{t('resetPin.codeHow', { name: pinReset.name })}</AppText>
         </View>
-        <BigButton kind="secondary" icon="✅" label={t('people.code.done')} onPress={() => setPinReset(null)} />
+        <BigButton kind="secondary" icon="check" label={t('people.code.done')} onPress={() => setPinReset(null)} />
       </Screen>
     );
   }
@@ -150,8 +153,8 @@ export function PeopleScreen() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
-      <AppText variant="title">👥 {t('people.title', { name })}</AppText>
+      <TopBar />
+      <AppText variant="title">{t('people.title', { name })}</AppText>
       <AuthErrorText error={error} phoneRole="" />
       {!snap && !error ? <AppText tone="muted">{t('common.loading')}</AppText> : null}
 
@@ -162,15 +165,18 @@ export function PeopleScreen() {
           const label = p?.name ?? t(`roles.${m.role}`);
           return (
             <View key={m.user_id} style={styles.member}>
-              <AppText variant="large" bold>
-                {ROLE_ICON[m.role]} {label}
-                {m.user_id === me ? ` (${t('people.you')})` : ''}
-              </AppText>
+              <View style={styles.memberHead}>
+                <Picture glyph={ROLE_ICON[m.role]} size={40} />
+                <AppText variant="large" weight="bold" style={styles.memberName}>
+                  {label}
+                  {m.user_id === me ? ` (${t('people.you')})` : ''}
+                </AppText>
+              </View>
               <AppText variant="small" tone="muted">
                 {[
                   m.role === 'caregiver' && m.relation ? t(`relation.${m.relation}`) : t(`roles.${m.role}`),
                   p?.organization,
-                  m.is_manager ? `⭐ ${t('people.manager')}` : null,
+                  m.is_manager ? t('people.manager') : null,
                   p?.phone ? formatPhone(p.phone) : null,
                 ]
                   .filter(Boolean)
@@ -180,14 +186,14 @@ export function PeopleScreen() {
                 <>
                   <BigButton
                     kind="ghost"
-                    icon="🔑"
+                    icon="key"
                     label={t('resetPin.make')}
                     disabled={busy}
                     onPress={() => run(async () => setPinReset({ ...(await createPinReset(m.user_id)), name: label }))}
                   />
                   <BigButton
-                    kind="ghost"
-                    icon="➖"
+                    kind="danger"
+                    icon="minus"
                     label={t('people.remove')}
                     onPress={() => remove(m.user_id, label)}
                   />
@@ -198,9 +204,10 @@ export function PeopleScreen() {
         })}
 
       {snap ? (
-        <View style={[styles.member, device ? styles.paired : styles.unpaired]}>
-          <AppText bold>📱 {t(device ? 'people.phonePaired' : 'people.phoneNotPaired', { name })}</AppText>
-        </View>
+        <StatusLine
+          status={device ? 'well' : 'soon'}
+          text={t(device ? 'people.phonePaired' : 'people.phoneNotPaired', { name })}
+        />
       ) : null}
 
       {amManager ? (
@@ -209,7 +216,7 @@ export function PeopleScreen() {
             {t('people.addTitle')}
           </AppText>
           <BigButton
-            icon="📱"
+            icon="phone-device"
             label={t(device ? 'people.repairPhone' : 'people.pairPhone', { name })}
             disabled={busy}
             onPress={() => makeInvite('device')}
@@ -227,7 +234,7 @@ export function PeopleScreen() {
               ) : null}
               <BigButton
                 kind="secondary"
-                icon={ROLE_ICON[role]}
+                icon="user-plus"
                 label={t(`people.invite.${role}`)}
                 disabled={busy}
                 onPress={() => makeInvite(role)}
@@ -241,7 +248,7 @@ export function PeopleScreen() {
         </AppText>
       ) : null}
 
-      {snap ? <BigButton kind="ghost" icon="🚪" label={t('people.leave')} disabled={busy} onPress={leave} /> : null}
+      {snap ? <BigButton kind="danger" icon="door" label={t('people.leave')} disabled={busy} onPress={leave} /> : null}
       <AppText variant="caption" tone="muted">
         {t('people.updated', { time: formatTime(new Date(nowMs()), language) })}
       </AppText>
@@ -282,7 +289,7 @@ function InviteCode({
     <Screen>
       <AppText variant="title">{t(`people.code.title.${invite.role}`, { name: patientName })}</AppText>
       <View style={styles.codeBox} accessible accessibilityLabel={invite.code.split('').join(' ')}>
-        <AppText style={styles.code} testID="invite-code">
+        <AppText weight="bold" style={styles.code} testID="invite-code">
           {expired ? '— — —' : spaced}
         </AppText>
         <AppText tone="muted" center>
@@ -295,9 +302,13 @@ function InviteCode({
         </AppText>
       </View>
       {!expired && invite.role !== 'device' ? (
-        <BigButton icon="📤" label={t('people.code.share')} onPress={() => Share.share({ message }).catch(() => {})} />
+        <BigButton
+          icon="share"
+          label={t('people.code.share')}
+          onPress={() => Share.share({ message }).catch(() => {})}
+        />
       ) : null}
-      <BigButton kind="secondary" icon="✅" label={t('people.code.done')} onPress={onDone} />
+      <BigButton kind="secondary" icon="check" label={t('people.code.done')} onPress={onDone} />
     </Screen>
   );
 }
@@ -308,11 +319,10 @@ const styles = StyleSheet.create({
     padding: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
-  paired: { backgroundColor: colors.successSoft, borderColor: colors.success },
-  unpaired: { backgroundColor: colors.warningSoft, borderColor: colors.warning },
+  memberHead: { flexDirection: 'row', alignItems: 'center', gap: space.sm + 4 },
+  memberName: { flex: 1 },
   invite: { gap: space.sm },
   codeBox: {
     alignItems: 'center',
@@ -321,5 +331,5 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     backgroundColor: colors.primarySoft,
   },
-  code: { fontSize: 56, lineHeight: 68, fontWeight: '700', letterSpacing: 6, color: colors.primary },
+  code: { fontSize: 56, lineHeight: 68, letterSpacing: 6, color: colors.primary },
 });

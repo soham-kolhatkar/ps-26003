@@ -313,3 +313,29 @@
 6. **APK v0.3.0** (`Download/Smriti-v0.3.0.apk`, installs over v0.2.0 and keeps its data): app opens on "Who will use this phone?"; the hidden single-phone demo (hold the 🌼) still works offline.
 7. **4-phone rehearsal** (if you have the phones): follow Plan A in [DEMO.md](DEMO.md): pair Kamala's phone from Priya's People screen, play a game, set a reminder for now, record Sunita's visit with a referral, Dr. Anjali's note.
 
+
+## F20 Design foundation checklist
+> Browser first (`npm run web`, http://localhost:8081, a phone-sized window), then the phone (`npm run usb`). F20 changes the shared pieces (colours, fonts, icons, pictures, buttons, cards), so **every screen changes a little**; the layouts themselves are redone in F21–F24.
+1. **Fonts:** Welcome → English text is Noto Sans; numbers have a plain zero (e.g. "10:00 am", "Metformin 500 mg", not "1Ø:ØØ"). Tap **हिन्दी**: the welcome, "यह फ़ोन कौन इस्तेमाल करेगा?" and the role picker read cleanly, no matras cut off at the top or bottom of a line.
+2. **Pictures instead of emoji:** "Who will use this phone?" shows four 3D pictures (older woman, woman, health worker, stethoscope). Hidden demo (hold the 🌼 for 2 s) → role picker and PIN screen show the same pictures.
+3. **Patient home (demo → Kamala):** game tiles = picture in a soft colour + name + green ▶ (cards, teacup, magnifier, basket, abacus, fish, light bulb). The reminder due now is a clay card with a pill picture; "Later" is a clay line with a water drop.
+4. **Buttons:** one filled green main button per screen; second buttons are pale green with no outline (Read aloud, Hear again, Create an account). Pressing any button or card shrinks it slightly. Every inner screen has a **‹ Back** pill at the top left; a game's intro has **⌂ Home** there.
+5. **Cards:** white with a soft shadow, no grey borders (role picker, setup cards, patient cards, charts on Progress).
+6. **Games:** each intro shows its 3D picture; the end of a game shows a blossom (no 🎉). In **Odd one out**, an oil lamp never appears; a teapot (केतली) can.
+7. **Staff (demo → Priya / Sunita / Dr. Anjali):** a **Sign out** pill top right (cloud phones: **Settings**, with the sync chip "Synced just now" and a cloud icon beside it). Sunita's list: "▲ Visit overdue by 2 days" in red, "Things to look at: 3 (3 new) ›" as a pale red row with a triangle, "✓ No concerns in the trends" in green. No emoji in titles (People, Settings, Join with a code, Demo tools).
+8. **Text fields** (sign in / sign up): a clearly visible darker edge.
+9. **Phone (Expo Go, `npm run usb`):** the same as above; fonts load (not the phone's default font), soft shadows show, a correct answer gives a gentle "confirm" buzz and a wrong one only a soft tick.
+10. Still old on purpose (next features): the patient home's long game list and date card (F21), game boards and level stars (F22), caregiver and ASHA layouts (F23, F24).
+
+## F20 review fixes checklist
+> Same branch. Fixes from the user's F20 test: destructive buttons, wrapping, the ASHA/doctor lists, more UI bugs.
+1. **Destructive actions are red** (pale red with red text): Sign out (Settings, and the demo staff homes), Change this phone's role (Settings, Sign in, Pair), Remove / Leave (People), Delete (doctor's note, reminder), Unpair this phone (family corner), Reset demo data. Each still asks to confirm.
+2. **Caregiver home:** the patient card ends with "This week: N games played"; below it one white list: **Progress report** (no count), **Reminders** ("0 of 6 done today" / "None for today"), **Family photos** (count, or "Added on Kamala's phone" on cloud phones), **People** (cloud). When there are alerts, a red/amber **Things to look at** row comes first.
+3. **ASHA home (Sunita):** a summary line ("1 person needs attention. 2 are doing well."), then sections **Needs attention** / **Doing well**. One card per patient: picture with a red or amber **count badge** on its corner (no long alert text), name, age · village, one status line (visit overdue / next visit).
+4. **Doctor home (Dr. Anjali):** "Hello, Dr. Anjali" (not "Hello, Dr."); sections **Referred to you** / **Doing well**, the same cards.
+5. **ASHA patient page (Ramesh):** Start home visit, then tabs **Alerts (3)** · **Visits (3)** · **Notes**. It opens on Alerts when there are any (the cards are right there, no extra screen); Visits shows the past visits; Notes the doctor's notes. The two tiles show small icons (not the words "note" / "game").
+6. **Doctor report:** tabs **Summary** (referral, things to look at, abilities, weekly chart) · **Games** (per game, reaction time) · **Care** (reminders, check-ups) · **Notes** (write a note). "How to read this report" is folded; tap to open.
+7. **Wrapping:** long button labels wrap inside the button (nothing cut off on the phone); phone numbers never break in the middle ("92051 20666"); "Create a new account" and "Load the demo story" fit on one line.
+8. **Progress (caregiver):** "Last 7 days / Last 30 days" is a two-part switch; only games played in the period get a tile, the rest are named in one line; reminder types and recent activity show pictures (a warning icon for a missed dose).
+9. **Forms:** the reminder form's type chips show pictures; times are chips with ✕; "Add time" has a +; Cancel is the top-left pill (reminder and photo forms). The ASHA visit's answer chips are pale green, filled green when chosen (amber for a worry).
+10. **Games:** no "⭐⭐⭐ Level 4" on the intro and no stars at the end (levels are for the family's phone); "You moved up a level" stays as plain text.

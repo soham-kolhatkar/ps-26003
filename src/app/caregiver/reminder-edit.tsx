@@ -1,10 +1,14 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { PressableScale } from '@/components/PressableScale';
+import { Picture } from '@/components/Picture';
+import { Icon, type IconName } from '@/components/Icon';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { confirm, notify } from '@/services/confirm';
 import { pickDateTime } from '@/services/pickDateTime';
@@ -132,7 +136,7 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="✖️" label={t('common.cancel')} onPress={() => router.back()} />
+      <TopBar onBack={() => router.back()} backLabel={t('common.cancel')} backIcon="x" />
       <AppText variant="title">
         {existing ? t('reminders.caregiver.editTitle') : t('reminders.caregiver.newTitle')}
       </AppText>
@@ -144,7 +148,8 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
         {REMINDER_TYPES.map((k) => (
           <Chip
             key={k}
-            label={`${REMINDER_ICON[k]} ${t(`reminders.type.${k}`)}`}
+            glyph={REMINDER_ICON[k]}
+            label={t(`reminders.type.${k}`)}
             on={type === k}
             onPress={() => chooseType(k)}
           />
@@ -173,7 +178,7 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
             </AppText>
             <BigButton
               kind="secondary"
-              icon="📅"
+              icon="calendar"
               label={formatShortDate(new Date(onceAt), language)}
               onPress={() => pickOnce('date')}
             />
@@ -184,7 +189,7 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
             </AppText>
             <BigButton
               kind="secondary"
-              icon="🕰️"
+              icon="clock"
               label={formatTime(new Date(onceAt), language)}
               onPress={() => pickOnce('time')}
             />
@@ -199,47 +204,72 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
             {times.map((x) => (
               <Chip
                 key={x}
-                label={`${formatClock(x, language)}  ✕`}
+                label={formatClock(x, language)}
+                icon="x"
+                a11yLabel={`${t('common.delete')} ${formatClock(x, language)}`}
                 on
                 onPress={() => setTimes((prev) => prev.filter((p) => p !== x))}
               />
             ))}
-            <Chip label={`➕ ${t('reminders.caregiver.addTime')}`} on={false} onPress={addTime} />
+            <Chip label={t('reminders.caregiver.addTime')} icon="plus" on={false} onPress={addTime} />
           </View>
         </>
       )}
 
-      <BigButton size="large" icon="💾" label={t('reminders.caregiver.save')} onPress={save} disabled={!canSave} />
-      {existing ? <BigButton kind="ghost" icon="🗑️" label={t('reminders.caregiver.delete')} onPress={remove} /> : null}
+      <BigButton size="large" icon="save" label={t('reminders.caregiver.save')} onPress={save} disabled={!canSave} />
+      {existing ? (
+        <BigButton kind="danger" icon="trash" label={t('reminders.caregiver.delete')} onPress={remove} />
+      ) : null}
     </Screen>
   );
 }
 
-function Chip({ label, on, onPress }: { label: string; on: boolean; onPress: () => void }) {
+function Chip({
+  label,
+  on,
+  onPress,
+  glyph,
+  icon,
+  a11yLabel,
+}: {
+  label: string;
+  on: boolean;
+  onPress: () => void;
+  /** Picture before the label (reminder type). */
+  glyph?: string;
+  /** Icon after the label (✕ on a time, + on "Add time"). */
+  icon?: IconName;
+  a11yLabel?: string;
+}) {
+  const fg = on ? colors.textOnPrimary : colors.onPrimarySoft;
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityState={{ selected: on }}
+      accessibilityLabel={a11yLabel ?? label}
       onPress={onPress}
       style={[styles.chip, on && styles.chipOn]}
     >
-      <AppText variant="small" bold tone={on ? 'onPrimary' : 'primary'}>
+      {glyph ? <Picture glyph={glyph} size={24} /> : null}
+      {icon === 'plus' ? <Icon name="plus" size={18} color={fg} /> : null}
+      <AppText variant="small" bold style={{ color: fg }}>
         {label}
       </AppText>
-    </Pressable>
+      {icon === 'x' ? <Icon name="x" size={18} color={fg} /> : null}
+    </PressableScale>
   );
 }
 
 const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   chip: {
-    minHeight: 48,
-    justifyContent: 'center',
+    minHeight: 52,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs + 2,
     paddingHorizontal: space.md,
     borderRadius: radius.pill,
-    borderWidth: 2,
-    borderColor: colors.primary,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.primarySoft,
   },
   chipOn: { backgroundColor: colors.primary },
   row: { flexDirection: 'row', gap: space.md },

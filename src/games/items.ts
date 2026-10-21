@@ -43,7 +43,7 @@ export const ITEMS: readonly Item[] = [
   { id: 'chair', emoji: '🪑', category: 'household' },
   { id: 'bicycle', emoji: '🚲', category: 'vehicle' },
   { id: 'mango', emoji: '🥭', category: 'fruit' },
-  { id: 'lamp', emoji: '🪔', category: 'household' },
+  { id: 'teapot', emoji: '🫖', category: 'household' },
   { id: 'bell', emoji: '🔔', category: 'household' },
   { id: 'drum', emoji: '🥁' },
   { id: 'rhino', emoji: '🦏', category: 'animal' },

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { AppText } from '@/components/AppText';
 import { AuthErrorText } from '@/components/AuthErrorText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { ChipGroup } from '@/components/Chip';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
@@ -82,7 +83,7 @@ export function PatientForm() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+      <TopBar />
       <AppText variant="title">{t(isCaregiver ? 'people.addFamilyTitle' : 'people.registerTitle')}</AppText>
       <TextField label={t('people.form.name')} value={name} onChangeText={setName} testID="patient-name" />
       <TextField
@@ -142,7 +143,7 @@ export function PatientForm() {
       <AuthErrorText error={error} phoneRole="" />
       <BigButton
         size="large"
-        icon="💾"
+        icon="save"
         label={busy ? t('common.loading') : t('people.form.save')}
         disabled={busy}
         onPress={save}

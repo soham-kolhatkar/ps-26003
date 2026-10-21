@@ -6,6 +6,7 @@ import { StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { AuthErrorText } from '@/components/AuthErrorText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
 import { resetPinWithCode } from '@/cloud/account';
@@ -44,17 +45,17 @@ export default function ResetPin() {
   if (done) {
     return (
       <Screen>
-        <AppText variant="title">✅ {t('resetPin.done')}</AppText>
+        <AppText variant="title">{t('resetPin.done')}</AppText>
         <AppText>{t('resetPin.doneHint')}</AppText>
-        <BigButton size="large" icon="🔓" label={t('auth.signIn')} onPress={() => router.back()} />
+        <BigButton size="large" icon="lock-open" label={t('auth.signIn')} onPress={() => router.back()} />
       </Screen>
     );
   }
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
-      <AppText variant="title">🔑 {t('resetPin.title')}</AppText>
+      <TopBar />
+      <AppText variant="title">{t('resetPin.title')}</AppText>
       <View style={styles.how}>
         <AppText>{t('resetPin.how')}</AppText>
       </View>
@@ -93,7 +94,7 @@ export default function ResetPin() {
       <AuthErrorText error={error} phoneRole="" />
       <BigButton
         size="large"
-        icon="💾"
+        icon="save"
         label={busy ? t('common.loading') : t('resetPin.save')}
         disabled={busy}
         onPress={submit}

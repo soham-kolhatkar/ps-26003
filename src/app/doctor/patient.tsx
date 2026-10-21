@@ -1,5 +1,5 @@
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Share, StyleSheet, View } from 'react-native';
 
@@ -7,6 +7,11 @@ import { AlertCard } from '@/components/AlertCard';
 import { DoctorNotes } from '@/components/DoctorNotes';
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { Icon, type IconName } from '@/components/Icon';
+import { ListGroup, ListRow } from '@/components/List';
+import { Picture } from '@/components/Picture';
+import { Tabs } from '@/components/Tabs';
+import { TopBar } from '@/components/TopBar';
 import { ChartCard } from '@/components/charts/ChartCard';
 import { LineChart } from '@/components/charts/LineChart';
 import { Meter } from '@/components/charts/Meter';
@@ -37,7 +42,7 @@ import { refreshAlerts } from '@/services/alerts';
 import { formatDayMonth, formatShortDate } from '@/services/datetime';
 import { useDevice } from '@/store/device';
 import { useSettings } from '@/store/settings';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -48,6 +53,8 @@ const DAY = 24 * 60 * 60 * 1000;
  */
 export default function DoctorReport() {
   const { t } = useTranslation();
+  const [tab, setTab] = useState<'summary' | 'games' | 'care' | 'notes'>('summary');
+  const [showHow, setShowHow] = useState(false);
   const { patientId } = useLocalSearchParams<{ patientId: string }>();
   const language = useSettings((s) => s.language);
   const cloud = useDevice((s) => s.mode) === 'cloud';
@@ -140,178 +147,224 @@ export default function DoctorReport() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+      <TopBar />
       <AppText variant="title">{t('doctor.title')}</AppText>
       <PatientCard patient={data.patient} showNotes />
       {cloud ? (
-        <BigButton
-          kind="secondary"
-          icon="👥"
-          label={t('people.button')}
-          onPress={() => router.push({ pathname: '/doctor/people', params: { patientId } })}
-        />
+        <ListGroup>
+          <ListRow
+            icon="users"
+            tone="pond"
+            title={t('people.button')}
+            subtitle={t('people.rowHint', { name })}
+            onPress={() => router.push({ pathname: '/doctor/people', params: { patientId } })}
+          />
+        </ListGroup>
       ) : null}
       <AppText tone="muted">{t('doctor.period', { from: date(from), to: date(now) })}</AppText>
 
-      {referral ? (
+      <Tabs
+        tabs={[
+          { key: 'summary', label: t('doctor.tab.summary') },
+          { key: 'games', label: t('doctor.tab.games') },
+          { key: 'care', label: t('doctor.tab.care') },
+          { key: 'notes', label: t('notes.tab') },
+        ]}
+        value={tab}
+        onChange={setTab}
+      />
+
+      {tab === 'summary' && referral ? (
         <View style={styles.referral}>
-          <AppText variant="large" bold>
-            🩺 {t('doctor.referredBy', { name: data.ashaName ?? t('roles.asha'), date: date(referral.startedAt) })}
-          </AppText>
+          <CardTitle
+            icon="stethoscope"
+            color={colors.warning}
+            text={t('doctor.referredBy', { name: data.ashaName ?? t('roles.asha'), date: date(referral.startedAt) })}
+          />
           {concerns(referral.observations).map((k) => (
             <AppText key={k} variant="small">
               • {t(`visit.obs.${k}.short`)}: {t(`visit.obs.${k}.${referral.observations[k]}`)}
             </AppText>
           ))}
-          {referral.note ? <AppText variant="small">📝 {referral.note}</AppText> : null}
-        </View>
-      ) : null}
-
-      {data.alerts.map((a) => (
-        <AlertCard key={a.id} alert={a} patientName={name} compact />
-      ))}
-
-      <AppText variant="large" bold>
-        {t('doctor.domainsTitle')}
-      </AppText>
-      {domains.length === 0 ? <AppText tone="muted">{t('doctor.noGames')}</AppText> : null}
-      <View style={styles.tiles}>
-        {domains.map((d) => (
-          <StatTile
-            key={d.domain}
-            label={t(`doctor.domain.${d.domain}`)}
-            value={d.recent == null ? '—' : String(d.recent)}
-            delta={changeText(d) ?? { text: t('doctor.notEnough'), tone: 'neutral' }}
-            caption={d.games.map((g) => t(`games.${g}.title`)).join(' · ')}
-          />
-        ))}
-      </View>
-
-      <ChartCard
-        title={t('doctor.weeklyTitle')}
-        subtitle={t('doctor.weeklySubtitle')}
-        showTableLabel={t('progress.table.show')}
-        showChartLabel={t('progress.table.chart')}
-        tableHeader={[t('doctor.week'), t('doctor.index')]}
-        table={[...weeks]
-          .reverse()
-          .map((w) => [formatDayMonth(new Date(w.weekStart), language), w.index == null ? '—' : String(w.index)])}
-      >
-        <LineChart
-          points={weeks.map((w) => ({ label: formatDayMonth(new Date(w.weekStart), language), value: w.index }))}
-          max={100}
-          emptyText={t('doctor.noGames')}
-          readout={(p, i) =>
-            p.value == null
-              ? t('doctor.weekNone', { date: p.label })
-              : t('doctor.weekReadout', { date: p.label, index: p.value, count: weeks[i].sessions })
-          }
-        />
-      </ChartCard>
-
-      <AppText variant="large" bold>
-        {t('doctor.gamesTitle')}
-      </AppText>
-      <View style={styles.table}>
-        <View style={[styles.tr, styles.th]}>
-          <AppText variant="caption" bold style={styles.cGame}>
-            {t('doctor.col.game')}
-          </AppText>
-          <AppText variant="caption" bold style={styles.cNum}>
-            {t('doctor.col.sessions')}
-          </AppText>
-          <AppText variant="caption" bold style={styles.cNum}>
-            {t('doctor.col.level')}
-          </AppText>
-          <AppText variant="caption" bold style={styles.cTrend}>
-            {t('doctor.col.change')}
-          </AppText>
-        </View>
-        {games.map((g) => {
-          const c = changeText(g);
-          return (
-            <View key={g.gameId} style={styles.tr}>
-              <AppText variant="small" style={styles.cGame}>
-                {GAMES.find((x) => x.id === g.gameId)?.icon ?? '🎲'} {t(`games.${g.gameId}.title`)}
-              </AppText>
-              <AppText variant="small" style={[styles.cNum, styles.num]}>
-                {g.sessions}
-              </AppText>
-              <AppText variant="small" style={[styles.cNum, styles.num]}>
-                {g.level}
-              </AppText>
-              <AppText
-                variant="small"
-                bold={c?.tone === 'bad'}
-                style={[styles.cTrend, c?.tone === 'bad' && { color: colors.warning }]}
-              >
-                {c ? c.text : '—'}
+          {referral.note ? (
+            <View style={styles.noteRow}>
+              <Icon name="note" size={18} color={colors.textMuted} />
+              <AppText variant="small" style={styles.flex}>
+                {referral.note}
               </AppText>
             </View>
-          );
-        })}
-      </View>
-
-      {reaction.sessions ? (
-        <View style={styles.card}>
-          <AppText bold>🐟 {t('doctor.reactionTitle')}</AppText>
-          <AppText variant="small">
-            {t('doctor.reaction', { recent: secs(reaction.recentMs), previous: secs(reaction.previousMs) })}
-          </AppText>
+          ) : null}
         </View>
       ) : null}
 
-      <View style={styles.card}>
-        <AppText bold>💊 {t('doctor.remindersTitle')}</AppText>
-        {[
-          ['medicine', medicine],
-          ['hydration', hydration],
-          ['activity', activity],
-        ]
-          .filter(([, a]) => (a as typeof medicine).decided > 0)
-          .map(([type, a]) => {
-            const ad = a as typeof medicine;
-            return (
-              <Meter
-                key={type as string}
-                label={t(`reminders.type.${type}`)}
-                ratio={ad.rate ?? 0}
-                valueText={`${pct(ad.rate)} · ${ad.taken}/${ad.decided}`}
+      {tab === 'summary' && data.alerts.length ? (
+        <AppText variant="large" weight="bold">
+          {t('doctor.alertsTitle')} ({data.alerts.length})
+        </AppText>
+      ) : null}
+      {tab === 'summary' ? data.alerts.map((a) => <AlertCard key={a.id} alert={a} patientName={name} compact />) : null}
+
+      {tab === 'summary' ? (
+        <>
+          <AppText variant="large" bold>
+            {t('doctor.domainsTitle')}
+          </AppText>
+          {domains.length === 0 ? <AppText tone="muted">{t('doctor.noGames')}</AppText> : null}
+          <View style={styles.tiles}>
+            {domains.map((d) => (
+              <StatTile
+                key={d.domain}
+                label={t(`doctor.domain.${d.domain}`)}
+                value={d.recent == null ? '—' : String(d.recent)}
+                delta={changeText(d) ?? { text: t('doctor.notEnough'), tone: 'neutral' }}
+                caption={d.games.map((g) => t(`games.${g}.title`)).join(' · ')}
               />
-            );
-          })}
-        {medicine.decided + hydration.decided + activity.decided === 0 ? (
-          <AppText variant="small" tone="muted">
-            {t('progress.kpi.noData')}
-          </AppText>
-        ) : null}
-      </View>
+            ))}
+          </View>
 
-      <View style={styles.card}>
-        <AppText bold>🏠 {t('doctor.checkupsTitle')}</AppText>
-        {checkups.length === 0 ? (
-          <AppText variant="small" tone="muted">
-            {t('doctor.noCheckups')}
-          </AppText>
-        ) : null}
-        {checkups.slice(0, 5).map((v) => (
-          <AppText key={v.id} variant="small">
-            {date(v.startedAt)} · {t('visit.scoreLine', { score: v.checkupScore })}
-          </AppText>
-        ))}
-      </View>
+          <ChartCard
+            title={t('doctor.weeklyTitle')}
+            subtitle={t('doctor.weeklySubtitle')}
+            showTableLabel={t('progress.table.show')}
+            showChartLabel={t('progress.table.chart')}
+            tableHeader={[t('doctor.week'), t('doctor.index')]}
+            table={[...weeks]
+              .reverse()
+              .map((w) => [formatDayMonth(new Date(w.weekStart), language), w.index == null ? '—' : String(w.index)])}
+          >
+            <LineChart
+              points={weeks.map((w) => ({ label: formatDayMonth(new Date(w.weekStart), language), value: w.index }))}
+              max={100}
+              emptyText={t('doctor.noGames')}
+              readout={(p, i) =>
+                p.value == null
+                  ? t('doctor.weekNone', { date: p.label })
+                  : t('doctor.weekReadout', { date: p.label, index: p.value, count: weeks[i].sessions })
+              }
+            />
+          </ChartCard>
+        </>
+      ) : null}
 
-      <DoctorNotes patientId={patientId} canWrite limit={5} />
+      {tab === 'games' ? (
+        <>
+          <AppText variant="large" bold>
+            {t('doctor.gamesTitle')}
+          </AppText>
+          <View style={styles.table}>
+            <View style={[styles.tr, styles.th]}>
+              <AppText variant="caption" bold style={styles.cGame}>
+                {t('doctor.col.game')}
+              </AppText>
+              <AppText variant="caption" bold style={styles.cNum}>
+                {t('doctor.col.sessions')}
+              </AppText>
+              <AppText variant="caption" bold style={styles.cNum}>
+                {t('doctor.col.level')}
+              </AppText>
+              <AppText variant="caption" bold style={styles.cTrend}>
+                {t('doctor.col.change')}
+              </AppText>
+            </View>
+            {games.map((g) => {
+              const c = changeText(g);
+              return (
+                <View key={g.gameId} style={styles.tr}>
+                  <View style={[styles.cGame, styles.gameCell]}>
+                    <Picture glyph={GAMES.find((x) => x.id === g.gameId)?.icon} size={22} />
+                    <AppText variant="small" style={styles.flex}>
+                      {t(`games.${g.gameId}.title`)}
+                    </AppText>
+                  </View>
+                  <AppText variant="small" style={[styles.cNum, styles.num]}>
+                    {g.sessions}
+                  </AppText>
+                  <AppText variant="small" style={[styles.cNum, styles.num]}>
+                    {g.level}
+                  </AppText>
+                  <AppText
+                    variant="small"
+                    bold={c?.tone === 'bad'}
+                    style={[styles.cTrend, c?.tone === 'bad' && { color: colors.warning }]}
+                  >
+                    {c ? c.text : '—'}
+                  </AppText>
+                </View>
+              );
+            })}
+          </View>
 
-      <BigButton icon="📤" label={t('doctor.share')} onPress={share} />
+          {reaction.sessions ? (
+            <View style={styles.card}>
+              <CardTitle icon="clock" text={t('doctor.reactionTitle')} />
+              <AppText variant="small">
+                {t('doctor.reaction', { recent: secs(reaction.recentMs), previous: secs(reaction.previousMs) })}
+              </AppText>
+            </View>
+          ) : null}
+        </>
+      ) : null}
+
+      {tab === 'care' ? (
+        <>
+          <View style={styles.card}>
+            <CardTitle icon="bell" text={t('doctor.remindersTitle')} />
+            {[
+              ['medicine', medicine],
+              ['hydration', hydration],
+              ['activity', activity],
+            ]
+              .filter(([, a]) => (a as typeof medicine).decided > 0)
+              .map(([type, a]) => {
+                const ad = a as typeof medicine;
+                return (
+                  <Meter
+                    key={type as string}
+                    label={t(`reminders.type.${type}`)}
+                    ratio={ad.rate ?? 0}
+                    valueText={`${pct(ad.rate)} · ${ad.taken}/${ad.decided}`}
+                  />
+                );
+              })}
+            {medicine.decided + hydration.decided + activity.decided === 0 ? (
+              <AppText variant="small" tone="muted">
+                {t('progress.kpi.noData')}
+              </AppText>
+            ) : null}
+          </View>
+
+          <View style={styles.card}>
+            <CardTitle icon="house" text={t('doctor.checkupsTitle')} />
+            {checkups.length === 0 ? (
+              <AppText variant="small" tone="muted">
+                {t('doctor.noCheckups')}
+              </AppText>
+            ) : null}
+            {checkups.slice(0, 5).map((v) => (
+              <AppText key={v.id} variant="small">
+                {date(v.startedAt)} · {t('visit.scoreLine', { score: v.checkupScore })}
+              </AppText>
+            ))}
+          </View>
+        </>
+      ) : null}
+
+      {tab === 'notes' ? <DoctorNotes patientId={patientId} canWrite limit={5} /> : null}
+
+      <BigButton icon="share" label={t('doctor.share')} onPress={share} />
 
       <View style={styles.about}>
-        <AppText variant="small" bold>
-          {t('doctor.howTitle')}
-        </AppText>
-        <AppText variant="small" tone="muted">
-          {t('doctor.how')}
-        </AppText>
+        <BigButton
+          kind="ghost"
+          icon={showHow ? 'caret-left' : 'info'}
+          label={t('doctor.howTitle')}
+          onPress={() => setShowHow(!showHow)}
+        />
+        {showHow ? (
+          <AppText variant="small" tone="muted">
+            {t('doctor.how')}
+          </AppText>
+        ) : null}
         <AppText variant="small" tone="muted">
           {t('doctor.disclaimer')}
         </AppText>
@@ -352,6 +405,18 @@ function summaryText(args: {
     .join('\n');
 }
 
+/** Icon + bold heading inside a report card. */
+function CardTitle({ icon, text, color = colors.text }: { icon: IconName; text: string; color?: string }) {
+  return (
+    <View style={styles.cardTitle}>
+      <Icon name={icon} size={20} color={color} />
+      <AppText weight="bold" style={[styles.flex, { color }]}>
+        {text}
+      </AppText>
+    </View>
+  );
+}
+
 /** Plain title for the shared text (the hook version needs a component). */
 function alertTitle(t: (key: string, opts?: Record<string, unknown>) => string, a: StoredAlert) {
   if (a.kind === 'game_decline') return t('alerts.game_decline.title', { game: t(`games.${a.detail.gameId}.title`) });
@@ -360,21 +425,23 @@ function alertTitle(t: (key: string, opts?: Record<string, unknown>) => string, 
 }
 
 const styles = StyleSheet.create({
-  referral: { gap: space.xs, padding: space.md, borderRadius: radius.md, backgroundColor: colors.warningSoft },
+  referral: { gap: space.xs + 2, padding: space.md, borderRadius: radius.md, backgroundColor: colors.warningSoft },
+  cardTitle: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+  noteRow: { flexDirection: 'row', alignItems: 'flex-start', gap: space.sm },
+  gameCell: { flexDirection: 'row', alignItems: 'center', gap: space.xs + 2 },
+  flex: { flex: 1 },
   tiles: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md },
   card: {
     gap: space.sm,
     padding: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
   table: {
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
     paddingHorizontal: space.sm,
   },
   tr: {

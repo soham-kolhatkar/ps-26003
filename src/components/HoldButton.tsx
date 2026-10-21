@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Icon } from '@/components/Icon';
 import { colors, radius, space, touch } from '@/theme/tokens';
 
 type HoldButtonProps = {
@@ -24,8 +25,9 @@ export function HoldButton({ label, hint, onHold, holdMs = 2000 }: HoldButtonPro
       onLongPress={onHold}
       style={({ pressed }) => [styles.base, pressed && styles.pressed]}
     >
-      <AppText variant="small" tone="muted">
-        🔒 {label}
+      <Icon name="lock" size={20} color={colors.textMuted} />
+      <AppText variant="small" tone="muted" style={styles.label}>
+        {label}
       </AppText>
     </Pressable>
   );
@@ -35,9 +37,13 @@ const styles = StyleSheet.create({
   base: {
     alignSelf: 'center',
     minHeight: touch.min,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
     justifyContent: 'center',
     paddingHorizontal: space.lg,
     borderRadius: radius.pill,
   },
   pressed: { backgroundColor: colors.surfaceMuted },
+  label: { flexShrink: 1 },
 });

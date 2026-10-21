@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { PinPad } from '@/components/PinPad';
 import { Screen } from '@/components/Screen';
 import { FAMILY_PIN_ID, PIN_LENGTH, verifyPin } from '@/services/auth';
@@ -50,9 +51,9 @@ export default function FamilyCorner() {
   if (!open) {
     return (
       <Screen>
-        <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
+        <TopBar />
         <AppText variant="title" center>
-          🔒 {t('family.title')}
+          {t('family.title')}
         </AppText>
         <AppText center tone="muted">
           {t('family.enterPin')}
@@ -69,15 +70,15 @@ export default function FamilyCorner() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="⬅️" label={t('common.back')} onPress={() => router.back()} />
-      <AppText variant="title">🔓 {t('family.title')}</AppText>
+      <TopBar />
+      <AppText variant="title">{t('family.title')}</AppText>
       <BigButton
-        icon="📷"
+        icon="camera"
         label={t('family.photos')}
         onPress={() => router.push({ pathname: '/patient/photos', params: { patientId: patientId ?? '' } })}
       />
       <View style={styles.spacer} />
-      <BigButton kind="ghost" icon="🔌" label={t('family.unpair')} onPress={unpair} />
+      <BigButton kind="danger" icon="plug" label={t('family.unpair')} onPress={unpair} />
     </Screen>
   );
 }

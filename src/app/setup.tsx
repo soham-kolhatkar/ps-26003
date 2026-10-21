@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { BigButton } from '@/components/BigButton';
+import { Picture } from '@/components/Picture';
+import { TopBar } from '@/components/TopBar';
 import { ChoiceCard } from '@/components/ChoiceCard';
 import { Screen } from '@/components/Screen';
 import { confirm } from '@/services/confirm';
@@ -41,12 +42,7 @@ export default function Setup() {
 
   return (
     <Screen>
-      <BigButton
-        kind="ghost"
-        icon="⬅️"
-        label={t('common.back')}
-        onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
-      />
+      <TopBar />
       <View style={styles.header}>
         <Pressable
           onLongPress={openDemo}
@@ -55,9 +51,7 @@ export default function Setup() {
           style={styles.logo}
           testID="setup-logo"
         >
-          <AppText variant="hero" importantForAccessibility="no">
-            🌼
-          </AppText>
+          <Picture glyph="🌼" size={60} />
         </Pressable>
         {/* Hidden: hold the title for the presenter's Demo tools (cloud demo story). */}
         <Pressable onLongPress={() => router.push('/demo-tools')} delayLongPress={1500} testID="setup-title">

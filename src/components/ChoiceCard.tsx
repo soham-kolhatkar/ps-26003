@@ -2,9 +2,10 @@ import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { Card } from '@/components/Card';
+import { Picture } from '@/components/Picture';
 import { colors, radius, space } from '@/theme/tokens';
 
-/** Big tappable card: emoji avatar, title, one-line hint. */
+/** Big tappable card: picture, title, one-line hint. */
 export function ChoiceCard({
   icon,
   title,
@@ -20,9 +21,7 @@ export function ChoiceCard({
     <Card onPress={onPress} accessibilityLabel={`${title}. ${hint}`}>
       <View style={styles.row}>
         <View style={styles.avatar}>
-          <AppText variant="hero" importantForAccessibility="no">
-            {icon}
-          </AppText>
+          <Picture glyph={icon} size={56} />
         </View>
         <View style={styles.body}>
           <AppText variant="large" bold>
@@ -40,10 +39,10 @@ export function ChoiceCard({
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: space.md },
   avatar: {
-    width: 80,
-    height: 80,
+    width: 76,
+    height: 76,
     borderRadius: radius.pill,
-    backgroundColor: colors.primarySoft,
+    backgroundColor: colors.tint.leaf,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -1,9 +1,12 @@
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Icon } from '@/components/Icon';
+import { Picture } from '@/components/Picture';
+import { PressableScale } from '@/components/PressableScale';
 import { ensureEvents, listOccurrences } from '@/db/repos/reminders';
 import { useDbQuery } from '@/db/useDbQuery';
 import { eventState, startOfDay } from '@/engine/reminders';
@@ -41,35 +44,31 @@ export function TodayReminders({ patientId, now, language }: Props) {
   return (
     <View style={styles.wrap}>
       {due.map((o) => (
-        <Pressable
+        <PressableScale
           key={o.eventId}
           accessibilityRole="button"
           accessibilityLabel={`${t(`reminders.prompt.${o.type}.title`)}: ${o.title}`}
           onPress={() => router.push({ pathname: '/patient/reminder/[eventId]', params: { eventId: o.eventId } })}
           style={({ pressed }) => [styles.dueCard, pressed && styles.pressed]}
         >
-          <AppText style={styles.dueEmoji} importantForAccessibility="no">
-            {REMINDER_ICON[o.type]}
-          </AppText>
+          <Picture glyph={REMINDER_ICON[o.type]} size={60} />
           <View style={styles.text}>
-            <AppText variant="small" tone="accent" bold>
-              🔔 {t('reminders.state.due')} · {formatTime(new Date(o.dueAt), language)}
+            <AppText variant="small" tone="onClay" bold>
+              {t('reminders.state.due')} · {formatTime(new Date(o.dueAt), language)}
             </AppText>
-            <AppText variant="large" bold>
+            <AppText variant="large" weight="bold" tone="onClay">
               {o.title}
             </AppText>
           </View>
-          <AppText variant="title" tone="primary" importantForAccessibility="no">
-            ▶
-          </AppText>
-        </Pressable>
+          <Icon name="caret-right" size={28} color={colors.onClay} />
+        </PressableScale>
       ))}
 
       {next ? (
         <View style={styles.nextRow}>
-          <AppText variant="body" tone="muted">
-            {REMINDER_ICON[next.type]} {t('reminders.state.upcoming')} · {formatTime(new Date(next.dueAt), language)} ·{' '}
-            {next.title}
+          <Picture glyph={REMINDER_ICON[next.type]} size={44} />
+          <AppText variant="body" tone="onClay" style={styles.text}>
+            {t('reminders.state.upcoming')} · {formatTime(new Date(next.dueAt), language)} · {next.title}
           </AppText>
         </View>
       ) : due.length === 0 ? (
@@ -90,17 +89,17 @@ const styles = StyleSheet.create({
     minHeight: touch.large,
     padding: space.md,
     borderRadius: radius.lg,
-    borderWidth: 3,
-    borderColor: colors.accent,
-    backgroundColor: colors.accentSoft,
+    backgroundColor: colors.clay,
   },
-  pressed: { opacity: 0.8 },
-  dueEmoji: { fontSize: 44, lineHeight: 54 },
+  pressed: { opacity: 0.85 },
   text: { flex: 1, gap: 2 },
   nextRow: {
-    paddingVertical: space.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm + 4,
+    paddingVertical: space.sm + 4,
     paddingHorizontal: space.md,
     borderRadius: radius.md,
-    backgroundColor: colors.surfaceMuted,
+    backgroundColor: colors.clay,
   },
 });
