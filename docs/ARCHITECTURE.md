@@ -59,3 +59,5 @@ F22: `games/ui/` (`Prompt` + `Feedback`, `Board` with `bestColumns`/`tileSize`, 
 
 F23: `engine/highlights` (Progress summary), `StatTile third`, `Meter` on the reminders list; caregiver Progress / Reminders / Photos / alerts restyled; `PeopleScreen` sorts members by role and gives each Reset PIN / Remove pill a `testID` with the person's name (e2e targets them).
 
+F24: `asha/visit` = intro → check-up → one question per screen (`question` index; `AnswerTile`) → finish (answers list, note, refer switch, next visit) → saved. `components/Disclosure` (folded explanation row). `DoctorNotes` restyled. e2e `f24-visit-demo` covers the visit offline.
+

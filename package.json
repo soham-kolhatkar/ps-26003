@@ -62,7 +62,7 @@
     "tunnel": "expo start --tunnel",
     "usb": "bash scripts/usb.sh",
     "web": "expo start --localhost",
-    "e2e": "node e2e/f15-demo.mjs && node e2e/f15-cloud.mjs && node e2e/f16-people.mjs && node e2e/f17-sync.mjs && node e2e/f18-extras.mjs && node e2e/f19-demo.mjs && node e2e/f21-sos-demo.mjs && node e2e/f21-sos-cloud.mjs",
+    "e2e": "node e2e/f15-demo.mjs && node e2e/f15-cloud.mjs && node e2e/f16-people.mjs && node e2e/f17-sync.mjs && node e2e/f18-extras.mjs && node e2e/f19-demo.mjs && node e2e/f21-sos-demo.mjs && node e2e/f21-sos-cloud.mjs && node e2e/f24-visit-demo.mjs",
     "android": "expo run:android",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",

@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** none (F23 merged 2026-10-21).
-**Next:** F24 ASHA and doctor.
+**Current feature:** F24 ASHA and doctor, on `feat/f24-asha-doctor`: pushed, **waiting for the user's test** (checklist at the end of TESTING.md).
+**Next:** F25 Assamese.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -45,7 +45,7 @@ The user found the UI cluttered and messy (2026-10-21). Full plan and research: 
 | F21 | Patient phone: SOS call family (D53, SQL 006), home (today's 3 games + all games), reminder screen | ✅ done (3c5df28) |
 | F22 | Games: shell, boards, prompts, end-of-game bloom, all 8 games (D54) | ✅ done (0fcb458) |
 | F23 | Family caregiver: progress dashboard (D55), reminders, photos, people, alerts | ✅ done (cd2310a) |
-| F24 | ASHA and doctor: triage home, patient page, visit form, report, alerts, notes | ⏳ |
+| F24 | ASHA and doctor: home visit one question per screen (D56), report header and explainer, notes, alerts | 🧪 testing |
 | F25 | Assamese pack (was F14, moved here by the user) | ⏳ |
 | F26 | Polish, accessibility pass, APK v0.4.0, tag v0.4.0 | ⏳ |
 

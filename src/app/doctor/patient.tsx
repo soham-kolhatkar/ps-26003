@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Share, StyleSheet, View } from 'react-native';
 
 import { AlertCard } from '@/components/AlertCard';
+import { Disclosure } from '@/components/Disclosure';
 import { DoctorNotes } from '@/components/DoctorNotes';
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
@@ -54,7 +55,6 @@ const DAY = 24 * 60 * 60 * 1000;
 export default function DoctorReport() {
   const { t } = useTranslation();
   const [tab, setTab] = useState<'summary' | 'games' | 'care' | 'notes'>('summary');
-  const [showHow, setShowHow] = useState(false);
   const { patientId } = useLocalSearchParams<{ patientId: string }>();
   const language = useSettings((s) => s.language);
   const cloud = useDevice((s) => s.mode) === 'cloud';
@@ -149,7 +149,7 @@ export default function DoctorReport() {
     <Screen>
       <TopBar />
       <AppText variant="title">{t('doctor.title')}</AppText>
-      <PatientCard patient={data.patient} showNotes />
+      <PatientCard patient={data.patient} showNotes={tab === 'summary'} />
       {cloud ? (
         <ListGroup>
           <ListRow
@@ -353,22 +353,14 @@ export default function DoctorReport() {
 
       <BigButton icon="share" label={t('doctor.share')} onPress={share} />
 
-      <View style={styles.about}>
-        <BigButton
-          kind="ghost"
-          icon={showHow ? 'caret-left' : 'info'}
-          label={t('doctor.howTitle')}
-          onPress={() => setShowHow(!showHow)}
-        />
-        {showHow ? (
-          <AppText variant="small" tone="muted">
-            {t('doctor.how')}
-          </AppText>
-        ) : null}
+      <Disclosure label={t('doctor.howTitle')}>
         <AppText variant="small" tone="muted">
-          {t('doctor.disclaimer')}
+          {t('doctor.how')}
         </AppText>
-      </View>
+      </Disclosure>
+      <AppText variant="caption" tone="muted">
+        {t('doctor.disclaimer')}
+      </AppText>
     </Screen>
   );
 }
@@ -457,5 +449,4 @@ const styles = StyleSheet.create({
   cNum: { flex: 1, textAlign: 'right' },
   cTrend: { flex: 2.4, textAlign: 'right' },
   num: { fontVariant: ['tabular-nums'] },
-  about: { gap: space.xs, padding: space.md, backgroundColor: colors.surfaceMuted, borderRadius: radius.md },
 });

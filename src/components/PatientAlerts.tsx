@@ -1,11 +1,10 @@
 import { useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
 
 import { AlertCard } from '@/components/AlertCard';
 import { AppText } from '@/components/AppText';
-import { BigButton } from '@/components/BigButton';
+import { Disclosure } from '@/components/Disclosure';
 import { StatusLine } from '@/components/StatusLine';
 import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
@@ -13,7 +12,6 @@ import { listAlerts, markAlertsSeen } from '@/db/repos/alerts';
 import { displayName, getPatient } from '@/db/repos/patients';
 import { useDbQuery } from '@/db/useDbQuery';
 import { refreshAlerts } from '@/services/alerts';
-import { colors, radius, space } from '@/theme/tokens';
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -25,7 +23,6 @@ const DAY = 24 * 60 * 60 * 1000;
 export function PatientAlerts() {
   const { t } = useTranslation();
   const { patientId } = useLocalSearchParams<{ patientId: string }>();
-  const [showHow, setShowHow] = useState(false);
   const { data, reload } = useDbQuery(
     async (db) => {
       const now = Date.now();
@@ -61,26 +58,14 @@ export function PatientAlerts() {
           ))}
         </>
       ) : null}
-      <View style={styles.about}>
-        <BigButton
-          kind="ghost"
-          icon={showHow ? 'caret-left' : 'info'}
-          label={t('alerts.howTitle')}
-          onPress={() => setShowHow(!showHow)}
-        />
-        {showHow ? (
-          <AppText variant="small" tone="muted">
-            {t('alerts.how')}
-          </AppText>
-        ) : null}
+      <Disclosure label={t('alerts.howTitle')}>
         <AppText variant="small" tone="muted">
-          {t('alerts.disclaimer')}
+          {t('alerts.how')}
         </AppText>
-      </View>
+      </Disclosure>
+      <AppText variant="caption" tone="muted">
+        {t('alerts.disclaimer')}
+      </AppText>
     </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  about: { gap: space.xs, padding: space.md, backgroundColor: colors.surfaceMuted, borderRadius: radius.md },
-});
