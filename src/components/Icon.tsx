@@ -10,8 +10,10 @@ import { BackspaceIcon } from 'phosphor-react-native/src/icons/Backspace';
 import { BellIcon } from 'phosphor-react-native/src/icons/Bell';
 import { CalendarBlankIcon } from 'phosphor-react-native/src/icons/CalendarBlank';
 import { CameraIcon } from 'phosphor-react-native/src/icons/Camera';
+import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
 import { CaretLeftIcon } from 'phosphor-react-native/src/icons/CaretLeft';
 import { CaretRightIcon } from 'phosphor-react-native/src/icons/CaretRight';
+import { CaretUpIcon } from 'phosphor-react-native/src/icons/CaretUp';
 import { ChartBarIcon } from 'phosphor-react-native/src/icons/ChartBar';
 import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
 import { CheckCircleIcon } from 'phosphor-react-native/src/icons/CheckCircle';
@@ -80,8 +82,10 @@ const ICONS = {
   bell: BellIcon,
   calendar: CalendarBlankIcon,
   camera: CameraIcon,
+  'caret-down': CaretDownIcon,
   'caret-left': CaretLeftIcon,
   'caret-right': CaretRightIcon,
+  'caret-up': CaretUpIcon,
   chart: ChartBarIcon,
   check: CheckIcon,
   'check-circle': CheckCircleIcon,

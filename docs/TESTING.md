@@ -380,3 +380,15 @@
 8. **Family photos** (demo): "Add photos of at least 2 people…" as a grey line (green with a tick once unlocked), Take photo / Choose from gallery, the privacy note with a 🔒 icon, photos two per row filling the width.
 9. **People** (cloud): family first, then the ASHA worker, then the doctor; under each, small **Reset PIN** and red **Remove** pills side by side. **Add people**: Pair a new phone, then one list: Invite the ASHA worker / the doctor / a family member. Only after **Invite a family member** do the relation chips appear, with **Create a code for them**.
 10. **Things to look at** screen (from See all): "✓ Nothing to look at right now." when clear; the cards; "How Smriti notices these" folded (tap to open).
+
+## F24 ASHA and doctor checklist
+> Demo → **Sunita** (1234) and **Dr. Anjali** (1234); cloud too if you like. The homes, patient-page tabs and report tabs came in the F20 fixes; this is the visit and the details.
+1. **Start a home visit** (Sunita → Ramesh → Start home visit): Back top left, "Home visit: Ramesh", the 5-minute intro, a pale green hand-over note with a 🤝 icon, **Start check-up** and **Skip check-up** at the bottom.
+2. **Check-up** (Start check-up): three tasks, each with its picture, Start / Hear again, and a **Skip** pill top left while playing (as in F22).
+3. **Questions:** "Question 1 of 6" next to Back, a slim bar, the question in large text, the answers as **big white tiles in one column** with a round mark. Worrying answers show an amber dot + **Worth noting**. Tap an answer → it turns green, then the next question appears by itself. **Back** returns to the previous one; **Not sure, skip** leaves it unanswered.
+4. **Finish the visit:** the check-up result (or "No check-up this time"); **Your answers (tap to change)**: one row per question, worrying answers in amber with a dot; tapping a row goes back to that question (the other answers stay). Then Note, a **Refer to the doctor** row with a switch (the row turns pale red when on), **Next visit** chips (the suggestion pre-selected) and **Save visit**.
+5. **Visit saved:** a big green tick, the score line, the next visit date, "▲ Referred to the doctor" if referred, **Back to patient** → the Visits tab shows it.
+6. **Dr. Anjali → Ramesh:** on **Summary** the patient card has the notes ("Former paddy farmer…"); on Games / Care / Notes only the name card (less to scroll). At the bottom of every tab: **Share summary**, a folded **ⓘ How to read this report ⌄** row (tap to open) and the "not a diagnostic test" line.
+7. **Doctor's notes** (Notes tab, and on the family's Progress / Sunita's Notes tab): a 🩺 title, each note in a soft green box with author · date, and a small red **Delete** pill on your own notes.
+8. **Things to look at** screen: "How Smriti notices these" is the same folded row.
+9. Hindi: the visit questions and answers read naturally ("सवाल 1 / 6", "ध्यान दें", "दौरा पूरा करें").

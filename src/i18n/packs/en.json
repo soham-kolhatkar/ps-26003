@@ -584,7 +584,7 @@
     "intro": "About 5 minutes: a short check-up with {{name}} (3 small tasks), then a few questions for you.",
     "handOver": "Sit with {{name}} and hand over the phone. The app reads every task aloud. The tasks are always the same, so results can be compared from visit to visit.",
     "startCheckup": "Start check-up",
-    "skipCheckup": "Skip check-up (questions only)",
+    "skipCheckup": "Skip check-up",
     "formTitle": "Visit notes: {{name}}",
     "scoreLine": "Check-up score {{score}}",
     "noCheckup": "No check-up this time",
@@ -663,7 +663,14 @@
       }
     },
     "partial": "(partial)",
-    "tab": "Visits"
+    "tab": "Visits",
+    "questionOf": "Question {{n}} of {{total}}",
+    "finishTitle": "Finish the visit",
+    "answersTitle": "Your answers (tap to change)",
+    "skipQuestion": "Not sure, skip",
+    "notAnswered": "Not answered",
+    "worthNoting": "Worth noting",
+    "checkupTitle": "Check-up"
   },
   "doctor": {
     "title": "Cognitive trend report",

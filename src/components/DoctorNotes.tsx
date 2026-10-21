@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Icon } from '@/components/Icon';
+import { TopBarButton } from '@/components/TopBar';
 import { BigButton } from '@/components/BigButton';
 import { TextField } from '@/components/TextField';
 import { getDb } from '@/db/client';
@@ -53,16 +55,23 @@ export function DoctorNotes({
 
   return (
     <View style={styles.card}>
-      <AppText bold>{t(canWrite ? 'notes.titleDoctor' : 'notes.title')}</AppText>
+      <View style={styles.head}>
+        <Icon name="stethoscope" size={22} color={colors.onPrimarySoft} />
+        <AppText weight="bold" style={styles.flex}>
+          {t(canWrite ? 'notes.titleDoctor' : 'notes.title')}
+        </AppText>
+      </View>
       {notes?.map((n) => (
         <View key={n.id} style={styles.note}>
-          <AppText variant="small">{n.body}</AppText>
-          <AppText variant="caption" tone="muted">
-            {[n.authorName, formatShortDate(new Date(n.createdAt), language)].filter(Boolean).join(' · ')}
-          </AppText>
-          {canWrite && n.authorId === userId ? (
-            <BigButton kind="danger" icon="trash" label={t('notes.delete')} onPress={() => remove(n.id)} />
-          ) : null}
+          <AppText variant="body">{n.body}</AppText>
+          <View style={styles.meta}>
+            <AppText variant="caption" tone="muted" style={styles.flex}>
+              {[n.authorName, formatShortDate(new Date(n.createdAt), language)].filter(Boolean).join(' · ')}
+            </AppText>
+            {canWrite && n.authorId === userId ? (
+              <TopBarButton icon="trash" danger label={t('notes.delete')} onPress={() => remove(n.id)} />
+            ) : null}
+          </View>
         </View>
       ))}
       {canWrite ? (
@@ -91,5 +100,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     boxShadow: shadow.card,
   },
-  note: { gap: 2, paddingLeft: space.sm, borderLeftWidth: 3, borderLeftColor: colors.primary },
+  head: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+  flex: { flex: 1 },
+  note: { gap: space.xs, padding: space.sm + 4, borderRadius: radius.sm, backgroundColor: colors.primaryWash },
+  meta: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
 });

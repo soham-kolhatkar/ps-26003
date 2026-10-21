@@ -1,9 +1,10 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Switch, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { ChipGroup } from '@/components/Chip';
 import { StatusLine } from '@/components/StatusLine';
 import { PressableScale } from '@/components/PressableScale';
 import { Icon } from '@/components/Icon';
@@ -28,7 +29,6 @@ import {
   suggestNextVisitDays,
   VISIT_INTERVAL_CHOICES,
   type CheckupTask,
-  type ObservationKey,
   type Observations,
 } from '@/engine/visits';
 import { CheckupRunner } from '@/games/CheckupRunner';
@@ -39,6 +39,8 @@ import { useSettings } from '@/store/settings';
 import { colors, radius, shadow, space, touch } from '@/theme/tokens';
 
 const DAY = 24 * 60 * 60 * 1000;
+/** The chosen answer stays visible this long before the next question. */
+const ANSWER_PAUSE_MS = 350;
 type Phase = 'intro' | 'checkup' | 'form' | 'saved';
 
 /**
@@ -58,6 +60,8 @@ export default function HomeVisit() {
   const [refer, setRefer] = useState(false);
   const [nextDays, setNextDays] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
+  /** Which question is on screen; one past the last = the finish screen. */
+  const [question, setQuestion] = useState(0);
 
   const { data } = useDbQuery(
     async (db) => ({
@@ -118,8 +122,10 @@ export default function HomeVisit() {
         <AppText variant="title">{t('visit.title', { name })}</AppText>
         <AppText variant="large">{t('visit.intro', { name })}</AppText>
         <View style={styles.hint}>
-          <AppText>{t('visit.handOver', { name })}</AppText>
+          <Icon name="handshake" size={24} color={colors.onPrimarySoft} />
+          <AppText style={styles.flex}>{t('visit.handOver', { name })}</AppText>
         </View>
+        <View style={styles.fill} />
         <BigButton size="large" icon="play" label={t('visit.startCheckup')} onPress={() => setPhase('checkup')} />
         <BigButton kind="secondary" icon="skip" label={t('visit.skipCheckup')} onPress={() => setPhase('form')} />
       </Screen>
@@ -131,9 +137,15 @@ export default function HomeVisit() {
     const change = score != null && prev != null && isCompleteCheckup(tasks) ? score - prev : null;
     return (
       <Screen>
-        <AppText variant="title">{t('visit.saved')}</AppText>
+        <View style={styles.fill} />
+        <View style={styles.savedHead}>
+          <Icon name="check-circle" size={72} weight="fill" color={colors.primary} />
+          <AppText variant="title" center>
+            {t('visit.saved')}
+          </AppText>
+        </View>
         <View style={styles.card}>
-          <AppText variant="large" bold>
+          <AppText variant="large" weight="bold">
             {score != null ? t('visit.scoreLine', { score }) : t('visit.noCheckup')}
             {score != null && !isCompleteCheckup(tasks) ? ` ${t('visit.partial')}` : ''}
           </AppText>
@@ -149,7 +161,9 @@ export default function HomeVisit() {
           <AppText>{t('visit.nextOn', { date: formatShortDate(new Date(nowMs() + days * DAY), language) })}</AppText>
           {refer ? <StatusLine status="urgent" text={t('visit.referred')} /> : null}
         </View>
+        <View style={styles.fill} />
         <BigButton
+          size="large"
           icon="arrow-left"
           label={t('visit.backToPatient')}
           onPress={() => {
@@ -161,12 +175,50 @@ export default function HomeVisit() {
     );
   }
 
-  // ---- form: observations, note, referral, next visit ----
+  // ---- questions, one per screen (CommCare / CHT: one thing at a time, big answers) ----
+  if (question < OBSERVATION_KEYS.length) {
+    const key = OBSERVATION_KEYS[question];
+    const answer = (option: string) => {
+      setObs({ ...obs, [key]: option });
+      // A short pause so the choice is seen, then the next question (Back to change it).
+      setTimeout(() => setQuestion((q) => (q === question ? q + 1 : q)), ANSWER_PAUSE_MS);
+    };
+    return (
+      <Screen>
+        <TopBar
+          onBack={() => (question > 0 ? setQuestion(question - 1) : setPhase('intro'))}
+          title={t('visit.questionOf', { n: question + 1, total: OBSERVATION_KEYS.length })}
+        />
+        <View style={styles.track}>
+          <View style={[styles.bar, { width: `${(question / OBSERVATION_KEYS.length) * 100}%` }]} />
+        </View>
+        <AppText variant="title">{t(`visit.obs.${key}.q`)}</AppText>
+        <View style={styles.answers}>
+          {OBSERVATIONS[key].map((option) => (
+            <AnswerTile
+              key={option}
+              label={t(`visit.obs.${key}.${option}`)}
+              selected={obs[key] === option}
+              concerning={isConcerning(key, option)}
+              onPress={() => answer(option)}
+            />
+          ))}
+        </View>
+        <BigButton kind="ghost" icon="skip" label={t('visit.skipQuestion')} onPress={() => setQuestion(question + 1)} />
+      </Screen>
+    );
+  }
+
+  // ---- finish: answers at a glance, note, referral, next visit ----
   return (
     <Screen>
-      <AppText variant="title">{t('visit.formTitle', { name })}</AppText>
+      <TopBar onBack={() => setQuestion(OBSERVATION_KEYS.length - 1)} title={t('visit.finishTitle')} />
+
       <View style={styles.card}>
-        <AppText variant="large" bold>
+        <AppText variant="small" weight="bold" tone="muted">
+          {t('visit.checkupTitle')}
+        </AppText>
+        <AppText variant="large" weight="bold">
           {score != null ? t('visit.scoreLine', { score }) : t('visit.noCheckup')}
           {score != null && !isCompleteCheckup(tasks) ? ` ${t('visit.partial')}` : ''}
         </AppText>
@@ -180,12 +232,37 @@ export default function HomeVisit() {
         ))}
       </View>
 
-      <AppText variant="large" bold>
-        {t('visit.questionsTitle')}
-      </AppText>
-      {OBSERVATION_KEYS.map((key) => (
-        <ObservationRow key={key} k={key} value={obs[key]} onChange={(v) => setObs({ ...obs, [key]: v })} />
-      ))}
+      <View style={styles.list}>
+        <AppText variant="small" weight="bold" tone="muted" style={styles.listTitle}>
+          {t('visit.answersTitle')}
+        </AppText>
+        {OBSERVATION_KEYS.map((k, i) => {
+          const v = obs[k];
+          const worry = v != null && isConcerning(k, v);
+          return (
+            <PressableScale
+              key={k}
+              accessibilityRole="button"
+              accessibilityLabel={`${t(`visit.obs.${k}.short`)}: ${v ? t(`visit.obs.${k}.${v}`) : t('visit.notAnswered')}`}
+              onPress={() => setQuestion(i)}
+              style={({ pressed }) => [styles.answerRow, pressed && styles.pressed]}
+            >
+              <AppText variant="body" style={styles.flex}>
+                {t(`visit.obs.${k}.short`)}
+              </AppText>
+              {worry ? <Icon name="circle" size={14} weight="fill" color={colors.warning} /> : null}
+              <AppText
+                variant="body"
+                weight="semibold"
+                style={{ color: worry ? colors.warning : v ? colors.text : colors.textMuted }}
+              >
+                {v ? t(`visit.obs.${k}.${v}`) : t('visit.notAnswered')}
+              </AppText>
+              <Icon name="caret-right" size={20} color={colors.textMuted} />
+            </PressableScale>
+          );
+        })}
+      </View>
 
       <TextField
         label={t('visit.note')}
@@ -196,22 +273,26 @@ export default function HomeVisit() {
         style={styles.note}
       />
 
-      <BigButton
-        kind="secondary"
-        icon={refer ? 'check-square' : 'square'}
-        selected={refer}
-        label={t('visit.refer')}
-        onPress={() => setRefer(!refer)}
-      />
-
-      <AppText variant="small" bold>
-        {t('visit.nextVisit')}
-      </AppText>
-      <View style={styles.chips}>
-        {VISIT_INTERVAL_CHOICES.map((d) => (
-          <Chip key={d} label={t('visit.inDays', { n: d })} selected={days === d} onPress={() => setNextDays(d)} />
-        ))}
+      <View style={[styles.referRow, refer && styles.referOn]}>
+        <Icon name="stethoscope" size={26} color={refer ? colors.danger : colors.textMuted} />
+        <AppText variant="body" weight="semibold" style={styles.flex}>
+          {t('visit.refer')}
+        </AppText>
+        <Switch
+          value={refer}
+          onValueChange={setRefer}
+          accessibilityLabel={t('visit.refer')}
+          trackColor={{ true: colors.danger, false: colors.border }}
+        />
       </View>
+
+      <ChipGroup
+        label={t('visit.nextVisit')}
+        options={VISIT_INTERVAL_CHOICES.map(String)}
+        value={String(days)}
+        onChange={(v) => setNextDays(v == null ? null : Number(v))}
+        labelFor={(d) => t('visit.inDays', { n: Number(d) })}
+      />
       {nextDays == null ? (
         <AppText variant="caption" tone="muted">
           {t('visit.suggested', { n: suggested })}
@@ -223,67 +304,60 @@ export default function HomeVisit() {
   );
 }
 
-function ObservationRow({
-  k,
-  value,
-  onChange,
-}: {
-  k: ObservationKey;
-  value: string | undefined;
-  onChange: (v: never) => void;
-}) {
-  const { t } = useTranslation();
-  return (
-    <View style={styles.obs}>
-      <AppText bold>{t(`visit.obs.${k}.q`)}</AppText>
-      <View style={styles.chips}>
-        {OBSERVATIONS[k].map((option) => (
-          <Chip
-            key={option}
-            label={t(`visit.obs.${k}.${option}`)}
-            selected={value === option}
-            warn={isConcerning(k, option)}
-            onPress={() => onChange(option as never)}
-          />
-        ))}
-      </View>
-    </View>
-  );
-}
-
-function Chip({
+/** One answer: a full-width tile with a radio mark; worrying answers carry an amber dot and a word. */
+function AnswerTile({
   label,
   selected,
-  warn,
+  concerning,
   onPress,
 }: {
   label: string;
   selected: boolean;
-  warn?: boolean;
+  concerning: boolean;
   onPress: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <PressableScale
-      accessibilityRole="button"
+      accessibilityRole="radio"
       accessibilityState={{ selected }}
       accessibilityLabel={label}
       onPress={onPress}
-      style={[styles.chip, selected && (warn ? styles.chipWarn : styles.chipOn)]}
+      style={({ pressed }) => [styles.answer, selected && styles.answerOn, pressed && !selected && styles.pressed]}
     >
-      {selected ? <Icon name="check" size={20} color={warn ? colors.warning : colors.textOnPrimary} /> : null}
-      <AppText
-        variant="small"
-        bold
-        style={[styles.chipText, { color: selected ? (warn ? colors.warning : colors.textOnPrimary) : colors.onPrimarySoft }]}
-      >
+      <Icon
+        name={selected ? 'check-circle' : 'circle'}
+        size={28}
+        weight={selected ? 'fill' : 'regular'}
+        color={selected ? colors.primary : colors.textMuted}
+      />
+      <AppText variant="large" weight="semibold" style={styles.flex}>
         {label}
       </AppText>
+      {concerning ? (
+        <View style={styles.worry}>
+          <Icon name="circle" size={12} weight="fill" color={colors.warning} />
+          <AppText variant="caption" weight="semibold" style={{ color: colors.warning }}>
+            {t('visit.worthNoting')}
+          </AppText>
+        </View>
+      ) : null}
     </PressableScale>
   );
 }
 
 const styles = StyleSheet.create({
-  hint: { padding: space.md, backgroundColor: colors.primarySoft, borderRadius: radius.md },
+  fill: { flex: 1 },
+  flex: { flex: 1 },
+  hint: {
+    flexDirection: 'row',
+    gap: space.sm + 4,
+    alignItems: 'flex-start',
+    padding: space.md,
+    backgroundColor: colors.primaryWash,
+    borderRadius: radius.md,
+  },
+  savedHead: { alignItems: 'center', gap: space.sm },
   card: {
     gap: space.xs,
     padding: space.md,
@@ -291,19 +365,43 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     boxShadow: shadow.card,
   },
-  obs: { gap: space.xs },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
-  chip: {
-    minHeight: touch.min,
+  track: { height: 8, borderRadius: radius.pill, backgroundColor: colors.surfaceMuted, overflow: 'hidden' },
+  bar: { height: 8, borderRadius: radius.pill, backgroundColor: colors.primary },
+  answers: { gap: space.sm + 4 },
+  answer: {
+    minHeight: touch.medium,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: space.xs + 2,
-    paddingHorizontal: space.md + 2,
-    borderRadius: radius.pill,
-    backgroundColor: colors.primarySoft,
+    gap: space.md,
+    paddingHorizontal: space.md,
+    borderRadius: radius.md,
+    borderWidth: 3,
+    borderColor: 'transparent',
+    backgroundColor: colors.surface,
+    boxShadow: shadow.card,
   },
-  chipText: { flexShrink: 1 },
-  chipOn: { backgroundColor: colors.primary },
-  chipWarn: { backgroundColor: colors.warningSoft },
+  answerOn: { borderColor: colors.primary, backgroundColor: colors.primaryWash },
+  pressed: { backgroundColor: colors.primaryWash },
+  worry: { flexDirection: 'row', alignItems: 'center', gap: space.xs },
+  list: { backgroundColor: colors.surface, borderRadius: radius.md, boxShadow: shadow.card, paddingVertical: space.sm },
+  listTitle: { paddingHorizontal: space.md, paddingBottom: space.xs },
+  answerRow: {
+    minHeight: 56,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+    paddingHorizontal: space.md,
+  },
   note: { minHeight: 96, textAlignVertical: 'top', paddingTop: space.sm },
+  referRow: {
+    minHeight: touch.min + 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm + 4,
+    paddingHorizontal: space.md,
+    borderRadius: radius.md,
+    backgroundColor: colors.surface,
+    boxShadow: shadow.card,
+  },
+  referOn: { backgroundColor: colors.accentSoft },
 });
