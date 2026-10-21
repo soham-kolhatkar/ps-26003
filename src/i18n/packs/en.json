@@ -98,18 +98,20 @@
     "level": "Level {{level}}",
     "stop": "Stop",
     "progress": "{{done}} of {{total}}",
-    "doneTitle": "Well done, {{name}}!",
-    "doneSpoken": "Well done {{name}}! You played very nicely.",
-    "levelUp": "Next time: a new level!",
+    "doneTitle": "Well done, {{name}}",
+    "doneSpoken": "Well done, {{name}}. You finished {{game}}.",
     "playAgain": "Play again",
     "home": "Home",
-    "notFound": "This game is not available."
+    "notFound": "This game is not available.",
+    "doneLine": "You finished {{game}}."
   },
   "feedback": {
-    "praise1": "Very good!",
-    "praise2": "Wonderful!",
-    "praise3": "Well done!",
-    "praise4": "That's right!"
+    "praise1": "That's right.",
+    "praise2": "Yes, well done.",
+    "praise3": "Good, that's the one.",
+    "praise4": "Correct.",
+    "rightItem": "Yes, that's the {{item}}.",
+    "rightPerson": "Yes, this is {{name}}."
   },
   "games": {
     "object_recognition": {
@@ -186,9 +188,9 @@
       "rememberCount": "Remember: {{done}} of {{total}}",
       "recapTitle": "Remember these",
       "recap": "Remember: {{list}}.",
-      "breakTitle": "Tap all the stars",
-      "break": "Now a short break. Tap all the stars.",
-      "star": "Star",
+      "breakTitle": "Tap all the flowers",
+      "break": "Now a short break. Tap all the flowers.",
+      "star": "Flower",
       "find": "Find the {{count}} pictures you saw",
       "findSpoken": "Which pictures did you see? Find {{count}}.",
       "foundCount": "Found {{found}} of {{total}}",

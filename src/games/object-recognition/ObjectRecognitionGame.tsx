@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { AppText } from '@/components/AppText';
-import { BigButton } from '@/components/BigButton';
 import { nowMs } from '@/engine/clock';
-import { colors, radius, space } from '@/theme/tokens';
+import { space } from '@/theme/tokens';
 
-import { hapticGentle, hapticSuccess, randomPraise } from '../feedback';
+import { hapticGentle, hapticSuccess } from '../feedback';
 import { afterSpeech, useAlive } from '../pacing';
 import type { GameProps } from '../types';
 import type { Item } from '../items';
+import { Board } from '../ui/Board';
+import { PictureTile, type TileState } from '../ui/PictureTile';
+import { Feedback, Prompt } from '../ui/Prompt';
 import { levelParams, makeRounds } from './rounds';
 
 /** Minimum time the solved round stays on screen (praise is always heard in full). */
@@ -60,7 +61,7 @@ export function ObjectRecognitionGame({ level, totalTrials, onTrial, onComplete,
     if (!missed) onTrial({ correct: true, reactionMs });
     hapticSuccess();
     setSolved(true);
-    await afterSpeech(say(randomPraise(t)), NEXT_ROUND_DELAY_MS);
+    await afterSpeech(say(t('feedback.rightItem', { item: targetName })), NEXT_ROUND_DELAY_MS);
     if (!alive.current) return;
     if (index + 1 >= rounds.length) {
       onComplete();
@@ -72,83 +73,34 @@ export function ObjectRecognitionGame({ level, totalTrials, onTrial, onComplete,
     setSolved(false);
   };
 
-  const columns = round.options.length > 4 ? 3 : 2;
+  const tileState = (item: Item): TileState => {
+    if (item.id === round.target.id) return solved ? 'solved' : missed ? 'hint' : 'idle';
+    return wrongId === item.id ? 'dimmed' : 'idle';
+  };
 
   return (
     <View style={styles.wrap}>
-      <View style={styles.prompt}>
-        {showTargetPicture ? (
-          <AppText style={styles.promptEmoji} importantForAccessibility="no">
-            {round.target.emoji}
-          </AppText>
-        ) : null}
-        <AppText variant="title" center>
-          {prompt}
-        </AppText>
-        <BigButton kind="ghost" icon="speaker" label={t('game.hearAgain')} onPress={() => say(prompt)} />
-      </View>
-
-      <View style={styles.grid}>
-        {round.options.map((item) => {
-          const isTarget = item.id === round.target.id;
-          const highlight = isTarget && (missed || solved);
-          return (
-            <Pressable
+      <Prompt text={prompt} glyph={showTargetPicture ? round.target.emoji : undefined} onHear={() => say(prompt)} />
+      <Board count={round.options.length}>
+        {(size) =>
+          round.options.map((item) => (
+            <PictureTile
               key={`${index}-${item.id}`}
-              accessibilityRole="button"
-              accessibilityLabel={t(`items.${item.id}`)}
+              glyph={item.emoji}
+              label={t(`items.${item.id}`)}
+              showLabel={solved && item.id === round.target.id}
+              size={size}
+              state={tileState(item)}
               onPress={() => onPick(item)}
-              style={({ pressed }) => [
-                styles.tile,
-                { flexBasis: columns === 3 ? '30%' : '46%' },
-                pressed && styles.tilePressed,
-                highlight && (solved ? styles.tileSolved : styles.tileHint),
-                wrongId === item.id && !isTarget && styles.tileWrong,
-              ]}
-            >
-              <AppText style={styles.tileEmoji} importantForAccessibility="no">
-                {item.emoji}
-              </AppText>
-              {solved && isTarget ? (
-                <AppText variant="large" bold tone="primary">
-                  ✓ {t(`items.${item.id}`)}
-                </AppText>
-              ) : null}
-            </Pressable>
-          );
-        })}
-      </View>
+            />
+          ))
+        }
+      </Board>
+      <Feedback text={solved ? t('feedback.rightItem', { item: targetName }) : null} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, gap: space.lg },
-  prompt: {
-    alignItems: 'center',
-    gap: space.xs,
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    padding: space.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  promptEmoji: { fontSize: 56, lineHeight: 68 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md, justifyContent: 'center' },
-  tile: {
-    flexGrow: 1,
-    minHeight: 132,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: space.xs,
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    borderWidth: 3,
-    borderColor: colors.border,
-  },
-  tilePressed: { backgroundColor: colors.surfaceMuted },
-  tileHint: { borderColor: colors.warning, backgroundColor: colors.warningSoft },
-  tileSolved: { borderColor: colors.success, backgroundColor: colors.successSoft },
-  tileWrong: { opacity: 0.45 },
-  tileEmoji: { fontSize: 64, lineHeight: 76 },
+  wrap: { flex: 1, gap: space.md },
 });

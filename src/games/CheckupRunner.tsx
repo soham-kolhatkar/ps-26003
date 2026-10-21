@@ -4,6 +4,8 @@ import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { Picture } from '@/components/Picture';
+import { TopBarButton } from '@/components/TopBar';
 import type { Trial } from '@/engine/scoring';
 import { CHECKUP_STEPS, checkupTask, type CheckupGameId, type CheckupTask } from '@/engine/visits';
 import { speak, stopSpeaking } from '@/services/tts';
@@ -68,9 +70,9 @@ export function CheckupRunner({ patientId, onDone }: { patientId: string; onDone
         <AppText variant="small" tone="muted" bold>
           {stepLabel}
         </AppText>
-        <AppText style={styles.icon} center importantForAccessibility="no">
-          {TASK_ICON[step.gameId]}
-        </AppText>
+        <View style={styles.icon}>
+          <Picture glyph={TASK_ICON[step.gameId]} size={96} />
+        </View>
         <AppText variant="title" center>
           {title}
         </AppText>
@@ -92,7 +94,7 @@ export function CheckupRunner({ patientId, onDone }: { patientId: string; onDone
         <AppText variant="small" tone="muted" bold style={styles.topLabel}>
           {stepLabel} · {title}
         </AppText>
-        <BigButton kind="secondary" icon="skip" label={t('checkup.skip')} onPress={() => finish(null)} />
+        <TopBarButton icon="skip" label={t('checkup.skip')} onPress={() => finish(null)} />
       </View>
       <Task
         key={index}
@@ -113,7 +115,7 @@ export function CheckupRunner({ patientId, onDone }: { patientId: string; onDone
 const styles = StyleSheet.create({
   wrap: { flex: 1, gap: space.md },
   fill: { flex: 1 },
-  icon: { fontSize: 72, lineHeight: 86 },
+  icon: { alignSelf: 'center' },
   topBar: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   topLabel: { flex: 1 },
 });

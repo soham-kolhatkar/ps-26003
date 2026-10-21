@@ -69,8 +69,8 @@ Use this if there is no internet. On "Who will use this phone?" hold the 🌼 fo
 | 2 | Continue → tap **Kamala** (no PIN) | No logins for the patient. Big text, one action per screen. Exiting needs a 2-second hold so she can't leave by accident. |
 | 3 | Point at the **date and time card** and the greeting | Reality orientation, a standard dementia-care aid: "Good morning, Kamala. Today is Tuesday, 13 October." |
 | 3b | Tap **Call Priya** (top left) → the dialer opens with Priya's number (cancel it); later, at step 7, Priya's home shows **"Kamala pressed SOS"** | SOS: one tap opens a call to the family, and the press reaches the care team's phones as an urgent banner. |
-| 4 | Play **🃏 Memory pairs** (1 round) | Cards look like an Assamese gamosa. Errorless design: no red crosses, no buzzer. We only count a mistake when she'd already seen the matching card. |
-| 5 | Show the **🌟 "new level"** moment (or explain) | **AI: adaptive difficulty.** A staircase keeps her at about 75–80% success: up after two strong sessions, down immediately after a rough one, never announced. |
+| 4 | Play **Memory pairs** (1 round) | Calm, familiar pictures that look the same on every phone. Errorless design: no red crosses, no buzzer; a wrong card simply turns back. We only count a mistake when she'd already seen the matching card. |
+| 5 | Finish a game: the slow **bloom**, "Well done, Kamala · You finished …" (then explain) | **AI: adaptive difficulty.** A staircase keeps her at about 75–80% success: up after two strong sessions, down immediately after a rough one. Kamala never sees a level or a score; the family does, on Progress. |
 | 6 | Play **📋 Daily routines** (making tea ☕) | Familiar tasks: making tea, cooking rice, planting in the kitchen garden, washing clothes. Sequencing trains everyday function. |
 | 7 | Hold-to-exit → **Priya** (1234) → **📷 Family photos** → take a photo of a judge, name them | Photos stay on this phone; nothing is uploaded. |
 | 8 | Back to Kamala → **👨‍👩‍👧 Who is this?** | Recognising family is the most meaningful memory exercise. Only real family names are ever offered as choices. |

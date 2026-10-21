@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Icon } from '@/components/Icon';
 import { listPhotos } from '@/db/repos/photos';
 import { useDbQuery } from '@/db/useDbQuery';
 import { nowMs } from '@/engine/clock';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 import { hapticGentle, hapticSuccess } from '../feedback';
 import { afterSpeech, useAlive } from '../pacing';
@@ -141,9 +142,12 @@ function PhotoRecallPlay({
                   contentFit="cover"
                 />
                 {s.done ? (
-                  <AppText variant="body" bold tone="primary" center style={styles.caption}>
-                    ✓ {p.name}
-                  </AppText>
+                  <View style={styles.caption}>
+                    <Icon name="check-circle" size={22} weight="fill" color={colors.primary} />
+                    <AppText variant="body" weight="bold" tone="primary" center>
+                      {p.name}
+                    </AppText>
+                  </View>
                 ) : null}
               </Pressable>
             );
@@ -159,8 +163,8 @@ function PhotoRecallPlay({
       <View style={[styles.mainPhoto, solved && styles.done]}>
         <Image source={{ uri: round.photo.uri }} style={{ width: photoSize, height: photoSize }} contentFit="cover" />
       </View>
-      <AppText variant="title" center>
-        {solved ? `✓ ${round.target.name}` : prompt}
+      <AppText variant="title" center tone={solved ? 'primary' : 'default'} accessibilityLiveRegion="polite">
+        {solved ? t('feedback.rightPerson', { name: round.target.name }) : prompt}
       </AppText>
       {round.options.map((p) => {
         const s = optionState(p);
@@ -202,7 +206,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     overflow: 'hidden',
     borderWidth: 4,
-    borderColor: colors.border,
+    borderColor: 'transparent',
+    boxShadow: shadow.card,
   },
   nameOption: {
     minHeight: 76,
@@ -211,14 +216,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
-    borderWidth: 3,
-    borderColor: colors.border,
+    borderWidth: 4,
+    borderColor: 'transparent',
+    boxShadow: shadow.card,
   },
-  pressed: { backgroundColor: colors.surfaceMuted },
-  hint: { borderColor: colors.warning, backgroundColor: colors.warningSoft },
-  done: { borderColor: colors.success, backgroundColor: colors.successSoft },
-  wrong: { opacity: 0.45 },
+  pressed: { backgroundColor: colors.primaryWash },
+  hint: { borderColor: colors.primary, backgroundColor: colors.primaryWash },
+  done: { borderColor: colors.primary, backgroundColor: colors.primarySoft },
+  wrong: { opacity: 0.4 },
   photoGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md, justifyContent: 'center' },
-  photoTile: { borderRadius: radius.lg, overflow: 'hidden', borderWidth: 4, borderColor: colors.border },
-  caption: { paddingVertical: space.xs },
+  photoTile: {
+    borderRadius: radius.lg,
+    overflow: 'hidden',
+    borderWidth: 4,
+    borderColor: 'transparent',
+    backgroundColor: colors.surface,
+    boxShadow: shadow.card,
+  },
+  caption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: space.xs,
+    paddingVertical: space.xs,
+  },
 });

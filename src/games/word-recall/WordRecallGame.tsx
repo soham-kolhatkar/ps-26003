@@ -3,13 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { BigButton } from '@/components/BigButton';
-import { colors, radius, space } from '@/theme/tokens';
+import { Picture } from '@/components/Picture';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 import { hapticGentle, hapticSuccess } from '../feedback';
 import type { Item } from '../items';
 import { afterSpeech, useAlive } from '../pacing';
 import type { GameProps } from '../types';
+import { Board } from '../ui/Board';
+import { PictureTile } from '../ui/PictureTile';
+import { Prompt } from '../ui/Prompt';
 import { HINT_AFTER_WRONG, hintWord, makeRounds, STAR_CELLS } from './rounds';
 
 /** Each picture stays at least this long while being learnt. */
@@ -141,16 +144,14 @@ export function WordRecallGame({ level, totalTrials, onTrial, onProgress, onComp
     const it = round.words[studyIndex];
     return (
       <View style={styles.wrap}>
-        <AppText variant="title" center>
+        <AppText variant="title" center accessibilityLiveRegion="polite">
           {phase === 'study'
             ? t('games.word_recall.rememberCount', { done: studyIndex + 1, total: round.words.length })
             : t('games.word_recall.recapTitle')}
         </AppText>
         {phase === 'study' ? (
           <View style={styles.studyCard} accessible accessibilityLabel={name(it)}>
-            <AppText style={styles.studyEmoji} importantForAccessibility="no">
-              {it.emoji}
-            </AppText>
+            <Picture glyph={it.emoji} size={180} />
             <AppText variant="hero" center>
               {name(it)}
             </AppText>
@@ -159,10 +160,8 @@ export function WordRecallGame({ level, totalTrials, onTrial, onProgress, onComp
           <View style={styles.recapRow} accessible accessibilityLabel={listSpoken}>
             {round.words.map((w) => (
               <View key={w.id} style={styles.recapItem}>
-                <AppText style={styles.recapEmoji} importantForAccessibility="no">
-                  {w.emoji}
-                </AppText>
-                <AppText variant="body" center>
+                <Picture glyph={w.emoji} size={72} />
+                <AppText variant="body" weight="semibold" center>
                   {name(w)}
                 </AppText>
               </View>
@@ -174,6 +173,7 @@ export function WordRecallGame({ level, totalTrials, onTrial, onProgress, onComp
   }
 
   if (phase === 'break') {
+    // A short, easy pause between seeing and finding: tap the flowers.
     return (
       <View style={styles.wrap}>
         <AppText variant="title" center>
@@ -191,7 +191,7 @@ export function WordRecallGame({ level, totalTrials, onTrial, onProgress, onComp
                 onPress={() => onStar(cell)}
                 style={styles.starCell}
               >
-                {lit ? <AppText style={styles.starEmoji}>⭐</AppText> : null}
+                {lit ? <Picture glyph="🌼" size={76} /> : null}
               </Pressable>
             );
           })}
@@ -200,57 +200,30 @@ export function WordRecallGame({ level, totalTrials, onTrial, onProgress, onComp
     );
   }
 
-  const columns = round.grid.length <= 4 ? 2 : 3;
   return (
     <View style={styles.wrap}>
-      <View style={styles.prompt}>
-        <AppText variant="title" center accessibilityLiveRegion="polite">
-          {phase === 'roundDone' ? t('games.word_recall.allFound') : findPrompt}
-        </AppText>
-        <View style={styles.promptRow}>
-          <AppText variant="large" tone="muted">
-            {t('games.word_recall.foundCount', { found: found.size, total: round.words.length })}
-          </AppText>
-          {phase === 'recall' ? (
-            <BigButton
-              kind="ghost"
-              icon="speaker"
-              label={t('game.hearAgain')}
-              onPress={() => say(t('games.word_recall.findSpoken', { count: round.words.length }))}
-            />
-          ) : null}
-        </View>
-      </View>
-      <View style={styles.grid}>
-        {round.grid.map((it) => {
-          const isFound = found.has(it.id);
-          return (
-            <Pressable
+      <Prompt
+        text={phase === 'roundDone' ? t('games.word_recall.allFound') : findPrompt}
+        sub={t('games.word_recall.foundCount', { found: found.size, total: round.words.length })}
+        onHear={
+          phase === 'recall' ? () => say(t('games.word_recall.findSpoken', { count: round.words.length })) : undefined
+        }
+      />
+      <Board count={round.grid.length}>
+        {(size) =>
+          round.grid.map((it) => (
+            <PictureTile
               key={`${roundIndex}-${it.id}`}
-              accessibilityRole="button"
-              accessibilityLabel={name(it)}
+              glyph={it.emoji}
+              label={name(it)}
+              showLabel={found.has(it.id)}
+              size={size}
+              state={found.has(it.id) ? 'solved' : hinted === it.id ? 'hint' : faded.has(it.id) ? 'dimmed' : 'idle'}
               onPress={() => onPick(it)}
-              style={({ pressed }) => [
-                styles.tile,
-                { width: columns === 3 ? '30%' : '46%' },
-                pressed && styles.tilePressed,
-                isFound && styles.tileFound,
-                hinted === it.id && styles.tileHint,
-                faded.has(it.id) && styles.tileFaded,
-              ]}
-            >
-              <AppText style={styles.tileEmoji} importantForAccessibility="no">
-                {it.emoji}
-              </AppText>
-              {isFound ? (
-                <AppText variant="small" bold tone="primary" center numberOfLines={1} adjustsFontSizeToFit>
-                  ✓ {name(it)}
-                </AppText>
-              ) : null}
-            </Pressable>
-          );
-        })}
-      </View>
+            />
+          ))
+        }
+      </Board>
     </View>
   );
 }
@@ -264,21 +237,18 @@ const styles = StyleSheet.create({
     gap: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
-  studyEmoji: { fontSize: 140, lineHeight: 168 },
   recapRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: space.md },
   recapItem: {
     width: '30%',
     alignItems: 'center',
+    gap: space.xs,
     padding: space.sm,
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
+    boxShadow: shadow.card,
   },
-  recapEmoji: { fontSize: 56, lineHeight: 68 },
   starGrid: {
     flex: 1,
     flexDirection: 'row',
@@ -288,31 +258,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   starCell: { width: '30%', aspectRatio: 1, alignItems: 'center', justifyContent: 'center' },
-  starEmoji: { fontSize: 64, lineHeight: 76 },
-  prompt: {
-    alignItems: 'center',
-    gap: space.xs,
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    padding: space.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  promptRow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: space.md },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md, justifyContent: 'center' },
-  tile: {
-    minHeight: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: space.xs,
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    borderWidth: 3,
-    borderColor: colors.border,
-  },
-  tilePressed: { backgroundColor: colors.surfaceMuted },
-  tileFound: { borderColor: colors.success, backgroundColor: colors.successSoft },
-  tileHint: { borderColor: colors.warning, backgroundColor: colors.warningSoft },
-  tileFaded: { opacity: 0.3 },
-  tileEmoji: { fontSize: 52, lineHeight: 62 },
 });

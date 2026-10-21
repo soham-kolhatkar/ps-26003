@@ -98,18 +98,20 @@
     "level": "स्तर {{level}}",
     "stop": "रोकें",
     "progress": "{{total}} में से {{done}}",
-    "doneTitle": "बहुत बढ़िया, {{name}}!",
-    "doneSpoken": "बहुत बढ़िया {{name}}! आपने बहुत अच्छा खेला।",
-    "levelUp": "अगली बार: नया स्तर!",
+    "doneTitle": "बहुत अच्छा, {{name}}",
+    "doneSpoken": "बहुत अच्छा, {{name}}। आपने {{game}} पूरा किया।",
     "playAgain": "फिर से खेलें",
     "home": "होम",
-    "notFound": "यह खेल उपलब्ध नहीं है।"
+    "notFound": "यह खेल उपलब्ध नहीं है।",
+    "doneLine": "आपने {{game}} पूरा किया।"
   },
   "feedback": {
-    "praise1": "बहुत अच्छे!",
-    "praise2": "शाबाश!",
-    "praise3": "बहुत बढ़िया!",
-    "praise4": "बिल्कुल सही!"
+    "praise1": "सही है।",
+    "praise2": "हाँ, बिल्कुल सही।",
+    "praise3": "अच्छा, यही है।",
+    "praise4": "सही जवाब।",
+    "rightItem": "हाँ, यह {{item}} है।",
+    "rightPerson": "हाँ, यह {{name}} हैं।"
   },
   "games": {
     "object_recognition": {
@@ -186,9 +188,9 @@
       "rememberCount": "याद रखें: {{total}} में से {{done}}",
       "recapTitle": "इन्हें याद रखें",
       "recap": "याद रखें: {{list}}।",
-      "breakTitle": "सारे तारे छुएँ",
-      "break": "अब थोड़ा आराम। सारे तारे छुएँ।",
-      "star": "तारा",
+      "breakTitle": "सारे फूल छुएँ",
+      "break": "अब थोड़ा आराम। सारे फूल छुएँ।",
+      "star": "फूल",
       "find": "आपने जो {{count}} चित्र देखे थे, उन्हें ढूँढें",
       "findSpoken": "आपने कौन-से चित्र देखे थे? {{count}} चित्र ढूँढें।",
       "foundCount": "{{total}} में से {{found}} मिले",
