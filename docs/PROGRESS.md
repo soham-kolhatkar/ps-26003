@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F23 family caregiver, on `feat/f23-caregiver`: pushed, **waiting for the user's test** (checklist at the end of TESTING.md).
+**Current feature:** none (F23 merged 2026-10-21).
 **Next:** F24 ASHA and doctor.
 
 ## Tier 1: core demo
@@ -44,7 +44,7 @@ The user found the UI cluttered and messy (2026-10-21). Full plan and research: 
 | F20 | Design foundation: tokens v2, fonts per language, icons (Phosphor), pictures (Fluent 3D), shared components, motion, haptics; review fixes (D52) | ✅ done (f22e68f) |
 | F21 | Patient phone: SOS call family (D53, SQL 006), home (today's 3 games + all games), reminder screen | ✅ done (3c5df28) |
 | F22 | Games: shell, boards, prompts, end-of-game bloom, all 8 games (D54) | ✅ done (0fcb458) |
-| F23 | Family caregiver: progress dashboard (D55), reminders, photos, people, alerts | 🧪 testing |
+| F23 | Family caregiver: progress dashboard (D55), reminders, photos, people, alerts | ✅ done (cd2310a) |
 | F24 | ASHA and doctor: triage home, patient page, visit form, report, alerts, notes | ⏳ |
 | F25 | Assamese pack (was F14, moved here by the user) | ⏳ |
 | F26 | Polish, accessibility pass, APK v0.4.0, tag v0.4.0 | ⏳ |
