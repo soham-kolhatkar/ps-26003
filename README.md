@@ -13,6 +13,7 @@ Offline-first, bilingual (English / हिन्दी) Android app built with E
 - **Privacy**: all data, including photos, stays on the phone (SQLite). Staff PINs are salted hashes in the OS keystore.
 
 ## Run it
+New machine? Follow [docs/SETUP.md](docs/SETUP.md) (install, Supabase, phone, tests, APK).
 ```bash
 npm install          # uses the public npm registry via .npmrc
 npm run usb          # phone over USB (corporate network blocks the tunnel)
@@ -43,4 +44,4 @@ Demo PIN for caregiver / ASHA / doctor: **1234**.
 - The single-phone demo can be left again from "Who is using Smriti?" (**Leave the demo**).
 
 ## Docs
-[Demo script](docs/DEMO.md) · [Progress](docs/PROGRESS.md) · [Architecture](docs/ARCHITECTURE.md) · [Decisions](docs/DECISIONS.md) · [Testing](docs/TESTING.md)
+[Setup](docs/SETUP.md) · [Demo script](docs/DEMO.md) · [Progress](docs/PROGRESS.md) · [Architecture](docs/ARCHITECTURE.md) · [Decisions](docs/DECISIONS.md) · [Testing](docs/TESTING.md)
