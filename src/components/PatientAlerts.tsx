@@ -1,10 +1,12 @@
 import { useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { AlertCard } from '@/components/AlertCard';
 import { AppText } from '@/components/AppText';
+import { BigButton } from '@/components/BigButton';
+import { StatusLine } from '@/components/StatusLine';
 import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { listAlerts, markAlertsSeen } from '@/db/repos/alerts';
@@ -23,6 +25,7 @@ const DAY = 24 * 60 * 60 * 1000;
 export function PatientAlerts() {
   const { t } = useTranslation();
   const { patientId } = useLocalSearchParams<{ patientId: string }>();
+  const [showHow, setShowHow] = useState(false);
   const { data, reload } = useDbQuery(
     async (db) => {
       const now = Date.now();
@@ -44,11 +47,7 @@ export function PatientAlerts() {
     <Screen>
       <TopBar />
       <AppText variant="title">{t('alerts.title', { name })}</AppText>
-      {data && open.length === 0 ? (
-        <View style={styles.none}>
-          <AppText variant="large">{t('alerts.none')}</AppText>
-        </View>
-      ) : null}
+      {data && open.length === 0 ? <StatusLine status="well" text={t('alerts.none')} /> : null}
       {open.map((a) => (
         <AlertCard key={a.id} alert={a} patientName={name} />
       ))}
@@ -63,12 +62,17 @@ export function PatientAlerts() {
         </>
       ) : null}
       <View style={styles.about}>
-        <AppText variant="small" bold>
-          {t('alerts.howTitle')}
-        </AppText>
-        <AppText variant="small" tone="muted">
-          {t('alerts.how')}
-        </AppText>
+        <BigButton
+          kind="ghost"
+          icon={showHow ? 'caret-left' : 'info'}
+          label={t('alerts.howTitle')}
+          onPress={() => setShowHow(!showHow)}
+        />
+        {showHow ? (
+          <AppText variant="small" tone="muted">
+            {t('alerts.how')}
+          </AppText>
+        ) : null}
         <AppText variant="small" tone="muted">
           {t('alerts.disclaimer')}
         </AppText>
@@ -78,6 +82,5 @@ export function PatientAlerts() {
 }
 
 const styles = StyleSheet.create({
-  none: { padding: space.md, backgroundColor: colors.successSoft, borderRadius: radius.md },
   about: { gap: space.xs, padding: space.md, backgroundColor: colors.surfaceMuted, borderRadius: radius.md },
 });

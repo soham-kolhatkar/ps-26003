@@ -119,7 +119,7 @@ function PhotoRecallPlay({
   };
 
   if (round.reverse) {
-    const tile = Math.floor((width - space.lg * 2 - space.md) / 2);
+    const tile = Math.floor((width - 20 * 2 - space.md) / 2);
     return (
       <ScrollView contentContainerStyle={styles.wrap}>
         <AppText variant="title" center>
@@ -157,7 +157,7 @@ function PhotoRecallPlay({
     );
   }
 
-  const photoSize = Math.min(width - space.lg * 2, 300);
+  const photoSize = Math.min(width - 20 * 2, 300);
   return (
     <ScrollView contentContainerStyle={styles.wrap}>
       <View style={[styles.mainPhoto, solved && styles.done]}>

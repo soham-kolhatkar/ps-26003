@@ -57,3 +57,5 @@ F21: schema v9 `sos_event` (+ insert-only sync spec, SQL 006), `db/repos/sos` (f
 
 F22: `games/ui/` (`Prompt` + `Feedback`, `Board` with `bestColumns`/`tileSize`, `PictureTile`, `Bloom`); every game renders through them, game rules unchanged. GameShell: `TopBarButton` Stop, text progress + animated bar, bloom ending (no level chip).
 
+F23: `engine/highlights` (Progress summary), `StatTile third`, `Meter` on the reminders list; caregiver Progress / Reminders / Photos / alerts restyled; `PeopleScreen` sorts members by role and gives each Reset PIN / Remove pill a `testID` with the person's name (e2e targets them).
+

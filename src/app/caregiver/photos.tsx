@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Icon } from '@/components/Icon';
+import { StatusLine } from '@/components/StatusLine';
 import { BigButton } from '@/components/BigButton';
 import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
@@ -59,7 +61,8 @@ export default function FamilyPhotos() {
     ]);
   };
 
-  const tile = Math.floor((width - space.lg * 2 - space.md) / 2);
+  // Two per row inside the screen's 20 dp side padding.
+  const tile = Math.floor((width - 20 * 2 - space.md) / 2);
 
   return (
     <Screen>
@@ -69,19 +72,23 @@ export default function FamilyPhotos() {
         <AppText tone="muted">{t('photos.subtitle', { name })}</AppText>
       </View>
 
-      <View style={[styles.banner, (data?.people ?? 0) >= MIN_PEOPLE && styles.bannerOk]}>
-        <AppText variant="small">
-          {(data?.people ?? 0) >= MIN_PEOPLE
+      <StatusLine
+        status={(data?.people ?? 0) >= MIN_PEOPLE ? 'well' : 'info'}
+        text={
+          (data?.people ?? 0) >= MIN_PEOPLE
             ? t('photos.unlocked', { name, count: data?.people })
-            : t('photos.unlockHint', { name })}
-        </AppText>
-      </View>
+            : t('photos.unlockHint', { name })
+        }
+      />
 
       <BigButton icon="camera" label={t('photos.takePhoto')} onPress={() => add('camera')} />
       <BigButton kind="secondary" icon="image" label={t('photos.choose')} onPress={() => add('library')} />
-      <AppText variant="caption" tone="muted">
-        {t('photos.privacy')}
-      </AppText>
+      <View style={styles.privacy}>
+        <Icon name="lock" size={18} color={colors.textMuted} />
+        <AppText variant="caption" tone="muted" style={styles.flex}>
+          {t('photos.privacy')}
+        </AppText>
+      </View>
 
       {data && data.photos.length === 0 ? <AppText tone="muted">{t('photos.empty')}</AppText> : null}
       <View style={styles.grid}>
@@ -118,14 +125,8 @@ export default function FamilyPhotos() {
 }
 
 const styles = StyleSheet.create({
-  banner: {
-    backgroundColor: colors.warningSoft,
-    borderColor: colors.warning,
-    borderWidth: 1,
-    borderRadius: radius.md,
-    padding: space.md,
-  },
-  bannerOk: { backgroundColor: colors.successSoft, borderColor: colors.success },
+  privacy: { flexDirection: 'row', gap: space.sm, alignItems: 'flex-start' },
+  flex: { flex: 1 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md },
   tile: {
     borderRadius: radius.md,

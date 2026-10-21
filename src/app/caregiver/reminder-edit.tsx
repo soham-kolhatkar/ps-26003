@@ -19,7 +19,8 @@ import { deleteReminder, getReminder, saveReminder } from '@/db/repos/reminders'
 import { useDbQuery } from '@/db/useDbQuery';
 import { formatTime as hhmm, normalizeTimes, REMINDER_TYPES, type ReminderType } from '@/engine/reminders';
 import { formatClock, formatShortDate, formatTime } from '@/services/datetime';
-import { REMINDER_ICON, syncReminderNotifications } from '@/services/notifications';
+import { REMINDER_ICON, sendTestReminder, syncReminderNotifications } from '@/services/notifications';
+import { useDevice } from '@/store/device';
 import { useSession } from '@/store/session';
 import { useSettings } from '@/store/settings';
 import { colors, radius, space } from '@/theme/tokens';
@@ -117,6 +118,14 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
     });
     await syncReminderNotifications(getDb());
     router.back();
+  };
+
+  // "Test" rings THIS phone: meaningful only where the patient uses it (demo), never on cloud staff phones.
+  const canTest = useDevice((st) => st.mode) !== 'cloud';
+  const test = async () => {
+    if (!existing) return;
+    const ok = await sendTestReminder(getDb(), existing);
+    notify(ok ? t('reminders.caregiver.testSent') : t('reminders.caregiver.permissionDenied'));
   };
 
   const remove = () => {
@@ -217,6 +226,9 @@ function ReminderForm({ patientId, existing }: { patientId: string; existing: Re
       )}
 
       <BigButton size="large" icon="save" label={t('reminders.caregiver.save')} onPress={save} disabled={!canSave} />
+      {existing?.enabled && canTest ? (
+        <BigButton kind="secondary" icon="bell" label={t('reminders.caregiver.test')} onPress={test} />
+      ) : null}
       {existing ? (
         <BigButton kind="danger" icon="trash" label={t('reminders.caregiver.delete')} onPress={remove} />
       ) : null}
