@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F23 family caregiver (started 2026-10-21).
+**Current feature:** F23 family caregiver, on `feat/f23-caregiver`: pushed, **waiting for the user's test** (checklist at the end of TESTING.md).
 **Next:** F24 ASHA and doctor.
 
 ## Tier 1: core demo
@@ -44,7 +44,7 @@ The user found the UI cluttered and messy (2026-10-21). Full plan and research: 
 | F20 | Design foundation: tokens v2, fonts per language, icons (Phosphor), pictures (Fluent 3D), shared components, motion, haptics; review fixes (D52) | ✅ done (f22e68f) |
 | F21 | Patient phone: SOS call family (D53, SQL 006), home (today's 3 games + all games), reminder screen | ✅ done (3c5df28) |
 | F22 | Games: shell, boards, prompts, end-of-game bloom, all 8 games (D54) | ✅ done (0fcb458) |
-| F23 | Family caregiver: home, progress dashboard, reminders, photos, people, settings | ⏳ |
+| F23 | Family caregiver: progress dashboard (D55), reminders, photos, people, alerts | 🧪 testing |
 | F24 | ASHA and doctor: triage home, patient page, visit form, report, alerts, notes | ⏳ |
 | F25 | Assamese pack (was F14, moved here by the user) | ⏳ |
 | F26 | Polish, accessibility pass, APK v0.4.0, tag v0.4.0 | ⏳ |
@@ -61,6 +61,7 @@ Low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report expor
 - F11: on a phone whose demo history was *backfilled* (F07) after real test games, levels can disagree with the seeded history (real games at level 1, seed at level 3) and Kamala may show a "Daily routines" decline. **Reset demo data** gives the consistent story (Ramesh flagged, Kamala and Lakshmi clear).
 - APK v0.1.0 sha256 `a08cf427269f8c3b9a9093f4c05facf05f83cbe014098e18f32fcd9438bf0273` (on the phone in Download/ and in C:\Users\kolhsoh\Downloads).
 - APK v0.2.0 sha256 `34ace20bf52c203b7851a41abb6232c5960f0b3517b6aeed95f63600aa57b023`. APK v0.3.0 sha256 `f5991b68632b36cb5ffde62bf8f46f26306ddeb0628cdcb91f876c834bad2eb7` (built from 2d6f3e5, in `dist/`).
+- 2026-10-21 (F23): 4 more Expo SDK 57 patch updates (`expo` 57.0.31, `expo-router`, `@expo/ui`, `expo-network`) applied; expo-doctor 21/21.
 - 2026-10-21: the 6 Expo SDK 57 patch updates (`expo` 57.0.28 → 57.0.30, `expo-router`, `expo-notifications`, `expo-constants`, `expo-linking`, `@expo/ui`) were applied in F20 (`npx expo install --fix`); expo-doctor 21/21.
 - e2e `f18-extras` used to expect "0/2 today" for the ASHA's new medicine; after 8 am it is "0/1" (doses due before a reminder exists don't count, D49). F20 made the check accept any dose count.
 - 2026-10-12: the Expo ngrok tunnel was blocked by the corporate network during F05 testing (TLS to tunnel.*.ngrok.com fails). Still blocked 2026-10-13 → switched to USB (`npm run usb`).

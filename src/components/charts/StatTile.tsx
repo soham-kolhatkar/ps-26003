@@ -20,6 +20,8 @@ type Props = {
   icon?: IconName;
   /** …or a picture (a game's glyph). */
   glyph?: string;
+  /** Three tiles in one row (instead of two). */
+  third?: boolean;
 };
 
 const DELTA_COLOR: Record<DeltaTone, string> = {
@@ -29,10 +31,10 @@ const DELTA_COLOR: Record<DeltaTone, string> = {
 };
 
 /** Stat tile: label · value · optional delta · optional sparkline. */
-export function StatTile({ label, value, delta, caption, trend, icon, glyph }: Props) {
+export function StatTile({ label, value, delta, caption, trend, icon, glyph, third }: Props) {
   return (
     <View
-      style={styles.tile}
+      style={[styles.tile, third && styles.third]}
       accessible
       accessibilityLabel={[label, value, delta?.text, caption].filter(Boolean).join(', ')}
     >
@@ -71,4 +73,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     boxShadow: shadow.card,
   },
+  third: { flexBasis: '30%', paddingHorizontal: space.sm + 4 },
 });

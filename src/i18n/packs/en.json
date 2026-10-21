@@ -441,7 +441,9 @@
         "activity": "Evening walk"
       },
       "today": "{{done}} of {{total}} done today",
-      "noneToday": "None for today"
+      "noneToday": "None for today",
+      "todayLabel": "Today",
+      "doneOf": "{{done}} of {{total}} done"
     }
   },
   "progress": {
@@ -455,7 +457,7 @@
       "activeDaysValue": "{{n}} of {{d}}",
       "avgScore": "Average score",
       "remindersTaken": "Reminders taken",
-      "minutes": "{{n}} min of play",
+      "minutes": "{{n}} min",
       "noData": "—"
     },
     "delta": {
@@ -474,12 +476,13 @@
     "games": {
       "title": "By game",
       "level": "Level {{level}}",
-      "sessions": "{{count}} games",
       "never": "Not played in this period",
       "up": "↑ Improving",
       "down": "↓ Lower than before",
       "steady": "→ Steady",
-      "notPlayed": "Not played in this period: {{games}}"
+      "notPlayed": "Not played in this period: {{games}}",
+      "sessions_one": "{{count}} game",
+      "sessions_other": "{{count}} games"
     },
     "reminders": {
       "title": "Reminders taken per day",
@@ -501,12 +504,32 @@
       "chart": "Chart",
       "day": "Day",
       "score": "Score",
-      "taken": "Taken"
+      "taken": "Taken",
+      "games": "Games"
     },
     "disclaimer": "These scores show how game performance changes over time, to support conversations with the doctor. They are not a medical diagnosis.",
     "rowHint": "Games, scores and reminders",
     "weekGames_one": "This week: {{count}} game played",
-    "weekGames_other": "This week: {{count}} games played"
+    "weekGames_other": "This week: {{count}} games played",
+    "hl": {
+      "title": "Summary",
+      "gameDecline": "{{game}} was lower than usual. Worth a look.",
+      "adherenceLow": "Medicines were often missed ({{pct}}% taken).",
+      "inactive": "No games for {{days}} days.",
+      "scoresUp": "Scores are up on the period before.",
+      "scoresSteady": "Scores are steady.",
+      "scoresDown": "Scores are a little lower than the period before.",
+      "played": "{{name}} played on {{n}} of {{d}} days.",
+      "noGames": "No games played in this period yet.",
+      "reminders": "{{taken}} of {{decided}} reminders were done."
+    },
+    "daily": {
+      "title": "Games each day",
+      "subtitle": "Tap a bar to see the day.",
+      "readout_one": "{{date}} · {{count}} game",
+      "readout_other": "{{date}} · {{count}} games",
+      "readoutNone": "{{date}} · no games"
+    }
   },
   "alerts": {
     "title": "Things to look at: {{name}}",
@@ -811,7 +834,8 @@
     "invite": {
       "asha": "Invite the ASHA worker",
       "doctor": "Invite the doctor",
-      "caregiver": "Invite a family member"
+      "caregiver": "Invite a family member",
+      "caregiverCode": "Create a code for them"
     },
     "notManager": "Only the family (or the ASHA worker who registered this patient) can invite people.",
     "remove": "Remove",

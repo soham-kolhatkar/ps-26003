@@ -367,3 +367,16 @@
 12. **Hindi:** the same screens read naturally ("हाँ, यह चाबी है।", "बहुत अच्छा, Kamala", "सारे फूल छुएँ"); no "शाबाश".
 13. **ASHA check-up** (home visit → start the check-up): the task intro shows a Fluent picture; while playing, **Skip** is a top-left pill; the date questions use the same big question style.
 14. Phone: Settings → Accessibility → **Remove animations** on → the bloom simply appears, buttons don't shrink when pressed.
+
+## F23 Family caregiver checklist
+> Demo → **Priya** (1234), and a cloud caregiver for People. English and Hindi.
+1. **Progress report:** Back, "Kamala's progress", the doctor's note (if any), **Last 7 days / Last 30 days**. Then a **summary card** with up to three lines and a shape each: e.g. "● Scores are a little lower than the period before.", "✓ Kamala played on 5 of 7 days.", "✓ 29 of 38 reminders were done." With an open alert (cloud demo: Ramesh via the ASHA, or a decline) the first line is amber/red ("Find the object was lower than usual. Worth a look.") plus **See all things to look at**.
+2. Three numbers **in one row**: Games played (10 · 21 min), Active days (5 of 7), Reminders taken (76% · 29 / 38).
+3. **Games each day:** green bars per day (tap a bar: "20 Oct · 3 games"; **Table** shows the numbers).
+4. **By game:** one white list: picture, name, "4 games · Level 5", the trend word under it (↓ Lower than before in amber), the score on the right; games not played named in one line. "1 game", not "1 games".
+5. Reminders per day + by type, Recent activity, and the "not a diagnosis" note with an ⓘ icon (no emoji).
+6. **Reminders:** a white "Today · 0 of 6 done" card with a slim bar; the notifications-off note as an amber line (demo only); **Add reminder**; one list: picture in a clay circle, title, "Medicine · Every day · 8:30 am", a switch. No "Test in 10 s" on the list. Tap a row → edit.
+7. **Edit reminder:** Cancel top left, type chips with pictures, What / Note, times as chips with ✕, **+ Add time**, **Save reminder**, **Test in 10 s** (demo only; rings this phone), **Delete reminder** in red.
+8. **Family photos** (demo): "Add photos of at least 2 people…" as a grey line (green with a tick once unlocked), Take photo / Choose from gallery, the privacy note with a 🔒 icon, photos two per row filling the width.
+9. **People** (cloud): family first, then the ASHA worker, then the doctor; under each, small **Reset PIN** and red **Remove** pills side by side. **Add people**: Pair a new phone, then one list: Invite the ASHA worker / the doctor / a family member. Only after **Invite a family member** do the relation chips appear, with **Create a code for them**.
+10. **Things to look at** screen (from See all): "✓ Nothing to look at right now." when clear; the cards; "How Smriti notices these" folded (tap to open).

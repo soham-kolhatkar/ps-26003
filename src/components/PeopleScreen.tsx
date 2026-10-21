@@ -6,8 +6,9 @@ import { Share, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { AuthErrorText } from '@/components/AuthErrorText';
 import { BigButton } from '@/components/BigButton';
-import { TopBar } from '@/components/TopBar';
+import { TopBar, TopBarButton } from '@/components/TopBar';
 import { ChipGroup } from '@/components/Chip';
+import { ListGroup, ListRow } from '@/components/List';
 import { Picture } from '@/components/Picture';
 import { Screen } from '@/components/Screen';
 import { StatusLine } from '@/components/StatusLine';
@@ -34,6 +35,7 @@ import { colors, radius, shadow, space } from '@/theme/tokens';
 
 const ROLE_ICON: Record<MemberRole, string> = { caregiver: '👩', asha: '🧑‍⚕️', doctor: '🩺', device: '📱' };
 const INVITABLE = ['asha', 'doctor', 'caregiver'] as const;
+const ROLE_ORDER: Record<MemberRole, number> = { caregiver: 0, asha: 1, doctor: 2, device: 3 };
 
 /**
  * Who is linked to one patient (`?patientId=`), live from the cloud. Managers
@@ -50,6 +52,7 @@ export function PeopleScreen() {
   const [invite, setInvite] = useState<(Invite & { role: MemberRole }) | null>(null);
   const [pinReset, setPinReset] = useState<(Invite & { name: string }) | null>(null);
   const [familyRelation, setFamilyRelation] = useState<string | null>(null);
+  const [familyOpen, setFamilyOpen] = useState(false);
   const [busy, setBusy] = useState(false);
 
   const load = useCallback(() => {
@@ -160,6 +163,12 @@ export function PeopleScreen() {
 
       {members
         .filter((m) => m.role !== 'device')
+        // Family first, then the ASHA worker, then the doctor (the cloud returns no fixed order).
+        .sort(
+          (x, y) =>
+            ROLE_ORDER[x.role] - ROLE_ORDER[y.role] ||
+            (profile(x.user_id)?.name ?? '').localeCompare(profile(y.user_id)?.name ?? ''),
+        )
         .map((m) => {
           const p = profile(m.user_id);
           const label = p?.name ?? t(`roles.${m.role}`);
@@ -183,21 +192,25 @@ export function PeopleScreen() {
                   .join(' · ')}
               </AppText>
               {amManager && m.user_id !== me ? (
-                <>
-                  <BigButton
-                    kind="ghost"
+                <View style={styles.memberActions}>
+                  <TopBarButton
                     icon="key"
+                    testID={`reset-${label}`}
                     label={t('resetPin.make')}
-                    disabled={busy}
-                    onPress={() => run(async () => setPinReset({ ...(await createPinReset(m.user_id)), name: label }))}
+                    onPress={() =>
+                      busy
+                        ? undefined
+                        : run(async () => setPinReset({ ...(await createPinReset(m.user_id)), name: label }))
+                    }
                   />
-                  <BigButton
-                    kind="danger"
+                  <TopBarButton
                     icon="minus"
+                    danger
+                    testID={`remove-${label}`}
                     label={t('people.remove')}
                     onPress={() => remove(m.user_id, label)}
                   />
-                </>
+                </View>
               ) : null}
             </View>
           );
@@ -221,26 +234,37 @@ export function PeopleScreen() {
             disabled={busy}
             onPress={() => makeInvite('device')}
           />
-          {INVITABLE.map((role) => (
-            <View key={role} style={styles.invite}>
-              {role === 'caregiver' ? (
-                <ChipGroup
-                  label={t('people.familyRelation', { name })}
-                  options={FAMILY_RELATIONS}
-                  value={familyRelation}
-                  onChange={setFamilyRelation}
-                  labelFor={(r) => t(`relation.${r}`)}
-                />
-              ) : null}
+          <ListGroup>
+            {INVITABLE.map((role) => (
+              <ListRow
+                key={role}
+                icon={role === 'doctor' ? 'stethoscope' : 'user-plus'}
+                tone={role === 'asha' ? 'leaf' : role === 'doctor' ? 'pond' : 'clay'}
+                title={t(`people.invite.${role}`)}
+                onPress={() =>
+                  busy ? undefined : role === 'caregiver' ? setFamilyOpen(!familyOpen) : makeInvite(role)
+                }
+              />
+            ))}
+          </ListGroup>
+          {/* Family: first say how they are related (shown only when asked for). */}
+          {familyOpen ? (
+            <View style={styles.invite}>
+              <ChipGroup
+                label={t('people.familyRelation', { name })}
+                options={FAMILY_RELATIONS}
+                value={familyRelation}
+                onChange={setFamilyRelation}
+                labelFor={(r) => t(`relation.${r}`)}
+              />
               <BigButton
-                kind="secondary"
                 icon="user-plus"
-                label={t(`people.invite.${role}`)}
+                label={t('people.invite.caregiverCode')}
                 disabled={busy}
-                onPress={() => makeInvite(role)}
+                onPress={() => makeInvite('caregiver')}
               />
             </View>
-          ))}
+          ) : null}
         </>
       ) : snap ? (
         <AppText variant="small" tone="muted">
@@ -323,6 +347,7 @@ const styles = StyleSheet.create({
   },
   memberHead: { flexDirection: 'row', alignItems: 'center', gap: space.sm + 4 },
   memberName: { flex: 1 },
+  memberActions: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, marginTop: space.xs },
   invite: { gap: space.sm },
   codeBox: {
     alignItems: 'center',

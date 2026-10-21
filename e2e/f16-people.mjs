@@ -114,8 +114,7 @@ try {
   await c.tap('People', { button: true, exact: true });
   await c.see(`E2E Anjali ${run}`);
   await c.shot('people-full');
-  // The doctor is the last "Remove" (members are listed caregiver, asha, doctor).
-  await c.page.getByRole('button', { name: 'Remove' }).filter({ visible: true }).last().click();
+  await c.page.getByTestId(`remove-E2E Anjali ${run}`).filter({ visible: true }).first().click();
   await c.page.waitForTimeout(1500);
   await d.open('/');
   await d.see('No patients linked yet', 30000);

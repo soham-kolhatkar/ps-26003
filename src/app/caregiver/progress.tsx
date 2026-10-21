@@ -3,7 +3,6 @@ import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
-import { AlertCard } from '@/components/AlertCard';
 import { DoctorNotes } from '@/components/DoctorNotes';
 import { AppText } from '@/components/AppText';
 import { Tabs } from '@/components/Tabs';
@@ -13,9 +12,9 @@ import { BigButton } from '@/components/BigButton';
 import { TopBar } from '@/components/TopBar';
 import { ChartCard } from '@/components/charts/ChartCard';
 import { ColumnChart } from '@/components/charts/ColumnChart';
-import { LineChart } from '@/components/charts/LineChart';
 import { Meter } from '@/components/charts/Meter';
-import { StatTile, type DeltaTone } from '@/components/charts/StatTile';
+import { StatTile } from '@/components/charts/StatTile';
+import { StatusLine } from '@/components/StatusLine';
 import { Screen } from '@/components/Screen';
 import { listAlerts } from '@/db/repos/alerts';
 import { listSessions } from '@/db/repos/games';
@@ -32,6 +31,7 @@ import {
   trendOf,
   type SessionPoint,
 } from '@/engine/progress';
+import { progressHighlights, type HighlightAlert } from '@/engine/highlights';
 import { eventState, MISSED_AFTER_MS, startOfDay } from '@/engine/reminders';
 import { GAMES } from '@/games/registry';
 import { formatDayMonth, formatShortDate, formatTime } from '@/services/datetime';
@@ -93,15 +93,6 @@ export default function ProgressDashboard() {
   const taken = adherenceDays.reduce((n, d) => n + d.taken, 0);
   const byType = adherenceByType(periodOcc, now);
 
-  const deltaText = (delta: number | null): { text: string; tone: DeltaTone } => {
-    const trend = trendOf(delta);
-    if (trend == null || delta == null) return { text: t('progress.delta.none'), tone: 'neutral' };
-    const n = Math.abs(Math.round(delta));
-    if (trend === 'up') return { text: t('progress.delta.up', { n, d: period }), tone: 'good' };
-    if (trend === 'down') return { text: t('progress.delta.down', { n, d: period }), tone: 'bad' };
-    return { text: t('progress.delta.steady', { d: period }), tone: 'neutral' };
-  };
-
   // ---- recent activity timeline ----
   /** `icon: null` = a missed dose (warning icon instead of a picture). */
   type Item = { at: number; text: string; icon: string | null };
@@ -137,23 +128,34 @@ export default function ProgressDashboard() {
   const played = summaries.filter((x) => x.s.sessions > 0);
   const unplayed = summaries.filter((x) => x.s.sessions === 0);
 
+  const highlights = progressHighlights({
+    alerts: data.alerts
+      .filter((a) => a.resolvedAt == null)
+      .map((a): HighlightAlert =>
+        a.kind === 'game_decline'
+          ? { kind: 'game_decline', serious: a.severity === 'serious', gameId: String(a.gameId ?? a.detail.gameId) }
+          : a.kind === 'adherence_low'
+            ? { kind: 'adherence_low', serious: a.severity === 'serious', ratePct: Number(a.detail.ratePct) }
+            : { kind: 'inactive', serious: a.severity === 'serious', days: Number(a.detail.days) },
+      ),
+    sessions: activity.sessions,
+    activeDays: activity.activeDays,
+    periodDays: period,
+    scoreTrend: trendOf(scoreDelta),
+    remindersTaken: taken,
+    remindersDecided: decided,
+  });
+  const highlightText = (h: (typeof highlights)[number]) =>
+    t(`progress.hl.${h.key}`, {
+      ...h.params,
+      name,
+      game: h.params?.gameId ? t(`games.${h.params.gameId}.title`) : undefined,
+    });
+
   return (
     <Screen>
       <TopBar />
       <AppText variant="title">{t('progress.title', { name })}</AppText>
-
-      {/* Trend alerts first: they are the reason to open this screen. */}
-      {data.alerts.slice(0, 2).map((a) => (
-        <AlertCard key={a.id} alert={a} patientName={name} compact />
-      ))}
-      {data.alerts.length ? (
-        <BigButton
-          kind="secondary"
-          icon="warning"
-          label={t('alerts.seeAll', { count: data.alerts.length })}
-          onPress={() => router.push({ pathname: '/caregiver/alerts', params: { patientId } })}
-        />
-      ) : null}
 
       {/* The doctor's latest advice, if any (F18). */}
       <DoctorNotes patientId={patientId} limit={2} />
@@ -168,91 +170,108 @@ export default function ProgressDashboard() {
         onChange={(k) => setPeriod(k === '7' ? 7 : 30)}
       />
 
+      {/* The summary first, in words: the reason to open this screen (D55). */}
+      <View style={styles.card} accessibilityLabel={t('progress.hl.title')}>
+        {highlights.map((h) => (
+          <StatusLine key={h.key} status={h.status} text={highlightText(h)} />
+        ))}
+        {data.alerts.some((a) => a.resolvedAt == null) ? (
+          <BigButton
+            kind="ghost"
+            icon="caret-right"
+            label={t('alerts.seeAll', { count: data.alerts.length })}
+            onPress={() => router.push({ pathname: '/caregiver/alerts', params: { patientId } })}
+          />
+        ) : null}
+      </View>
+
       <View style={styles.kpis}>
         <StatTile
+          third
           label={t('progress.kpi.sessions')}
           value={String(activity.sessions)}
           caption={t('progress.kpi.minutes', { n: activity.minutes })}
         />
         <StatTile
+          third
           label={t('progress.kpi.activeDays')}
           value={t('progress.kpi.activeDaysValue', { n: activity.activeDays, d: period })}
         />
         <StatTile
-          label={t('progress.kpi.avgScore')}
-          value={fmtScore(activity.avgScore)}
-          delta={deltaText(scoreDelta)}
-        />
-        <StatTile
+          third
           label={t('progress.kpi.remindersTaken')}
           value={fmtPct(decided ? taken / decided : null)}
           caption={decided ? `${taken} / ${decided}` : undefined}
         />
       </View>
 
+      {/* Bars read more easily than lines for families (patient-facing chart review). */}
       <ChartCard
-        title={t('progress.score.title')}
-        subtitle={t('progress.score.subtitle')}
+        title={t('progress.daily.title')}
+        subtitle={t('progress.daily.subtitle')}
         showTableLabel={t('progress.table.show')}
         showChartLabel={t('progress.table.chart')}
-        tableHeader={[t('progress.table.day'), t('progress.table.score')]}
-        table={[...scores].reverse().map((d) => [formatShortDate(new Date(d.day), language), fmtScore(d.avgScore)])}
+        tableHeader={[t('progress.table.day'), t('progress.table.games')]}
+        table={[...scores].reverse().map((d) => [formatShortDate(new Date(d.day), language), String(d.sessions)])}
       >
-        <LineChart
-          points={scores.map((d) => ({ label: day(d.day), value: d.avgScore }))}
-          max={100}
-          emptyText={t('progress.score.empty')}
-          readout={(p, i) =>
-            p.value == null
-              ? t('progress.score.readoutNone', { date: p.label })
-              : t('progress.score.readout', { date: p.label, score: Math.round(p.value), count: scores[i].sessions })
+        <ColumnChart
+          columns={scores.map((d) => ({ label: day(d.day), value: d.sessions || null }))}
+          max={Math.max(3, ...scores.map((d) => d.sessions))}
+          emptyText={t('progress.hl.noGames')}
+          readout={(_, i) =>
+            scores[i].sessions
+              ? t('progress.daily.readout', { date: day(scores[i].day), count: scores[i].sessions })
+              : t('progress.daily.readoutNone', { date: day(scores[i].day) })
           }
         />
       </ChartCard>
 
-      <AppText variant="large" bold>
-        {t('progress.games.title')}
-      </AppText>
-      <View style={styles.kpis}>
-        {played.map(({ g, s }) => {
-          const trendWord =
-            s.trend === 'up'
-              ? t('progress.games.up')
-              : s.trend === 'down'
-                ? t('progress.games.down')
-                : s.trend === 'steady'
-                  ? t('progress.games.steady')
-                  : null;
-          return (
-            <StatTile
-              key={g.id}
-              glyph={g.icon}
-              label={t(`games.${g.id}.title`)}
-              value={fmtScore(s.avgScore)}
-              delta={
-                trendWord
-                  ? { text: trendWord, tone: s.trend === 'up' ? 'good' : s.trend === 'down' ? 'bad' : 'neutral' }
-                  : null
-              }
-              caption={
-                s.sessions
-                  ? [
-                      t('progress.games.sessions', { count: s.sessions }),
-                      s.lastLevel ? t('progress.games.level', { level: s.lastLevel }) : null,
-                    ]
-                      .filter(Boolean)
-                      .join(' · ')
-                  : t('progress.games.never')
-              }
-              trend={s.recent.length > 1 ? s.recent : undefined}
-            />
-          );
-        })}
-      </View>
-      {unplayed.length ? (
-        <AppText variant="small" tone="muted">
-          {t('progress.games.notPlayed', { games: unplayed.map((x) => t(`games.${x.g.id}.title`)).join(', ') })}
-        </AppText>
+      {played.length ? (
+        <View style={styles.list}>
+          <AppText variant="large" weight="bold" style={styles.listTitle}>
+            {t('progress.games.title')}
+          </AppText>
+          {played.map(({ g, s: sum }) => (
+            <View key={g.id} style={styles.gameRow}>
+              <View style={[styles.gamePicture, { backgroundColor: g.tint }]}>
+                <Picture glyph={g.icon} size={30} />
+              </View>
+              <View style={styles.flex}>
+                <AppText variant="body" weight="semibold">
+                  {t(`games.${g.id}.title`)}
+                </AppText>
+                <AppText variant="caption" tone="muted">
+                  {[
+                    t('progress.games.sessions', { count: sum.sessions }),
+                    sum.lastLevel ? t('progress.games.level', { level: sum.lastLevel }) : null,
+                  ]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </AppText>
+                {sum.trend ? (
+                  <AppText
+                    variant="caption"
+                    weight="semibold"
+                    style={{
+                      color:
+                        sum.trend === 'down' ? colors.warning : sum.trend === 'up' ? colors.success : colors.textMuted,
+                    }}
+                  >
+                    {t(`progress.games.${sum.trend}`)}
+                  </AppText>
+                ) : null}
+              </View>
+              <AppText variant="title" weight="bold">
+                {fmtScore(sum.avgScore)}
+              </AppText>
+            </View>
+          ))}
+          {unplayed.length ? (
+            <AppText variant="caption" tone="muted" style={styles.listFoot}>
+              {t('progress.games.notPlayed', { games: unplayed.map((x) => t(`games.${x.g.id}.title`)).join(', ') })}
+            </AppText>
+          ) : null}
+        </View>
       ) : null}
 
       <ChartCard
@@ -319,9 +338,12 @@ export default function ProgressDashboard() {
         ))}
       </View>
 
-      <AppText variant="caption" tone="muted">
-        ℹ️ {t('progress.disclaimer')}
-      </AppText>
+      <View style={styles.note}>
+        <Icon name="info" size={18} color={colors.textMuted} />
+        <AppText variant="caption" tone="muted" style={styles.flex}>
+          {t('progress.disclaimer')}
+        </AppText>
+      </View>
     </Screen>
   );
 }
@@ -339,4 +361,17 @@ const styles = StyleSheet.create({
   },
   recentRow: { flexDirection: 'row', gap: space.sm, alignItems: 'flex-start' },
   flex: { flex: 1 },
+  list: { backgroundColor: colors.surface, borderRadius: radius.md, boxShadow: shadow.card, paddingVertical: space.sm },
+  listTitle: { paddingHorizontal: space.md, paddingVertical: space.xs },
+  listFoot: { paddingHorizontal: space.md, paddingTop: space.xs },
+  gameRow: {
+    minHeight: 68,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm + 4,
+    paddingHorizontal: space.md,
+    paddingVertical: space.xs,
+  },
+  gamePicture: { width: 44, height: 44, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
+  note: { flexDirection: 'row', gap: space.sm, alignItems: 'flex-start' },
 });

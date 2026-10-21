@@ -3,10 +3,14 @@ import type { TFunction } from 'i18next';
 import { router, usePathname, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
+import { StyleSheet, Switch, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { Picture } from '@/components/Picture';
+import { PressableScale } from '@/components/PressableScale';
+import { StatusLine } from '@/components/StatusLine';
+import { Meter } from '@/components/charts/Meter';
 import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { getDb } from '@/db/client';
@@ -17,7 +21,7 @@ import { useDbQuery } from '@/db/useDbQuery';
 import { startOfDay } from '@/engine/reminders';
 import type { LanguageCode } from '@/i18n';
 import { formatClock, formatShortDate, formatTime } from '@/services/datetime';
-import { REMINDER_ICON, sendTestReminder, syncReminderNotifications } from '@/services/notifications';
+import { REMINDER_ICON, syncReminderNotifications } from '@/services/notifications';
 import { useDevice } from '@/store/device';
 import { useSettings } from '@/store/settings';
 import { colors, radius, shadow, space } from '@/theme/tokens';
@@ -69,11 +73,6 @@ export default function CaregiverReminders() {
     reload();
   };
 
-  const test = async (r: Reminder) => {
-    const ok = await sendTestReminder(getDb(), r);
-    Alert.alert(ok ? t('reminders.caregiver.testSent') : t('reminders.caregiver.permissionDenied'));
-  };
-
   const name = data?.patient ? displayName(data.patient) : '';
 
   return (
@@ -84,20 +83,18 @@ export default function CaregiverReminders() {
         <AppText tone="muted">{t('reminders.caregiver.subtitle', { name })}</AppText>
       </View>
 
-      {data ? (
+      {data && data.total > 0 ? (
         <View style={styles.summary}>
-          <AppText variant="large" bold tone="onPrimary">
-            {t('reminders.caregiver.todaySummary', { done: data.done, total: data.total })}
-          </AppText>
+          <Meter
+            label={t('reminders.caregiver.todayLabel')}
+            valueText={t('reminders.caregiver.doneOf', { done: data.done, total: data.total })}
+            ratio={data.done / data.total}
+          />
         </View>
       ) : null}
 
       {/* Cloud staff phones never ring: reminders ring on the patient's phone. */}
-      {!permissionOk && canTest ? (
-        <View style={styles.warn}>
-          <AppText variant="small">{t('reminders.caregiver.permissionDenied')}</AppText>
-        </View>
-      ) : null}
+      {!permissionOk && canTest ? <StatusLine status="soon" text={t('reminders.caregiver.permissionDenied')} /> : null}
 
       <BigButton
         icon="plus"
@@ -107,61 +104,64 @@ export default function CaregiverReminders() {
 
       {data && data.reminders.length === 0 ? <AppText tone="muted">{t('reminders.caregiver.empty')}</AppText> : null}
 
-      {data?.reminders.map((r) => (
-        <View key={r.id} style={[styles.card, !r.enabled && styles.cardOff]}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={`${t('reminders.caregiver.editTitle')}: ${r.title}`}
-            onPress={() => router.push({ pathname: editPath, params: { patientId, reminderId: r.id } })}
-            style={styles.cardMain}
-          >
-            <AppText style={styles.emoji} importantForAccessibility="no">
-              {REMINDER_ICON[r.type]}
-            </AppText>
-            <View style={styles.cardText}>
-              <AppText variant="caption" tone="primary" bold>
-                {t(`reminders.type.${r.type}`)}
-              </AppText>
-              <AppText variant="large" bold>
-                {r.title}
-              </AppText>
-              <AppText variant="small" tone="muted">
-                {scheduleText(t, r, language)}
-              </AppText>
+      {data?.reminders.length ? (
+        <View style={styles.list}>
+          {data.reminders.map((r, i) => (
+            <View key={r.id}>
+              {i > 0 ? <View style={styles.divider} /> : null}
+              <PressableScale
+                accessibilityRole="button"
+                accessibilityLabel={`${t('reminders.caregiver.editTitle')}: ${r.title}`}
+                onPress={() => router.push({ pathname: editPath, params: { patientId, reminderId: r.id } })}
+                style={({ pressed }) => [styles.row, pressed && styles.pressed, !r.enabled && styles.off]}
+              >
+                <View style={styles.picture}>
+                  <Picture glyph={REMINDER_ICON[r.type]} size={34} />
+                </View>
+                <View style={styles.text}>
+                  <AppText variant="body" weight="semibold">
+                    {r.title}
+                  </AppText>
+                  <AppText variant="caption" tone="muted">
+                    {t(`reminders.type.${r.type}`)} · {scheduleText(t, r, language)}
+                  </AppText>
+                </View>
+                <Switch
+                  value={r.enabled}
+                  onValueChange={(v) => toggle(r, v)}
+                  accessibilityLabel={r.enabled ? t('reminders.caregiver.on') : t('reminders.caregiver.off')}
+                  trackColor={{ true: colors.primary, false: colors.border }}
+                />
+              </PressableScale>
             </View>
-            <Switch
-              value={r.enabled}
-              onValueChange={(v) => toggle(r, v)}
-              accessibilityLabel={r.enabled ? t('reminders.caregiver.on') : t('reminders.caregiver.off')}
-              trackColor={{ true: colors.primary, false: colors.border }}
-            />
-          </Pressable>
-          {r.enabled && canTest ? (
-            <BigButton kind="ghost" icon="bell" label={t('reminders.caregiver.test')} onPress={() => test(r)} />
-          ) : null}
+          ))}
         </View>
-      ))}
+      ) : null}
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  summary: { backgroundColor: colors.primary, borderRadius: radius.md, padding: space.md },
-  warn: {
-    backgroundColor: colors.warningSoft,
-    borderColor: colors.warning,
-    borderWidth: 1,
-    borderRadius: radius.md,
-    padding: space.md,
+  summary: { backgroundColor: colors.surface, borderRadius: radius.md, padding: space.md, boxShadow: shadow.card },
+  list: { backgroundColor: colors.surface, borderRadius: radius.md, boxShadow: shadow.card, overflow: 'hidden' },
+  divider: { height: 1, backgroundColor: colors.surfaceMuted, marginLeft: 76 },
+  row: {
+    minHeight: 80,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm + 4,
+    paddingHorizontal: space.md,
+    paddingVertical: space.sm + 2,
   },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    boxShadow: shadow.card,
-    padding: space.sm,
+  pressed: { backgroundColor: colors.primaryWash },
+  off: { opacity: 0.55 },
+  picture: {
+    width: 48,
+    height: 48,
+    borderRadius: radius.pill,
+    backgroundColor: colors.clay,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  cardOff: { opacity: 0.55 },
-  cardMain: { flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.sm },
-  emoji: { fontSize: 36, lineHeight: 44 },
-  cardText: { flex: 1, gap: 2 },
+  text: { flex: 1, gap: 2 },
 });

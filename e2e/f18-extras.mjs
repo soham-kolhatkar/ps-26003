@@ -100,7 +100,7 @@ try {
   await c.see(patient, 30000);
   await c.tap('People', { button: true, exact: true });
   await c.see(`E2E Sunita ${run}`);
-  await c.page.getByRole('button', { name: 'Reset PIN' }).filter({ visible: true }).first().click();
+  await c.page.getByTestId(`reset-E2E Sunita ${run}`).filter({ visible: true }).first().click();
   const resetCode = (await c.text('pin-reset-code')).replace(/\s/g, '');
   await c.shot('reset-code');
   check(/^\d{6}$/.test(resetCode), `the caregiver gets a 6-digit PIN reset code (${resetCode})`);
