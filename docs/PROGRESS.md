@@ -1,7 +1,7 @@
 # Progress
 
 **Current feature:** none. Tier 3 is complete and tagged `v0.3.0` (2026-10-21).
-**Next:** Tier 4 UI redesign: research, then a plan for the user to approve (2026-10-21).
+**Next:** F20 design foundation (Tier 4 plan approved 2026-10-21).
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -38,10 +38,19 @@ Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync
 | F19 | Cloud demo story (Demo tools), 4-phone demo script, APK v0.3.0, tag v0.3.0 | ✅ done (9cae723), tagged v0.3.0 |
 
 ## Tier 4: UI redesign, target v0.4.0
-The user found the UI cluttered and messy (2026-10-21). Redesign every screen (patient, games, caregiver, ASHA, doctor, setup) from research on dementia-friendly and older-adult design: palette, type, illustrations, animation. Plan to follow in `docs/plans/tier4-ui-redesign.md`. Accessibility and animation polish move here from the old Tier 4.
+The user found the UI cluttered and messy (2026-10-21). Full plan and research: [docs/plans/tier4-ui-redesign.md](plans/tier4-ui-redesign.md); visual direction: https://claude.ai/artifact/4uM8m3uXX8ikDJt35m2Wqt
+| ID | Feature | Status |
+|---|---|---|
+| F20 | Design foundation: tokens v2, fonts per language, icons (Phosphor), pictures (Fluent 3D), shared components, motion, haptics | ⏳ |
+| F21 | Patient phone: setup, pairing, PIN, home (today's 3 games + all games + SOS call family), reminder, family corner | ⏳ |
+| F22 | Games: shell, boards, prompts, end-of-game bloom, all 8 games | ⏳ |
+| F23 | Family caregiver: home, progress dashboard, reminders, photos, people, settings | ⏳ |
+| F24 | ASHA and doctor: triage home, patient page, visit form, report, alerts, notes | ⏳ |
+| F25 | Assamese pack (was F14, moved here by the user) | ⏳ |
+| F26 | Polish, accessibility pass, APK v0.4.0, tag v0.4.0 | ⏳ |
 
 ## Tier 5: later (the old Tier 4, moved by the user on 2026-10-21)
-F14 Assamese pack · low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report export · real SMS OTP (MSG91 + DLT) + login lockout · realtime updates · Play Store signing.
+Low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report export · real SMS OTP (MSG91 + DLT) + login lockout · realtime updates · Play Store signing.
 
 ## Known issues / notes
 - `expo-doctor`'s React Native Directory check sometimes fails (reactnative.directory unreachable from the corporate network, HTTP 000; seen 2026-10-14, passed again later the same day). Retry; it is not a project problem.
