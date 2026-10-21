@@ -219,6 +219,21 @@ CREATE TABLE doctor_note (
 CREATE INDEX idx_doctor_note_patient ON doctor_note (patient_id, created_at);
 `,
   },
+  {
+    version: 9,
+    name: 'SOS presses (F21)',
+    sql: `
+CREATE TABLE sos_event (
+  id             TEXT PRIMARY KEY NOT NULL,
+  patient_id     TEXT NOT NULL REFERENCES patient(id) ON DELETE CASCADE,
+  called_user_id TEXT REFERENCES app_user(id) ON DELETE SET NULL,
+  created_at     INTEGER NOT NULL,
+  -- This phone only (never synced): the banner was dismissed here.
+  seen_at        INTEGER
+);
+CREATE INDEX idx_sos_event_patient ON sos_event (patient_id, created_at);
+`,
+  },
 ];
 
 export const LATEST_VERSION = MIGRATIONS[MIGRATIONS.length - 1].version;

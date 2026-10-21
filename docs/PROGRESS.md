@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F21 patient phone (starting with the SOS "Call family" button, the user's priority).
+**Current feature:** F21 patient phone (SOS "Call family" + new patient home), on `feat/f21-patient-phone`: pushed, **waiting for the user's test** (checklist at the end of TESTING.md). SQL 006 applied by the user (2026-10-21); full e2e green, incl. the cloud SOS test.
 **Next:** F22 games.
 
 ## Tier 1: core demo
@@ -42,7 +42,7 @@ The user found the UI cluttered and messy (2026-10-21). Full plan and research: 
 | ID | Feature | Status |
 |---|---|---|
 | F20 | Design foundation: tokens v2, fonts per language, icons (Phosphor), pictures (Fluent 3D), shared components, motion, haptics; review fixes (D52) | ✅ done (f22e68f) |
-| F21 | Patient phone: setup, pairing, PIN, home (today's 3 games + all games + SOS call family), reminder, family corner | ⏳ |
+| F21 | Patient phone: SOS call family (D53, SQL 006), home (today's 3 games + all games), reminder screen | 🧪 testing |
 | F22 | Games: shell, boards, prompts, end-of-game bloom, all 8 games | ⏳ |
 | F23 | Family caregiver: home, progress dashboard, reminders, photos, people, settings | ⏳ |
 | F24 | ASHA and doctor: triage home, patient page, visit form, report, alerts, notes | ⏳ |

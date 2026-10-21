@@ -14,6 +14,7 @@ export const SYNCED_TABLES = [
   'game_level',
   'visit',
   'doctor_note',
+  'sos_event',
 ] as const;
 export type SyncedTable = (typeof SYNCED_TABLES)[number];
 
@@ -38,6 +39,10 @@ export const OUTBOX_TRIGGERS_SQL = [
   triggers('game_level', "NEW.patient_id || '|' || NEW.game_id", "OLD.patient_id || '|' || OLD.game_id"),
   triggers('visit', 'NEW.id', 'OLD.id'),
   triggers('doctor_note', 'NEW.id', 'OLD.id'),
+  // SOS presses travel once, on insert; dismissing the banner (seen_at) stays on this phone.
+  `
+CREATE TRIGGER IF NOT EXISTS sync_sos_event_ins AFTER INSERT ON sos_event WHEN ${QUIET}
+BEGIN INSERT INTO sync_outbox (tbl, row_id, op) VALUES ('sos_event', NEW.id, 'upsert'); END;`,
 ].join('\n');
 
 export async function installOutboxTriggers(db: DbClient): Promise<void> {

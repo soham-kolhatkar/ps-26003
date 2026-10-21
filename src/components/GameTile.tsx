@@ -27,7 +27,7 @@ export function GameTile({ icon, title, description, tint = colors.tint.leaf, on
       style={({ pressed }) => [styles.tile, pressed && styles.pressed]}
     >
       <View style={[styles.picture, { backgroundColor: tint }]}>
-        <Picture glyph={icon} size={54} />
+        <Picture glyph={icon} size={48} />
       </View>
       <AppText variant="large" bold style={styles.title}>
         {title}
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.md,
-    minHeight: 100,
+    minHeight: 88,
     paddingHorizontal: space.md,
     paddingVertical: space.sm + 4,
     backgroundColor: colors.surface,
@@ -53,8 +53,8 @@ const styles = StyleSheet.create({
   },
   pressed: { backgroundColor: colors.primaryWash },
   picture: {
-    width: 72,
-    height: 72,
+    width: 64,
+    height: 64,
     borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',

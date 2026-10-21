@@ -11,6 +11,7 @@ import {
   saveReminder,
 } from '@/db/repos/reminders';
 import { addDoctorNote, deleteDoctorNote, listDoctorNotes } from '@/db/repos/notes';
+import { listFamilyContacts, listUnseenSos, markSosSeen, recordSos } from '@/db/repos/sos';
 import { insertVisit, listVisits } from '@/db/repos/visits';
 import { createTestDb } from '@/db/testing/nodeDb';
 import type { DbClient } from '@/db/types';
@@ -289,6 +290,52 @@ describe('sync engine (two phones through the cloud)', () => {
     const r = await pull(carer, cloud, now);
     expect(r.applied).toBe(n);
     expect(await listSessions(carer, P, { limit: 5000 })).toHaveLength(n);
+  });
+
+  it("an SOS press on the patient's phone reaches the family as one new banner (F21)", async () => {
+    const cloud = memoryRemote();
+    const patientPhone = await phone();
+    const carer = await phone();
+    const [priya] = await listFamilyContacts(patientPhone, P);
+    expect(priya).toMatchObject({ name: 'Priya Sharma', phone: '+919800000001', isManager: true });
+    await recordSos(patientPhone, { patientId: P, calledUserId: priya.userId }, now);
+    await push(patientPhone, cloud);
+
+    expect((await pull(patientPhone, cloud, now)).sosArrived).toBe(0); // its own press: no alarm there
+    expect((await pull(carer, cloud, now)).sosArrived).toBe(1);
+    const [e] = await listUnseenSos(carer, [P], now - DAY);
+    expect(e).toMatchObject({ patientName: 'Kamala', calledName: 'Priya Sharma', createdAt: now });
+
+    // Dismissed here only: nothing travels, and a later pull does not bring it back.
+    await markSosSeen(carer, [e.id], now);
+    expect(await pendingChanges(carer)).toBe(0);
+    expect((await pull(carer, cloud, now)).sosArrived).toBe(0);
+    expect(await listUnseenSos(carer, [P], now - DAY)).toEqual([]);
+  });
+
+  it('keeps SOS presses queued while the cloud has no table for them, and syncs the rest', async () => {
+    const cloud = memoryRemote();
+    cloud.missing.add('sos_events');
+    const patientPhone = await phone();
+    const carer = await phone();
+    await recordSos(patientPhone, { patientId: P, calledUserId: CARER }, now);
+    await insertSession(patientPhone, {
+      patientId: P,
+      gameId: 'memory_match',
+      level: 1,
+      startedAt: now,
+      endedAt: now + 6e4,
+      stats: { trials: 4, correct: 4, accuracy: 1, avgReactionMs: 2000, score: 90 },
+      completed: true,
+    });
+    await push(patientPhone, cloud);
+    expect(await pendingChanges(patientPhone)).toBe(1); // the press waits; the game went
+    expect((await pull(carer, cloud, now)).applied).toBe(1);
+
+    cloud.missing.clear(); // SQL 006 has been run
+    await push(patientPhone, cloud);
+    expect(await pendingChanges(patientPhone)).toBe(0);
+    expect((await pull(carer, cloud, now)).sosArrived).toBe(1);
   });
 
   it('keeps changes queued when offline, drops changes the cloud refuses', async () => {

@@ -12,7 +12,7 @@ type LocalRow = Record<string, unknown>;
 
 export type TableSpec = {
   local: SyncedTable;
-  cloud: 'reminders' | 'reminder_events' | 'game_sessions' | 'game_levels' | 'visits' | 'doctor_notes';
+  cloud: 'reminders' | 'reminder_events' | 'game_sessions' | 'game_levels' | 'visits' | 'doctor_notes' | 'sos_events';
   /** Outbox row_id for a local row. */
   key: (row: LocalRow) => string;
   /** Cloud column used to page rows that share one updated_at. */
@@ -169,6 +169,22 @@ export const SPECS: Record<SyncedTable, TableSpec> = {
       deleted_at: null,
     }),
   },
+  sos_event: {
+    local: 'sos_event',
+    cloud: 'sos_events',
+    key: (r) => String(r.id),
+    pageKey: 'id',
+    pageKeyOf: (r) => String(r.id),
+    onConflict: 'id',
+    insertOnly: true,
+    readLocal: (db, ids) => byId(db, 'sos_event', ids),
+    toCloud: (r) => ({
+      id: r.id,
+      patient_id: r.patient_id,
+      called_user_id: r.called_user_id,
+      created_at: r.created_at,
+    }),
+  },
 };
 
 // ─── Applying pulled rows locally ─────────────────────────────────────────
@@ -186,6 +202,8 @@ export type ApplyOutcome = {
   /** Rows that could not be applied yet (their parent is missing): pull them again later. */
   held: CloudRow[];
   remindersChanged: boolean;
+  /** SOS presses this phone had not seen before (a notification is shown for them). */
+  sosArrived: number;
 };
 
 const userOrNull = (ctx: ApplyContext, id: unknown) => (typeof id === 'string' && ctx.knownUsers.has(id) ? id : null);
@@ -197,7 +215,7 @@ export async function applyRows(
   rows: CloudRow[],
   ctx: ApplyContext,
 ): Promise<ApplyOutcome> {
-  const out: ApplyOutcome = { applied: 0, held: [], remindersChanged: false };
+  const out: ApplyOutcome = { applied: 0, held: [], remindersChanged: false, sosArrived: 0 };
   for (const r of rows) {
     const pid = String(r.patient_id);
     if (!ctx.knownPatients.has(pid)) {
@@ -310,6 +328,15 @@ export async function applyRows(
           params(r.id, pid, userOrNull(ctx, r.author_id), r.body, r.created_at),
         );
         break;
+      case 'sos_event': {
+        const res = await db.runAsync(
+          `INSERT INTO sos_event (id, patient_id, called_user_id, created_at) VALUES (?, ?, ?, ?)
+           ON CONFLICT(id) DO NOTHING`,
+          params(r.id, pid, userOrNull(ctx, r.called_user_id), r.created_at),
+        );
+        if (res.changes > 0) out.sosArrived++;
+        break;
+      }
       case 'visit':
         await db.runAsync(
           `INSERT INTO visit (id, patient_id, user_id, started_at, ended_at, checkup, checkup_score, observations, note,

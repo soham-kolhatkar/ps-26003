@@ -5,6 +5,9 @@ import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { Icon } from '@/components/Icon';
+import { Picture } from '@/components/Picture';
+import { TopBar, TopBarButton } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { getDb } from '@/db/client';
 import { displayName, getPatient } from '@/db/repos/patients';
@@ -15,7 +18,7 @@ import { formatLongDate, formatTime } from '@/services/datetime';
 import { REMINDER_ICON, snoozeReminder } from '@/services/notifications';
 import { speak, stopSpeaking } from '@/services/tts';
 import { useSettings } from '@/store/settings';
-import { colors, radius, shadow, space } from '@/theme/tokens';
+import { colors, radius, space } from '@/theme/tokens';
 
 const THANKS_MIN_MS = 1500;
 
@@ -71,26 +74,31 @@ export default function ReminderPrompt() {
 
   return (
     <Screen>
+      <TopBar
+        onBack={goHome}
+        backLabel={t('game.home')}
+        backIcon="house"
+        right={<TopBarButton icon="speaker" tonal label={t('common.speak')} onPress={() => speak(spoken, language)} />}
+      />
       <View style={styles.center}>
         <View style={styles.icon}>
-          <AppText style={styles.emoji} importantForAccessibility="no">
-            {REMINDER_ICON[occ.type]}
-          </AppText>
+          <Picture glyph={REMINDER_ICON[occ.type]} size={136} />
         </View>
         <AppText variant="hero" center>
           {t(`reminders.prompt.${occ.type}.title`)}
         </AppText>
-        <View style={styles.card}>
-          <AppText variant="title" center>
-            {occ.title}
+        <AppText variant="title" weight="semibold" center>
+          {occ.title}
+        </AppText>
+        {occ.note ? (
+          <AppText variant="large" tone="muted" center>
+            {occ.note}
           </AppText>
-          {occ.note ? (
-            <AppText variant="large" tone="muted" center>
-              {occ.note}
-            </AppText>
-          ) : null}
-          <AppText variant="large" tone="primary" bold center>
-            🕰️ {occ.type === 'appointment' ? `${formatLongDate(new Date(occ.dueAt), language)} · ${time}` : time}
+        ) : null}
+        <View style={styles.when}>
+          <Icon name="clock" size={24} color={colors.onClay} />
+          <AppText variant="large" weight="semibold" tone="onClay">
+            {occ.type === 'appointment' ? `${formatLongDate(new Date(occ.dueAt), language)} · ${time}` : time}
           </AppText>
         </View>
       </View>
@@ -116,7 +124,6 @@ export default function ReminderPrompt() {
           {occ.type !== 'appointment' ? (
             <BigButton kind="secondary" icon="alarm" label={t('reminders.later')} onPress={later} disabled={busy} />
           ) : null}
-          <BigButton kind="ghost" icon="speaker" label={t('common.speak')} onPress={() => speak(spoken, language)} />
         </>
       )}
     </Screen>
@@ -126,21 +133,21 @@ export default function ReminderPrompt() {
 const styles = StyleSheet.create({
   center: { alignItems: 'center', gap: space.md, marginTop: space.lg },
   icon: {
-    width: 140,
-    height: 140,
+    width: 200,
+    height: 200,
     borderRadius: radius.pill,
-    backgroundColor: colors.primarySoft,
+    backgroundColor: colors.clay,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  emoji: { fontSize: 76, lineHeight: 90 },
-  card: {
-    alignSelf: 'stretch',
-    gap: space.xs,
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    boxShadow: shadow.card,
-    padding: space.lg,
+  when: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+    paddingHorizontal: space.md,
+    paddingVertical: space.sm,
+    borderRadius: radius.pill,
+    backgroundColor: colors.clay,
   },
   fill: { flex: 1 },
 });

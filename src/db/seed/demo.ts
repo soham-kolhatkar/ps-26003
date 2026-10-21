@@ -57,12 +57,20 @@ export const DEMO = {
     },
   ],
   users: [
-    { id: 'u-rimjhim', role: 'caregiver', name: 'Priya Sharma', phone: null, organization: null, avatar: '👩' },
+    // Numbers = the cloud demo accounts (D48), so the patient's SOS button has someone to call (F21).
+    {
+      id: 'u-rimjhim',
+      role: 'caregiver',
+      name: 'Priya Sharma',
+      phone: '+919000010001',
+      organization: null,
+      avatar: '👩',
+    },
     {
       id: 'u-pranita',
       role: 'asha',
       name: 'Sunita Devi',
-      phone: null,
+      phone: '+919000010002',
       organization: 'ASHA, Cinnamara sub-centre',
       avatar: '🧑‍⚕️',
     },
@@ -70,7 +78,7 @@ export const DEMO = {
       id: 'u-anjali',
       role: 'doctor',
       name: 'Dr. Anjali Mehta',
-      phone: null,
+      phone: '+919000010003',
       organization: 'Geriatric OPD, District Hospital Jorhat',
       avatar: '🩺',
     },
@@ -268,6 +276,7 @@ export const DEMO = {
 /** Tables in child → parent order, for clearing. */
 const ALL_TABLES = [
   'doctor_note',
+  'sos_event',
   'visit',
   'alert',
   'reminder_event',
@@ -547,4 +556,11 @@ export async function backfillDemoVisits(db: DbClient, now: number = Date.now())
     await db.runAsync("INSERT INTO setting (key, value) VALUES ('demo_visits_seeded', '1')", []);
   });
   return true;
+}
+
+/** Phones seeded before F21 have no demo numbers: fill them in (idempotent). */
+export async function backfillDemoContacts(db: DbClient): Promise<void> {
+  for (const u of DEMO.users) {
+    if (u.phone) await db.runAsync('UPDATE app_user SET phone = ? WHERE id = ? AND phone IS NULL', [u.phone, u.id]);
+  }
 }

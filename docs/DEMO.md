@@ -30,6 +30,7 @@
 | # | Phone | Do | Say |
 |---|---|---|---|
 | 1 | 1 Kamala | Point at the greeting and the date card; tap **🔊 Read aloud** | Voice-first and errorless: big text, one thing per screen, no logins, no exit by accident. |
+| 1b | 1 Kamala → 2 Priya, 3 Sunita | Tap **Call Priya** (top left) → the dialer opens with Priya's number; then show Priya's and Sunita's homes: red **"Kamala pressed SOS · time · calling Priya"** → **OK, seen** | Help is one tap away, and the whole care team knows within seconds, even if nobody answers the call. |
 | 2 | 1 Kamala | Play **🃏 Memory pairs** (one round) | The games adapt (AI difficulty): she stays at about 75–80% success, never sees "wrong". |
 | 3 | 2 Priya | Home → the sync chip turns "✓ Synced"; **📊 Progress** shows the game she just played | The family sees play, scores and trends within seconds, from anywhere. |
 | 4 | 2 Priya | **🔔 Reminders** → add "Metformin" for now → Save | Reminders are set by the family… |
@@ -67,6 +68,7 @@ Use this if there is no internet. On "Who will use this phone?" hold the 🌼 fo
 | 1 | Welcome → tap **हिन्दी** → **सुनाएँ** | Multilingual, voice-first. Everything on the patient side is read aloud, slowly. Assamese comes next. |
 | 2 | Continue → tap **Kamala** (no PIN) | No logins for the patient. Big text, one action per screen. Exiting needs a 2-second hold so she can't leave by accident. |
 | 3 | Point at the **date and time card** and the greeting | Reality orientation, a standard dementia-care aid: "Good morning, Kamala. Today is Tuesday, 13 October." |
+| 3b | Tap **Call Priya** (top left) → the dialer opens with Priya's number (cancel it); later, at step 7, Priya's home shows **"Kamala pressed SOS"** | SOS: one tap opens a call to the family, and the press reaches the care team's phones as an urgent banner. |
 | 4 | Play **🃏 Memory pairs** (1 round) | Cards look like an Assamese gamosa. Errorless design: no red crosses, no buzzer. We only count a mistake when she'd already seen the matching card. |
 | 5 | Show the **🌟 "new level"** moment (or explain) | **AI: adaptive difficulty.** A staircase keeps her at about 75–80% success: up after two strong sessions, down immediately after a rough one, never announced. |
 | 6 | Play **📋 Daily routines** (making tea ☕) | Familiar tasks: making tea, cooking rice, planting in the kitchen garden, washing clothes. Sequencing trains everyday function. |
