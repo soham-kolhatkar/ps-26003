@@ -3,9 +3,9 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, StyleSheet, View } from 'react-native';
 
-import { AlertsButton } from '@/components/AlertsButton';
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { ListGroup, ListRow } from '@/components/List';
 import { PatientCard } from '@/components/PatientCard';
 import { Screen } from '@/components/Screen';
 import { StaffHeader } from '@/components/StaffHeader';
@@ -25,7 +25,7 @@ import { clearAllPhotoFiles } from '@/services/photos';
 import { useDevice } from '@/store/device';
 import { useCloudRefresh } from '@/sync/refresh';
 import { useSession } from '@/store/session';
-import { space } from '@/theme/tokens';
+import { colors, space } from '@/theme/tokens';
 
 export default function CaregiverHome() {
   const { t } = useTranslation();
@@ -79,44 +79,71 @@ export default function CaregiverHome() {
   return (
     <Screen>
       <StaffHeader user={data.user} />
-      {data.patients.map((p) => (
-        <View key={p.id} style={styles.patient}>
-          <PatientCard patient={p} showNotes />
-          <AlertsButton counts={data.alerts[p.id]} patientId={p.id} pathname="/caregiver/alerts" />
-          <BigButton
-            icon="chart"
-            label={t('progress.button', { count: data.gamesThisWeek[p.id] ?? 0 })}
-            onPress={() => router.push({ pathname: '/caregiver/progress', params: { patientId: p.id } })}
-          />
-          {cloud ? (
-            // Photos never leave the patient's phone: they are added there (family corner).
-            <AppText variant="small" tone="muted">
-              {t('people.photosOnPatientPhone', { name: displayName(p) })}
-            </AppText>
-          ) : (
-            <BigButton
-              kind="secondary"
-              icon="camera"
-              label={t('photos.button', { count: data.photoCounts[p.id] ?? 0 })}
-              onPress={() => router.push({ pathname: '/caregiver/photos', params: { patientId: p.id } })}
-            />
-          )}
-          <BigButton
-            kind="secondary"
-            icon="bell"
-            label={t('reminders.caregiver.button', data.reminderToday[p.id] ?? { done: 0, total: 0 })}
-            onPress={() => router.push({ pathname: '/caregiver/reminders', params: { patientId: p.id } })}
-          />
-          {cloud ? (
-            <BigButton
-              kind="secondary"
-              icon="users"
-              label={t('people.button')}
-              onPress={() => router.push({ pathname: '/caregiver/people', params: { patientId: p.id } })}
-            />
-          ) : null}
-        </View>
-      ))}
+      {data.patients.map((p) => {
+        const counts = data.alerts[p.id];
+        const today = data.reminderToday[p.id] ?? { done: 0, total: 0 };
+        const photos = data.photoCounts[p.id] ?? 0;
+        return (
+          <View key={p.id} style={styles.patient}>
+            <PatientCard patient={p} showNotes showRelation footer={t('progress.weekGames', { count: data.gamesThisWeek[p.id] ?? 0 })} />
+            <ListGroup>
+              {counts?.open ? (
+                <ListRow
+                  icon={counts.serious ? 'triangle' : 'circle'}
+                  tone={counts.serious ? 'danger' : 'warning'}
+                  titleColor={counts.serious ? colors.danger : colors.warning}
+                  title={t('alerts.tab')}
+                  subtitle={
+                    counts.unseen
+                      ? t('alerts.badgeNew', { count: counts.open, unseen: counts.unseen })
+                      : t('alerts.badge', { count: counts.open })
+                  }
+                  onPress={() => router.push({ pathname: '/caregiver/alerts', params: { patientId: p.id } })}
+                />
+              ) : null}
+              <ListRow
+                icon="chart"
+                title={t('progress.button')}
+                subtitle={t('progress.rowHint')}
+                onPress={() => router.push({ pathname: '/caregiver/progress', params: { patientId: p.id } })}
+              />
+              <ListRow
+                icon="bell"
+                tone="clay"
+                title={t('reminders.caregiver.title')}
+                subtitle={today.total ? t('reminders.caregiver.today', today) : t('reminders.caregiver.noneToday')}
+                onPress={() => router.push({ pathname: '/caregiver/reminders', params: { patientId: p.id } })}
+              />
+              {cloud ? (
+                // Photos never leave the patient's phone: they are added there (family corner).
+                <ListRow
+                  icon="image"
+                  tone="lilac"
+                  title={t('photos.title')}
+                  subtitle={t('people.photosOnPatientPhone', { name: displayName(p) })}
+                />
+              ) : (
+                <ListRow
+                  icon="image"
+                  tone="lilac"
+                  title={t('photos.title')}
+                  subtitle={photos ? t('photos.count', { count: photos }) : t('photos.none')}
+                  onPress={() => router.push({ pathname: '/caregiver/photos', params: { patientId: p.id } })}
+                />
+              )}
+              {cloud ? (
+                <ListRow
+                  icon="users"
+                  tone="pond"
+                  title={t('people.button')}
+                  subtitle={t('people.rowHint', { name: displayName(p) })}
+                  onPress={() => router.push({ pathname: '/caregiver/people', params: { patientId: p.id } })}
+                />
+              ) : null}
+            </ListGroup>
+          </View>
+        );
+      })}
       {cloud && data.patients.length === 0 ? <AppText tone="muted">{t('people.noFamilyYet')}</AppText> : null}
       {cloud ? (
         <>
@@ -130,11 +157,11 @@ export default function CaregiverHome() {
         </>
       ) : null}
       {/* The demo story lives only in the single-phone demo database. */}
-      {cloud ? null : <BigButton kind="secondary" icon="reset" label={t('staff.resetDemo')} onPress={confirmReset} />}
+      {cloud ? null : <BigButton kind="danger" icon="reset" label={t('staff.resetDemo')} onPress={confirmReset} />}
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  patient: { gap: space.sm },
+  patient: { gap: space.md },
 });

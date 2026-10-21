@@ -18,9 +18,10 @@ export function normalizePhone(input: string): string | null {
 }
 
 /** "+919876543210" → "98765 43210" for display. */
+/** "98765 43210" with a no-break space, so a number never splits across two lines. */
 export function formatPhone(e164: string): string {
   const d = e164.replace(/^\+91/, '');
-  return d.length === 10 ? `${d.slice(0, 5)} ${d.slice(5)}` : e164;
+  return d.length === 10 ? `${d.slice(0, 5)}\u00A0${d.slice(5)}` : e164;
 }
 
 export function phoneToEmail(e164: string): string {

@@ -1,18 +1,22 @@
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
-import { AlertsButton } from '@/components/AlertsButton';
-import { DoctorNotes } from '@/components/DoctorNotes';
+import { AlertCard } from '@/components/AlertCard';
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
-import { TopBar } from '@/components/TopBar';
-import { StatTile } from '@/components/charts/StatTile';
+import { DoctorNotes } from '@/components/DoctorNotes';
+import { Icon } from '@/components/Icon';
+import { ListGroup, ListRow } from '@/components/List';
 import { PatientCard } from '@/components/PatientCard';
 import { Screen } from '@/components/Screen';
+import { StatusLine } from '@/components/StatusLine';
+import { Tabs } from '@/components/Tabs';
+import { TopBar } from '@/components/TopBar';
 import { VisitStatusLine } from '@/components/VisitStatusLine';
-import { alertCounts } from '@/db/repos/alerts';
+import { StatTile } from '@/components/charts/StatTile';
+import { listAlerts, markAlertsSeen } from '@/db/repos/alerts';
 import { listSessions } from '@/db/repos/games';
 import { displayName, getPatient } from '@/db/repos/patients';
 import { listVisits, type Visit } from '@/db/repos/visits';
@@ -27,22 +31,31 @@ import { colors, radius, shadow, space } from '@/theme/tokens';
 
 const DAY = 24 * 60 * 60 * 1000;
 
-/** ASHA view of one patient: visit status, alerts, check-up trend, past visits → start a home visit. */
+type Tab = 'alerts' | 'visits' | 'notes';
+
+/**
+ * ASHA view of one patient: visit status → start a home visit; then one section at a
+ * time (things to look at, past visits, doctor's notes) instead of one long page.
+ */
 export default function AshaPatient() {
   const { t } = useTranslation();
   const { patientId } = useLocalSearchParams<{ patientId: string }>();
   const language = useSettings((s) => s.language);
   const cloud = useDevice((s) => s.mode) === 'cloud';
+  const [tab, setTab] = useState<Tab | null>(null);
   const { data, reload } = useDbQuery(
     async (db) => {
       const now = Date.now();
       await refreshAlerts(db, patientId, now);
       const week = await listSessions(db, patientId, { since: now - 7 * DAY });
+      // Read before marking seen, so this visit still shows what is new.
+      const alerts = await listAlerts(db, patientId, { resolvedSince: now - 30 * DAY });
+      await markAlertsSeen(db, patientId, now);
       return {
         now,
         patient: await getPatient(db, patientId),
         visits: await listVisits(db, patientId),
-        alerts: await alertCounts(db, patientId),
+        alerts,
         gamesThisWeek: week.filter((s) => s.completed).length,
       };
     },
@@ -57,6 +70,8 @@ export default function AshaPatient() {
   const scored = comparableCheckups(data.visits);
   const [latest, previous] = scored;
   const change = latest && previous ? latest.checkupScore! - previous.checkupScore! : null;
+  const open = data.alerts.filter((a) => a.resolvedAt == null);
+  const shown: Tab = tab ?? (open.length ? 'alerts' : 'visits');
 
   return (
     <Screen>
@@ -69,22 +84,22 @@ export default function AshaPatient() {
         label={t('visit.start')}
         onPress={() => router.push({ pathname: '/asha/visit', params: { patientId } })}
       />
-      <AlertsButton counts={data.alerts} patientId={patientId} pathname="/asha/alerts" showClear />
       {cloud ? (
-        <BigButton
-          kind="secondary"
-          icon="users"
-          label={t('people.button')}
-          onPress={() => router.push({ pathname: '/asha/people', params: { patientId } })}
-        />
-      ) : null}
-      {cloud ? (
-        <BigButton
-          kind="secondary"
-          icon="bell"
-          label={t('reminders.caregiver.title')}
-          onPress={() => router.push({ pathname: '/asha/reminders', params: { patientId } })}
-        />
+        <ListGroup>
+          <ListRow
+            icon="bell"
+            tone="clay"
+            title={t('reminders.caregiver.title')}
+            onPress={() => router.push({ pathname: '/asha/reminders', params: { patientId } })}
+          />
+          <ListRow
+            icon="users"
+            tone="pond"
+            title={t('people.button')}
+            subtitle={t('people.rowHint', { name })}
+            onPress={() => router.push({ pathname: '/asha/people', params: { patientId } })}
+          />
+        </ListGroup>
       ) : null}
 
       <View style={styles.tiles}>
@@ -112,15 +127,43 @@ export default function AshaPatient() {
         />
       </View>
 
-      <DoctorNotes patientId={patientId} />
+      <Tabs
+        tabs={[
+          { key: 'alerts', label: t('alerts.tabShort'), count: open.length },
+          { key: 'visits', label: t('visit.tab'), count: data.visits.length },
+          { key: 'notes', label: t('notes.tab') },
+        ]}
+        value={shown}
+        onChange={setTab}
+      />
 
-      <AppText variant="large" bold>
-        {t('visit.history', { count: data.visits.length })}
-      </AppText>
-      {data.visits.length === 0 ? <AppText tone="muted">{t('visit.noVisits')}</AppText> : null}
-      {data.visits.slice(0, 6).map((v) => (
-        <VisitCard key={v.id} visit={v} language={language} />
-      ))}
+      {shown === 'alerts' ? (
+        <View style={styles.section}>
+          {open.length === 0 ? <StatusLine status="well" text={t('alerts.noConcerns')} /> : null}
+          {open.map((a) => (
+            <AlertCard key={a.id} alert={a} patientName={name} compact />
+          ))}
+          {data.alerts.length > open.length ? (
+            <BigButton
+              kind="ghost"
+              icon="caret-right"
+              label={t('alerts.seeAll', { count: data.alerts.length })}
+              onPress={() => router.push({ pathname: '/asha/alerts', params: { patientId } })}
+            />
+          ) : null}
+        </View>
+      ) : null}
+
+      {shown === 'visits' ? (
+        <View style={styles.section}>
+          {data.visits.length === 0 ? <AppText tone="muted">{t('visit.noVisits')}</AppText> : null}
+          {data.visits.slice(0, 6).map((v) => (
+            <VisitCard key={v.id} visit={v} language={language} />
+          ))}
+        </View>
+      ) : null}
+
+      {shown === 'notes' ? <DoctorNotes patientId={patientId} /> : null}
     </Screen>
   );
 }
@@ -130,7 +173,7 @@ function VisitCard({ visit, language }: { visit: Visit; language: LanguageCode }
   const worries = concerns(visit.observations);
   return (
     <View style={styles.visit}>
-      <AppText bold>
+      <AppText weight="semibold">
         {formatShortDate(new Date(visit.startedAt), language)}
         {' · '}
         {visit.checkupScore != null ? t('visit.scoreLine', { score: visit.checkupScore }) : t('visit.noCheckup')}
@@ -140,41 +183,45 @@ function VisitCard({ visit, language }: { visit: Visit; language: LanguageCode }
         <View style={styles.worries}>
           {worries.map((k) => (
             <View key={k} style={styles.worry}>
-              <AppText variant="caption" bold>
+              <AppText variant="caption" bold style={{ color: colors.warning }}>
                 {t(`visit.obs.${k}.short`)}: {t(`visit.obs.${k}.${visit.observations[k]}`)}
               </AppText>
             </View>
           ))}
         </View>
       ) : (
-        <AppText variant="small" tone="muted">
-          {t('visit.allWell')}
-        </AppText>
+        <StatusLine status="well" text={t('visit.allWell')} />
       )}
-      {visit.note ? <AppText variant="small">📝 {visit.note}</AppText> : null}
-      {visit.refer ? (
-        <AppText variant="small" bold>
-          {t('visit.referred')}
-        </AppText>
+      {visit.note ? (
+        <View style={styles.note}>
+          <Icon name="note" size={18} color={colors.textMuted} />
+          <AppText variant="small" style={styles.noteText}>
+            {visit.note}
+          </AppText>
+        </View>
       ) : null}
+      {visit.refer ? <StatusLine status="urgent" text={t('visit.referred')} /> : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   tiles: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md },
+  section: { gap: space.sm + 4 },
   visit: {
-    gap: space.xs,
+    gap: space.sm,
     padding: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
     boxShadow: shadow.card,
   },
-  worries: { flexDirection: 'row', flexWrap: 'wrap', gap: space.xs },
+  worries: { flexDirection: 'row', flexWrap: 'wrap', gap: space.xs + 2 },
   worry: {
-    paddingHorizontal: space.sm,
+    paddingHorizontal: space.sm + 2,
     paddingVertical: 2,
     borderRadius: radius.pill,
     backgroundColor: colors.warningSoft,
   },
+  note: { flexDirection: 'row', gap: space.sm, alignItems: 'flex-start' },
+  noteText: { flex: 1 },
 });

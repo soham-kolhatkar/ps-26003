@@ -16,7 +16,7 @@ try {
   const tools = await phone('demo-tools');
   await tools.open('/demo-tools');
   await tools.see('Demo tools');
-  await tools.tap('Load / reset the cloud demo', { button: true });
+  await tools.tap('Load the demo story', { button: true });
   await tools.see('✅ done', 240000);
   await tools.shot('loaded');
   check(true, 'Demo tools load the story into the cloud');
@@ -24,9 +24,9 @@ try {
   const priya = await phone('priya');
   await signIn(priya, 'Family caregiver', '9000010001');
   await priya.see('Kamala Sharma', 30000);
-  await priya.see('games this week');
+  await priya.see('games played');
   await priya.shot('home');
-  check(!(await priya.page.getByText('Progress · 0 games').count()), 'Priya sees Kamala with her game history');
+  check(!(await priya.page.getByText('This week: 0 games').count()), 'Priya sees Kamala with her game history');
 
   const sunita = await phone('sunita');
   await signIn(sunita, 'ASHA worker', '9000010002');
@@ -35,7 +35,7 @@ try {
   await sunita.see('Kamala Sharma');
   await sunita.see('Visit overdue');
   // Two games slipping + blood-pressure medicine often missed (missed doses are computed on her phone).
-  await sunita.see('Things to look at: 3', 30000);
+  await sunita.page.getByLabel(/^3 things to look at/).filter({ visible: true }).first().waitFor({ timeout: 30000 });
   await sunita.shot('asha-list');
   check(true, "Sunita sees her three patients; Ramesh: visit overdue, 3 things to look at (incl. missed medicine)");
 
@@ -50,7 +50,7 @@ try {
   check(true, "Dr. Anjali sees the referral and Ramesh's trend report");
 
   // Reset works: a second load replaces the story (no duplicates).
-  await tools.tap('Load / reset the cloud demo', { button: true });
+  await tools.tap('Load the demo story', { button: true });
   await tools.see('removed', 240000);
   await tools.see('✅ done', 240000);
   await priya.open('/');

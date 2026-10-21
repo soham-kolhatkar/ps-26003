@@ -96,14 +96,14 @@ try {
 
   // 4. Both reach the caregiver.
   // Water comes with default times (10:00, 13:00, 16:00) plus the one added: 1 of 4 taken.
-  const dose = await eventually(c, '/', 'Reminders · 1/');
+  const dose = await eventually(c, '/', /^1 of \d+ done today$/);
   if (!dose) {
     console.log('--- patient warnings ---\n' + p.warnings.slice(-15).join('\n'));
     console.log('--- caregiver warnings ---\n' + c.warnings.slice(-15).join('\n'));
     await c.shot('caregiver-dose-missing');
   }
   check(dose, "the caregiver sees the dose taken on the patient's phone (1 of today's doses)");
-  const game = await eventually(c, '/', 'Progress · 1 games this week');
+  const game = await eventually(c, '/', 'This week: 1 game played');
   await c.shot('caregiver-after-sync');
   check(game, "the caregiver sees the patient's game");
   await c.see('Synced');

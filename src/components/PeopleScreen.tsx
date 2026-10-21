@@ -192,7 +192,7 @@ export function PeopleScreen() {
                     onPress={() => run(async () => setPinReset({ ...(await createPinReset(m.user_id)), name: label }))}
                   />
                   <BigButton
-                    kind="ghost"
+                    kind="danger"
                     icon="minus"
                     label={t('people.remove')}
                     onPress={() => remove(m.user_id, label)}
@@ -248,7 +248,7 @@ export function PeopleScreen() {
         </AppText>
       ) : null}
 
-      {snap ? <BigButton kind="ghost" icon="door" label={t('people.leave')} disabled={busy} onPress={leave} /> : null}
+      {snap ? <BigButton kind="danger" icon="door" label={t('people.leave')} disabled={busy} onPress={leave} /> : null}
       <AppText variant="caption" tone="muted">
         {t('people.updated', { time: formatTime(new Date(nowMs()), language) })}
       </AppText>

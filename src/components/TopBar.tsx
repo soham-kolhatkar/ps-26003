@@ -52,6 +52,7 @@ export function TopBarButton({
   label,
   onPress,
   tonal,
+  danger,
   testID,
 }: {
   icon: IconName;
@@ -59,18 +60,21 @@ export function TopBarButton({
   onPress: () => void;
   /** Leaf background (Read aloud on patient screens). */
   tonal?: boolean;
+  /** Red tonal: Sign out. */
+  danger?: boolean;
   testID?: string;
 }) {
+  const fg = danger ? colors.danger : tonal ? colors.onPrimarySoft : colors.text;
   return (
     <PressableScale
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={onPress}
       testID={testID}
-      style={({ pressed }) => [styles.pill, tonal && styles.tonal, pressed && styles.pressed]}
+      style={({ pressed }) => [styles.pill, tonal && styles.tonal, danger && styles.danger, pressed && styles.pressed]}
     >
-      <Icon name={icon} size={22} color={tonal ? colors.onPrimarySoft : colors.text} />
-      <AppText variant="small" weight="semibold" tone={tonal ? 'onPrimarySoft' : 'default'}>
+      <Icon name={icon} size={22} color={fg} />
+      <AppText variant="small" weight="semibold" style={[styles.pillLabel, { color: fg }]} numberOfLines={1}>
         {label}
       </AppText>
     </PressableScale>
@@ -92,5 +96,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceMuted,
   },
   tonal: { backgroundColor: colors.primarySoft, paddingLeft: space.md },
+  danger: { backgroundColor: colors.accentSoft },
+  pillLabel: { flexShrink: 1 },
   pressed: { opacity: 0.85 },
 });

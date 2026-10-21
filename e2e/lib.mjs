@@ -108,7 +108,7 @@ export async function signUp(p, role, name, number, pin = '246810', extra = {}) 
   await p.tap('Continue', { button: true });
   await p.tap(role);
   await p.see('Sign in');
-  await p.tap('New here? Create an account', { button: true });
+  await p.tap('Create a new account', { button: true });
   await p.see('New account');
   await p.fill('name', name);
   await p.fill('phone', number);

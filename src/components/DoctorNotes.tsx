@@ -61,7 +61,7 @@ export function DoctorNotes({
             {[n.authorName, formatShortDate(new Date(n.createdAt), language)].filter(Boolean).join(' · ')}
           </AppText>
           {canWrite && n.authorId === userId ? (
-            <BigButton kind="ghost" icon="trash" label={t('notes.delete')} onPress={() => remove(n.id)} />
+            <BigButton kind="danger" icon="trash" label={t('notes.delete')} onPress={() => remove(n.id)} />
           ) : null}
         </View>
       ))}

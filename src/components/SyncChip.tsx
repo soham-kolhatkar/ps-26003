@@ -45,7 +45,11 @@ export function SyncChip() {
       hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
     >
       <Icon name={icon} size={18} color={warn ? colors.warning : ok ? colors.success : colors.textMuted} />
-      <AppText variant="caption" bold style={{ color: warn ? colors.warning : ok ? colors.success : colors.textMuted }}>
+      <AppText
+        variant="caption"
+        bold
+        style={[styles.text, { color: warn ? colors.warning : ok ? colors.success : colors.textMuted }]}
+      >
         {text}
       </AppText>
     </Pressable>
@@ -64,5 +68,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceMuted,
   },
   ok: { backgroundColor: colors.successSoft },
+  text: { flexShrink: 1 },
   warn: { backgroundColor: colors.warningSoft },
 });

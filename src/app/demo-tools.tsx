@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Icon } from '@/components/Icon';
 import { BigButton } from '@/components/BigButton';
 import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
@@ -55,11 +56,20 @@ export default function DemoTools() {
 
       <View style={styles.card}>
         {DEMO_ACCOUNTS.map((a) => (
-          <AppText key={a.key}>
-            <AppText bold>{t(`roles.${a.role}`)}</AppText> · {a.name} · 📱 {formatPhone(a.phone)}
-          </AppText>
+          <View key={a.key} style={styles.account}>
+            <AppText variant="small" tone="muted">
+              {t(`roles.${a.role}`)} · {a.name}
+            </AppText>
+            <View style={styles.line}>
+              <Icon name="phone-device" size={20} color={colors.textMuted} />
+              <AppText weight="semibold">{formatPhone(a.phone)}</AppText>
+            </View>
+          </View>
         ))}
-        <AppText bold>🔒 PIN {DEMO_PIN}</AppText>
+        <View style={styles.line}>
+          <Icon name="lock" size={20} color={colors.textMuted} />
+          <AppText weight="semibold">PIN {DEMO_PIN}</AppText>
+        </View>
         <AppText variant="small" tone="muted">
           {t('demoTools.patients')}
         </AppText>
@@ -103,6 +113,8 @@ export default function DemoTools() {
 }
 
 const styles = StyleSheet.create({
+  account: { gap: 2 },
+  line: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   card: {
     gap: space.xs,
     padding: space.md,

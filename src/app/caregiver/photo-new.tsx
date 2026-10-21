@@ -6,6 +6,7 @@ import { Alert, Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
+import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
 import { getDb } from '@/db/client';
@@ -50,7 +51,7 @@ export default function NewPhoto() {
 
   return (
     <Screen>
-      <BigButton kind="ghost" icon="x" label={t('common.cancel')} onPress={close} />
+      <TopBar onBack={close} backLabel={t('common.cancel')} backIcon="x" />
       <AppText variant="title">{t('photos.addTitle')}</AppText>
       <View style={styles.preview}>
         {uri ? (

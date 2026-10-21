@@ -16,7 +16,6 @@ import { speak, stopSpeaking } from '@/services/tts';
 import { useSettings } from '@/store/settings';
 import { colors, radius, space } from '@/theme/tokens';
 
-import { starsFor } from './feedback';
 import { finishSession, loadLevel, type FinishedSession } from './session';
 import type { GameDefinition } from './types';
 
@@ -132,11 +131,6 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
           <AppText variant="large" tone="muted" center>
             {instruction}
           </AppText>
-          <View style={styles.chip}>
-            <AppText variant="small" tone="primary" bold>
-              {'⭐'.repeat(Math.min(level, game.maxLevel))} {t('game.level', { level })}
-            </AppText>
-          </View>
         </View>
         <View style={styles.fill} />
         <BigButton size="large" icon="play" label={t('game.start')} onPress={start} />
@@ -170,7 +164,6 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
     );
   }
 
-  const stars = starsFor(result?.stats.accuracy ?? 0);
   return (
     <Screen>
       <View style={[styles.center, styles.celebrate]}>
@@ -180,14 +173,10 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
         <AppText variant="hero" center>
           {t('game.doneTitle', { name: patientName })}
         </AppText>
-        <AppText style={styles.stars} accessibilityLabel={`${stars} / 3`}>
-          {'⭐'.repeat(stars)}
-          <AppText style={[styles.stars, styles.starOff]}>{'⭐'.repeat(3 - stars)}</AppText>
-        </AppText>
         {result?.decision?.change === 'up' ? (
           <View style={[styles.chip, styles.chipAccent]}>
             <AppText variant="large" tone="primary" bold>
-              🌟 {t('game.levelUp')}
+              {t('game.levelUp')}
             </AppText>
           </View>
         ) : null}
@@ -221,8 +210,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  stars: { fontSize: 48, lineHeight: 60 },
-  starOff: { opacity: 0.2 },
   chip: {
     backgroundColor: colors.primarySoft,
     borderRadius: radius.pill,

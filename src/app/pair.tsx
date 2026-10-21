@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Picture } from '@/components/Picture';
 import { AuthErrorText } from '@/components/AuthErrorText';
 import { BigButton } from '@/components/BigButton';
 import { PinPad } from '@/components/PinPad';
@@ -95,9 +96,7 @@ export default function Pair() {
 
   return (
     <Screen>
-      <AppText variant="hero" center importantForAccessibility="no">
-        👵
-      </AppText>
+      <Picture glyph="👵" size={88} style={styles.picture} />
       <AppText variant="title" center>
         {t('pair.title')}
       </AppText>
@@ -123,7 +122,7 @@ export default function Pair() {
         onPress={pair}
       />
       <BigButton
-        kind="ghost"
+        kind="danger"
         icon="redo"
         label={t('auth.changeRole')}
         onPress={() => {
@@ -136,6 +135,7 @@ export default function Pair() {
 }
 
 const styles = StyleSheet.create({
+  picture: { alignSelf: 'center' },
   how: { padding: space.md, borderRadius: radius.md, backgroundColor: colors.primarySoft },
   code: { fontSize: 36, letterSpacing: 8, textAlign: 'center' },
 });

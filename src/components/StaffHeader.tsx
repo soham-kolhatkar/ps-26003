@@ -7,6 +7,7 @@ import { Picture } from '@/components/Picture';
 import { SyncChip } from '@/components/SyncChip';
 import { TopBarButton } from '@/components/TopBar';
 import type { AppUser } from '@/db/models';
+import { greetingName } from '@/engine/names';
 import { useDevice } from '@/store/device';
 import { useSession } from '@/store/session';
 import { colors, radius, space } from '@/theme/tokens';
@@ -29,6 +30,7 @@ export function StaffHeader({ user }: { user: AppUser }) {
         ) : (
           <TopBarButton
             icon="sign-out"
+            danger
             label={t('common.signOut')}
             onPress={() => {
               signOut();
@@ -42,7 +44,7 @@ export function StaffHeader({ user }: { user: AppUser }) {
           <Picture glyph={user.avatar ?? '🙂'} size={44} />
         </View>
         <View style={styles.text}>
-          <AppText variant="title">{t('staff.hello', { name: user.name.split(' ')[0] })}</AppText>
+          <AppText variant="title">{t('staff.hello', { name: greetingName(user.name) })}</AppText>
           <AppText variant="small" tone="muted">
             {[t(`roles.${user.role}`), user.organization].filter(Boolean).join(' · ')}
           </AppText>

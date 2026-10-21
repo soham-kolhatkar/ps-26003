@@ -18,7 +18,9 @@ export function StatusLine({ status, text, testID }: { status: Status; text: str
   const s = STATUS[status];
   return (
     <View style={styles.row} testID={testID}>
-      <Icon name={s.icon} size={18} weight="fill" color={s.color} />
+      <View style={styles.icon}>
+        <Icon name={s.icon} size={18} weight="fill" color={s.color} />
+      </View>
       <AppText variant="small" bold style={[styles.text, { color: s.color }]}>
         {text}
       </AppText>
@@ -27,6 +29,8 @@ export function StatusLine({ status, text, testID }: { status: Status; text: str
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+  row: { flexDirection: 'row', alignItems: 'flex-start', gap: space.sm },
+  /** One text line tall (18 sp × 1.45), so the icon sits beside the first line. */
+  icon: { height: 26, justifyContent: 'center' },
   text: { flexShrink: 1 },
 });

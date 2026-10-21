@@ -78,7 +78,7 @@ export default function FamilyCorner() {
         onPress={() => router.push({ pathname: '/patient/photos', params: { patientId: patientId ?? '' } })}
       />
       <View style={styles.spacer} />
-      <BigButton kind="ghost" icon="plug" label={t('family.unpair')} onPress={unpair} />
+      <BigButton kind="danger" icon="plug" label={t('family.unpair')} onPress={unpair} />
     </Screen>
   );
 }

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Picture } from '@/components/Picture';
 import { BigButton } from '@/components/BigButton';
 import { Screen } from '@/components/Screen';
 import { LANGUAGE_CODES, LANGUAGES } from '@/i18n';
@@ -50,9 +51,7 @@ export default function Welcome() {
     <Screen>
       <View style={styles.header}>
         <View style={styles.logo}>
-          <AppText variant="hero" importantForAccessibility="no">
-            🌼
-          </AppText>
+          <Picture glyph="🌼" size={60} />
         </View>
         <AppText variant="hero" tone="primary" center>
           {t('app.name')}

@@ -26,7 +26,7 @@ export function HoldButton({ label, hint, onHold, holdMs = 2000 }: HoldButtonPro
       style={({ pressed }) => [styles.base, pressed && styles.pressed]}
     >
       <Icon name="lock" size={20} color={colors.textMuted} />
-      <AppText variant="small" tone="muted">
+      <AppText variant="small" tone="muted" style={styles.label}>
         {label}
       </AppText>
     </Pressable>
@@ -45,4 +45,5 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
   },
   pressed: { backgroundColor: colors.surfaceMuted },
+  label: { flexShrink: 1 },
 });

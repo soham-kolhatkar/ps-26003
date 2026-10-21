@@ -1,9 +1,12 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { StatusLine } from '@/components/StatusLine';
+import { PressableScale } from '@/components/PressableScale';
+import { Icon } from '@/components/Icon';
 import { BigButton } from '@/components/BigButton';
 import { TopBar } from '@/components/TopBar';
 import { Screen } from '@/components/Screen';
@@ -144,7 +147,7 @@ export default function HomeVisit() {
             </AppText>
           ) : null}
           <AppText>{t('visit.nextOn', { date: formatShortDate(new Date(nowMs() + days * DAY), language) })}</AppText>
-          {refer ? <AppText bold>🩺 {t('visit.referred')}</AppText> : null}
+          {refer ? <StatusLine status="urgent" text={t('visit.referred')} /> : null}
         </View>
         <BigButton
           icon="arrow-left"
@@ -260,17 +263,22 @@ function Chip({
   onPress: () => void;
 }) {
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityState={{ selected }}
+      accessibilityLabel={label}
       onPress={onPress}
       style={[styles.chip, selected && (warn ? styles.chipWarn : styles.chipOn)]}
     >
-      <AppText variant="small" bold tone={selected && !warn ? 'onPrimary' : 'primary'}>
-        {selected ? '✓ ' : ''}
+      {selected ? <Icon name="check" size={20} color={warn ? colors.warning : colors.textOnPrimary} /> : null}
+      <AppText
+        variant="small"
+        bold
+        style={[styles.chipText, { color: selected ? (warn ? colors.warning : colors.textOnPrimary) : colors.onPrimarySoft }]}
+      >
         {label}
       </AppText>
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -287,14 +295,15 @@ const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   chip: {
     minHeight: touch.min,
-    justifyContent: 'center',
-    paddingHorizontal: space.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs + 2,
+    paddingHorizontal: space.md + 2,
     borderRadius: radius.pill,
-    borderWidth: 2,
-    borderColor: colors.primary,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.primarySoft,
   },
+  chipText: { flexShrink: 1 },
   chipOn: { backgroundColor: colors.primary },
-  chipWarn: { backgroundColor: colors.warningSoft, borderColor: colors.warning },
+  chipWarn: { backgroundColor: colors.warningSoft },
   note: { minHeight: 96, textAlignVertical: 'top', paddingTop: space.sm },
 });

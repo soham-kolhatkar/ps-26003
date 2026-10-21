@@ -7,9 +7,10 @@ import { colors, radius, space, touch } from '@/theme/tokens';
 
 /**
  * primary = the one filled main action on a screen; secondary = tonal (leaf, no outline);
- * ghost = plain text button for minor actions.
+ * ghost = plain text button for minor actions; danger = red tonal for anything that removes,
+ * signs out or unpairs (always behind a confirmation).
  */
-type Kind = 'primary' | 'secondary' | 'ghost';
+type Kind = 'primary' | 'secondary' | 'ghost' | 'danger';
 
 export type BigButtonProps = Omit<PressableScaleProps, 'children' | 'style'> & {
   label: string;
@@ -23,8 +24,9 @@ const FG: Record<Kind, string> = {
   primary: colors.textOnPrimary,
   secondary: colors.onPrimarySoft,
   ghost: colors.primary,
+  danger: colors.danger,
 };
-const TONE = { primary: 'onPrimary', secondary: 'onPrimarySoft', ghost: 'primary' } as const;
+const TONE = { primary: 'onPrimary', secondary: 'onPrimarySoft', ghost: 'primary', danger: 'accent' } as const;
 
 export function BigButton({
   label,
@@ -60,6 +62,7 @@ export function BigButton({
           weight={large ? 'bold' : 'semibold'}
           tone={selected ? 'onPrimarySoft' : TONE[kind]}
           center
+          style={styles.label}
         >
           {label}
         </AppText>
@@ -72,6 +75,7 @@ const PRESSED = StyleSheet.create({
   primary: { backgroundColor: colors.primaryPressed },
   secondary: { backgroundColor: '#CBE4D8' },
   ghost: { backgroundColor: colors.primaryWash },
+  danger: { backgroundColor: '#F6CFCA' },
 });
 
 const styles = StyleSheet.create({
@@ -85,9 +89,12 @@ const styles = StyleSheet.create({
   regular: { minHeight: touch.min, borderRadius: radius.md },
   large: { minHeight: touch.large, borderRadius: radius.lg },
   content: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: space.sm + 4 },
+  /** Long labels wrap inside the button instead of running out of it (Android). */
+  label: { flexShrink: 1 },
   primary: { backgroundColor: colors.primary },
   secondary: { backgroundColor: colors.primarySoft },
   ghost: { backgroundColor: 'transparent' },
+  danger: { backgroundColor: colors.accentSoft },
   selected: { backgroundColor: colors.primarySoft, borderColor: colors.primary },
   disabled: { opacity: 0.45 },
 });

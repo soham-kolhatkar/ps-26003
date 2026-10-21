@@ -78,8 +78,8 @@ export default function Settings() {
         </AppText>
       </View>
 
-      <BigButton kind="secondary" icon="sign-out" label={t('common.signOut')} onPress={() => leave(false)} />
-      <BigButton kind="ghost" icon="redo" label={t('settings.changeRole')} onPress={() => leave(true)} />
+      <BigButton kind="danger" icon="sign-out" label={t('common.signOut')} onPress={() => leave(false)} />
+      <BigButton kind="danger" icon="redo" label={t('settings.changeRole')} onPress={() => leave(true)} />
     </Screen>
   );
 }

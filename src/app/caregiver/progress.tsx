@@ -1,11 +1,14 @@
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { AlertCard } from '@/components/AlertCard';
 import { DoctorNotes } from '@/components/DoctorNotes';
 import { AppText } from '@/components/AppText';
+import { Tabs } from '@/components/Tabs';
+import { Picture } from '@/components/Picture';
+import { Icon } from '@/components/Icon';
 import { BigButton } from '@/components/BigButton';
 import { TopBar } from '@/components/TopBar';
 import { ChartCard } from '@/components/charts/ChartCard';
@@ -100,7 +103,8 @@ export default function ProgressDashboard() {
   };
 
   // ---- recent activity timeline ----
-  type Item = { at: number; text: string; icon: string };
+  /** `icon: null` = a missed dose (warning icon instead of a picture). */
+  type Item = { at: number; text: string; icon: string | null };
   const recent: Item[] = [
     ...sessions
       .filter((s) => s.completed)
@@ -120,13 +124,18 @@ export default function ProgressDashboard() {
           },
         ];
       if (st === 'missed')
-        return [{ at: o.dueAt + MISSED_AFTER_MS, icon: '⚠️', text: t('progress.recent.missed', { title: o.title }) }];
+        return [{ at: o.dueAt + MISSED_AFTER_MS, icon: null, text: t('progress.recent.missed', { title: o.title }) }];
       return [];
     }),
   ]
     .filter((i) => i.at <= now)
     .sort((a, b) => b.at - a.at)
     .slice(0, 8);
+
+  // Only games played in the period get a tile; the rest are named in one line (less to scan).
+  const summaries = GAMES.map((g) => ({ g, s: gameSummary(sessions, g.id, period, now) }));
+  const played = summaries.filter((x) => x.s.sessions > 0);
+  const unplayed = summaries.filter((x) => x.s.sessions === 0);
 
   return (
     <Screen>
@@ -150,22 +159,14 @@ export default function ProgressDashboard() {
       <DoctorNotes patientId={patientId} limit={2} />
 
       {/* One filter row, above everything it scopes. */}
-      <View style={styles.filters}>
-        {([7, 30] as const).map((p) => (
-          <Pressable
-            key={p}
-            accessibilityRole="button"
-            accessibilityState={{ selected: period === p }}
-            onPress={() => setPeriod(p)}
-            style={[styles.chip, period === p && styles.chipOn]}
-          >
-            <AppText variant="small" bold tone={period === p ? 'onPrimary' : 'primary'}>
-              {period === p ? '✓ ' : ''}
-              {t(p === 7 ? 'progress.last7' : 'progress.last30')}
-            </AppText>
-          </Pressable>
-        ))}
-      </View>
+      <Tabs
+        tabs={[
+          { key: '7', label: t('progress.last7') },
+          { key: '30', label: t('progress.last30') },
+        ]}
+        value={String(period) as '7' | '30'}
+        onChange={(k) => setPeriod(k === '7' ? 7 : 30)}
+      />
 
       <View style={styles.kpis}>
         <StatTile
@@ -213,8 +214,7 @@ export default function ProgressDashboard() {
         {t('progress.games.title')}
       </AppText>
       <View style={styles.kpis}>
-        {GAMES.map((g) => {
-          const s = gameSummary(sessions, g.id, period, now);
+        {played.map(({ g, s }) => {
           const trendWord =
             s.trend === 'up'
               ? t('progress.games.up')
@@ -226,7 +226,7 @@ export default function ProgressDashboard() {
           return (
             <StatTile
               key={g.id}
-              icon={g.icon}
+              glyph={g.icon}
               label={t(`games.${g.id}.title`)}
               value={fmtScore(s.avgScore)}
               delta={
@@ -249,6 +249,11 @@ export default function ProgressDashboard() {
           );
         })}
       </View>
+      {unplayed.length ? (
+        <AppText variant="small" tone="muted">
+          {t('progress.games.notPlayed', { games: unplayed.map((x) => t(`games.${x.g.id}.title`)).join(', ') })}
+        </AppText>
+      ) : null}
 
       <ChartCard
         title={t('progress.reminders.title')}
@@ -280,7 +285,8 @@ export default function ProgressDashboard() {
             {byType.map((b) => (
               <Meter
                 key={b.type}
-                label={`${REMINDER_ICON[b.type]} ${t(`reminders.type.${b.type}`)}`}
+                glyph={REMINDER_ICON[b.type]}
+                label={t(`reminders.type.${b.type}`)}
                 ratio={b.rate ?? 0}
                 valueText={`${fmtPct(b.rate)} · ${b.taken}/${b.decided}`}
               />
@@ -296,9 +302,13 @@ export default function ProgressDashboard() {
         {recent.length === 0 ? <AppText tone="muted">{t('progress.recent.empty')}</AppText> : null}
         {recent.map((r, i) => (
           <View key={i} style={styles.recentRow}>
-            <AppText variant="body" importantForAccessibility="no">
-              {r.icon}
-            </AppText>
+            {r.icon ? (
+              <Picture glyph={r.icon} size={28} />
+            ) : (
+              <View style={styles.missed}>
+                <Icon name="warning" size={20} weight="fill" color={colors.warning} />
+              </View>
+            )}
             <View style={styles.flex}>
               <AppText variant="small">{r.text}</AppText>
               <AppText variant="caption" tone="muted">
@@ -317,17 +327,7 @@ export default function ProgressDashboard() {
 }
 
 const styles = StyleSheet.create({
-  filters: { flexDirection: 'row', gap: space.sm },
-  chip: {
-    minHeight: 44,
-    justifyContent: 'center',
-    paddingHorizontal: space.md,
-    borderRadius: radius.pill,
-    borderWidth: 2,
-    borderColor: colors.primary,
-    backgroundColor: colors.surface,
-  },
-  chipOn: { backgroundColor: colors.primary },
+  missed: { width: 28, height: 28, alignItems: 'center', justifyContent: 'center' },
   kpis: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   byType: { gap: space.sm, marginTop: space.sm },
   card: {

@@ -2,19 +2,6 @@
 // Needs SQL 001–004 and the Edge Function `reset-pin`.
 import { check, phone, signUp, start, stop, testPhone } from './lib.mjs';
 
-async function eventually(p, path, text, tries = 8) {
-  for (let i = 0; i < tries; i++) {
-    await p.open(path);
-    try {
-      await p.see(text, 8000);
-      return true;
-    } catch {
-      await p.page.waitForTimeout(3000);
-    }
-  }
-  return false;
-}
-
 async function invite(c, button) {
   await c.tap(button, { button: true });
   const code = (await c.text('invite-code')).replace(/\s/g, '');
@@ -64,15 +51,26 @@ try {
   await a.page.waitForTimeout(6000);
   await a.shot('asha-reminders');
   check(true, 'the ASHA worker adds a reminder');
-  // A fresh page load starts at the home (session is per launch): check the home's reminder count.
-  // Medicine comes with a default 08:00, plus the 09:00 added. Doses due before the reminder was
-  // created don't count (D49), so later in the day it is 0/1: any dose today proves it arrived.
-  const seen = await eventually(c, '/', /Reminders · 0\/[1-9] today/);
+  // A fresh page load starts at the home (session is per launch). Today's dose count depends on the
+  // time of day (doses due before the reminder existed don't count, D49), so look for the reminder
+  // itself in the caregiver's Reminders list.
+  let seen = false;
+  for (let i = 0; i < 8 && !seen; i++) {
+    await c.open('/');
+    try {
+      await c.tap('Reminders', { button: true });
+      await c.see('Amlodipine 5 mg', 8000);
+      seen = true;
+    } catch {
+      await c.page.waitForTimeout(3000);
+    }
+  }
   if (!seen) console.log('--- asha warnings ---\n' + a.warnings.slice(-10).join('\n'));
   check(seen, "the ASHA worker's reminder reaches the caregiver");
 
   // 2. The doctor writes a note; the family and the ASHA worker read it.
   await d.tap(patient);
+  await d.page.getByTestId('tab-notes').filter({ visible: true }).first().click();
   await d.fill('doctor-note', 'Check blood pressure every week. Next review in 1 month.');
   await d.tap('Save note', { button: true });
   await d.see('Check blood pressure every week');

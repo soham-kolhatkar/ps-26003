@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F20 design foundation, on `feat/f20-design-foundation`: pushed, **waiting for the user's test** (checklist at the end of TESTING.md).
+**Current feature:** F20 design foundation + the user's review fixes (D52), on `feat/f20-design-foundation`: pushed, **waiting for the user's test** ("F20 review fixes" checklist at the end of TESTING.md).
 **Next:** F21 patient phone.
 
 ## Tier 1: core demo

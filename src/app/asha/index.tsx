@@ -7,7 +7,6 @@ export default function AshaHome() {
   return (
     <StaffPatientList
       footer={t('visit.listHint')}
-      alertsPath="/asha/alerts"
       patientPath="/asha/patient"
       withVisits
       registerPath="/asha/patient-new"

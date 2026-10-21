@@ -7,7 +7,6 @@ export default function DoctorHome() {
   return (
     <StaffPatientList
       footer={t('doctor.listHint')}
-      alertsPath="/doctor/alerts"
       patientPath="/doctor/patient"
       withReferrals
       joinPath="/doctor/join"

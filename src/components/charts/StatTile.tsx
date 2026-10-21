@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Icon, type IconName } from '@/components/Icon';
 import { Picture } from '@/components/Picture';
 import { colors, radius, shadow, space } from '@/theme/tokens';
 
@@ -15,7 +16,10 @@ type Props = {
   delta?: { text: string; tone: DeltaTone } | null;
   caption?: string;
   trend?: readonly (number | null)[];
-  icon?: string;
+  /** A UI icon before the label… */
+  icon?: IconName;
+  /** …or a picture (a game's glyph). */
+  glyph?: string;
 };
 
 const DELTA_COLOR: Record<DeltaTone, string> = {
@@ -25,7 +29,7 @@ const DELTA_COLOR: Record<DeltaTone, string> = {
 };
 
 /** Stat tile: label · value · optional delta · optional sparkline. */
-export function StatTile({ label, value, delta, caption, trend, icon }: Props) {
+export function StatTile({ label, value, delta, caption, trend, icon, glyph }: Props) {
   return (
     <View
       style={styles.tile}
@@ -33,7 +37,8 @@ export function StatTile({ label, value, delta, caption, trend, icon }: Props) {
       accessibilityLabel={[label, value, delta?.text, caption].filter(Boolean).join(', ')}
     >
       <View style={styles.label}>
-        {icon ? <Picture glyph={icon} size={22} /> : null}
+        {glyph ? <Picture glyph={glyph} size={22} /> : null}
+        {icon ? <Icon name={icon} size={18} color={colors.textMuted} /> : null}
         <AppText variant="caption" tone="muted" numberOfLines={2} style={styles.labelText}>
           {label}
         </AppText>

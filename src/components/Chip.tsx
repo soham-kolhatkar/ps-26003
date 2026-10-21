@@ -16,7 +16,7 @@ export function Chip({ label, selected, onPress }: { label: string; selected: bo
       style={[styles.chip, selected && styles.on]}
     >
       {selected ? <Icon name="check" size={20} color={colors.textOnPrimary} /> : null}
-      <AppText variant="small" bold tone={selected ? 'onPrimary' : 'onPrimarySoft'}>
+      <AppText variant="small" bold tone={selected ? 'onPrimary' : 'onPrimarySoft'} style={styles.label}>
         {label}
       </AppText>
     </PressableScale>
@@ -64,4 +64,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primarySoft,
   },
   on: { backgroundColor: colors.primary },
+  label: { flexShrink: 1 },
 });
