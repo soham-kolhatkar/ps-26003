@@ -1,6 +1,6 @@
 # Progress
 
-**Current feature:** F21 patient phone (SOS "Call family" + new patient home), on `feat/f21-patient-phone`: pushed, **waiting for the user's test** and for **SQL 006** in Supabase (checklist at the end of TESTING.md).
+**Current feature:** F21 patient phone (SOS "Call family" + new patient home), on `feat/f21-patient-phone`: pushed, **waiting for the user's test** (checklist at the end of TESTING.md). SQL 006 applied by the user (2026-10-21); full e2e green, incl. the cloud SOS test.
 **Next:** F22 games.
 
 ## Tier 1: core demo
