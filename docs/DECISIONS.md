@@ -187,3 +187,6 @@ Every game is built from `src/games/ui`: `Prompt` (large question, "Hear again" 
 ### D56: The ASHA home visit asks one question per screen (F24)
 Following CommCare / CHT practice for health workers: after the check-up (or "Skip check-up"), each of the six observations is its own screen ("Question 2 of 6", a slim bar), with the answers stacked as full-width tiles (radio mark, never a dropdown); a worrying answer carries an amber dot and "Worth noting" (shape + colour + word). Tapping an answer moves on after 350 ms; Back goes to the previous question; "Not sure, skip" leaves it unanswered. The finish screen lists every answer (tap one to change it, the others are kept), then the note, **Refer to the doctor** as a switch row, the next visit chips and **Save visit**. The doctor's notes are soft boxes with a small red Delete pill; long explanations ("How to read this report", "How Smriti notices these") are a folded `Disclosure` row.
 
+### D57: Assamese stays out of Tier 4 (2026-10-21)
+The user chose to skip F25 and go straight to F26: Assamese needs a native speaker to proofread every patient screen, and there is none on the team yet. It is back in Tier 5 with the other languages. The groundwork stays: one font family per script in `theme/fonts.ts` (Noto Sans Bengali covers Assamese ৰ ৱ) and the pack parity test.
+

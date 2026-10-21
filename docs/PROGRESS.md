@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** F24 ASHA and doctor, on `feat/f24-asha-doctor`: pushed, **waiting for the user's test** (checklist at the end of TESTING.md).
-**Next:** F25 Assamese.
+**Current feature:** F26 polish, accessibility pass, APK v0.4.0 (F25 Assamese skipped by the user, back in Tier 5, D57).
+**Next:** tag v0.4.0 once the user approves the APK.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -45,12 +45,12 @@ The user found the UI cluttered and messy (2026-10-21). Full plan and research: 
 | F21 | Patient phone: SOS call family (D53, SQL 006), home (today's 3 games + all games), reminder screen | ✅ done (3c5df28) |
 | F22 | Games: shell, boards, prompts, end-of-game bloom, all 8 games (D54) | ✅ done (0fcb458) |
 | F23 | Family caregiver: progress dashboard (D55), reminders, photos, people, alerts | ✅ done (cd2310a) |
-| F24 | ASHA and doctor: home visit one question per screen (D56), report header and explainer, notes, alerts | 🧪 testing |
-| F25 | Assamese pack (was F14, moved here by the user) | ⏳ |
+| F24 | ASHA and doctor: home visit one question per screen (D56), report header and explainer, notes, alerts | ✅ done (c2fb87c) |
+| F25 | Assamese pack | ⏭️ skipped by the user (2026-10-21), back in Tier 5 (D57) |
 | F26 | Polish, accessibility pass, APK v0.4.0, tag v0.4.0 | ⏳ |
 
 ## Tier 5: later (the old Tier 4, moved by the user on 2026-10-21)
-Low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report export · real SMS OTP (MSG91 + DLT) + login lockout · realtime updates · Play Store signing.
+Assamese pack (F14/F25; needs a native proofreader) · low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report export · real SMS OTP (MSG91 + DLT) + login lockout · realtime updates · Play Store signing.
 
 ## Known issues / notes
 - `expo-doctor`'s React Native Directory check sometimes fails (reactnative.directory unreachable from the corporate network, HTTP 000; seen 2026-10-14, passed again later the same day). Retry; it is not a project problem.
