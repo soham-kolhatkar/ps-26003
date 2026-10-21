@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** F19 cloud demo story + 4-phone demo + APK v0.3.0, on `feat/f19-cloud-demo`: pushed, **waiting for the user's test** (checklist at the end of TESTING.md). SQL 005 applied by the user.
-**Next:** tag v0.3.0 (end of Tier 3), then Tier 4 when the user says so.
+**Current feature:** none. Tier 3 is complete and tagged `v0.3.0` (2026-10-21).
+**Next:** Tier 4, once planned with the user.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -35,7 +35,7 @@ Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync
 | F16 | Patients, people, invite codes and patient-phone pairing (+ family corner for photos on the patient phone), membership pull, SQL `002` | ✅ done (fe03cbb) |
 | F17 | Data sync: outbox triggers, push/pull for reminders, doses, games, levels, visits; sync status chip; two-device tests, SQL `003` | ✅ done (f2e057c) |
 | F18 | Role extras: ASHA edits reminders, doctor's notes, PIN reset via manager (Edge Function) | ✅ done (d471b47) |
-| F19 | Cloud demo story (Demo tools), 4-phone demo script, APK v0.3.0, tag v0.3.0 | 🧪 testing |
+| F19 | Cloud demo story (Demo tools), 4-phone demo script, APK v0.3.0, tag v0.3.0 | ✅ done (9cae723), tagged v0.3.0 |
 
 ## Tier 4: later (moved from Tier 3 by the user)
 F14 Assamese pack · low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report export · real SMS OTP (MSG91 + DLT) + login lockout · realtime updates · accessibility/animation polish · Play Store signing.
@@ -48,6 +48,8 @@ F14 Assamese pack · low-resource language (Manipuri/Khasi/Mizo) + recorded audi
 - **Expo Go dev only (older note):** after a *full JS reload* (double-R, or editing a language-pack JSON while the app is open), expo-sqlite calls fail with `NativeDatabase.execAsync … NullPointerException` (a red "Render Error" or `DB query failed` toasts). A **cold restart** fixes it: `adb shell am force-stop host.exp.exponent`, then open `exp://localhost:8081` again. Normal Fast Refresh of .tsx files is fine. The APK never reloads JS, so it is unaffected.
 - F11: on a phone whose demo history was *backfilled* (F07) after real test games, levels can disagree with the seeded history (real games at level 1, seed at level 3) and Kamala may show a "Daily routines" decline. **Reset demo data** gives the consistent story (Ramesh flagged, Kamala and Lakshmi clear).
 - APK v0.1.0 sha256 `a08cf427269f8c3b9a9093f4c05facf05f83cbe014098e18f32fcd9438bf0273` (on the phone in Download/ and in C:\Users\kolhsoh\Downloads).
+- APK v0.2.0 sha256 `34ace20bf52c203b7851a41abb6232c5960f0b3517b6aeed95f63600aa57b023`. APK v0.3.0 sha256 `f5991b68632b36cb5ffde62bf8f46f26306ddeb0628cdcb91f876c834bad2eb7` (built from 2d6f3e5, in `dist/`).
+- 2026-10-21: `expo-doctor` reports 6 Expo SDK 57 patch updates (`expo` 57.0.28 → 57.0.30, `expo-router`, `expo-notifications`, `expo-constants`, `expo-linking`, `@expo/ui`). Tier 3 was closed on the tested versions. Run `npx expo install --check` at the start of Tier 4.
 - 2026-10-12: the Expo ngrok tunnel was blocked by the corporate network during F05 testing (TLS to tunnel.*.ngrok.com fails). Still blocked 2026-10-13 → switched to USB (`npm run usb`).
 - `npm install` warns about `always-auth` in the user's global npm config. This is harmless.
 - `unrs-resolver` postinstall is not approved under npm 11 `allowScripts`. Lint works without it.
