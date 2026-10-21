@@ -190,3 +190,6 @@ Following CommCare / CHT practice for health workers: after the check-up (or "Sk
 ### D57: Assamese stays out of Tier 4 (2026-10-21)
 The user chose to skip F25 and go straight to F26: Assamese needs a native speaker to proofread every patient screen, and there is none on the team yet. It is back in Tier 5 with the other languages. The groundwork stays: one font family per script in `theme/fonts.ts` (Noto Sans Bengali covers Assamese ৰ ৱ) and the pack parity test.
 
+
+### D58: The single-phone demo can be left from inside the app (F26)
+Asked by the user: once "Open demo" was chosen, nothing led back, because the welcome screen always opened the demo's "Who is using Smriti?" and only clearing the app's storage reset the phone. That screen (where Hold to exit and Sign out land in the demo) now ends with a red **Leave the demo** button behind a confirmation. It cancels the demo's scheduled reminder notifications (they would otherwise keep ringing), signs out and clears the phone's mode, so the app opens the empty setup file and "Who will use this phone?". The demo's own SQLite file is kept: holding the flower again finds the same story (Caregiver → Reset demo data still restarts it), and its reminders are scheduled again (the role picker does it when the demo is reopened in the same app session, because the database start-up runs once per session).

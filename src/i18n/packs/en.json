@@ -27,7 +27,10 @@
     "asha": "ASHA worker",
     "doctor": "Doctor",
     "patientHint": "Tap to start playing",
-    "staffHint": "PIN required"
+    "staffHint": "PIN required",
+    "leaveDemo": "Leave the demo",
+    "leaveDemoTitle": "Leave the demo?",
+    "leaveDemoBody": "This phone goes back to \"Who will use this phone?\", and the demo reminders stop. The demo story stays on the phone: hold the flower there to open it again."
   },
   "pin": {
     "title": "Enter your PIN",
