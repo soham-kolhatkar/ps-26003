@@ -77,12 +77,12 @@ try {
   await p.see('Type the family PIN again');
   for (const d of '1357') await p.tap(d, { button: true, exact: true });
   await p.see('Kamala', 40000);
-  await p.see('Choose a game');
+  await p.see("Today's games");
   await p.shot('patient-home');
   check(true, "the patient's phone pairs with the code + family PIN and opens Kamala's home");
 
   await p.open('/'); // restart
-  await p.see('Choose a game', 30000);
+  await p.see("Today's games", 30000);
   check(true, "a restart opens the patient's home directly (no setup, no sign-in)");
 
   await p.holdText('Hold for the family corner');

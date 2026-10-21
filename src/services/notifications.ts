@@ -4,10 +4,12 @@ import { Platform } from 'react-native';
 import type { Reminder, ReminderType } from '@/db/models';
 import { displayName, getPatient } from '@/db/repos/patients';
 import { listEnabledReminders } from '@/db/repos/reminders';
+import { listUnseenSos } from '@/db/repos/sos';
 import { getSetting } from '@/db/repos/settings';
 import type { DbClient } from '@/db/types';
 import { atTimeOnDay, parseTime, startOfDay } from '@/engine/reminders';
-import i18n from '@/i18n';
+import i18n, { type LanguageCode } from '@/i18n';
+import { formatTime } from '@/services/datetime';
 
 /**
  * Local (on-device) notifications for reminders — no server, works offline
@@ -189,4 +191,29 @@ export function dueAtFromPayload(payload: ReminderPayload, firedAt: number): num
   if (payload.dueAt != null) return payload.dueAt;
   const t = payload.time ? parseTime(payload.time) : null;
   return t ? atTimeOnDay(startOfDay(firedAt), t) : firedAt;
+}
+
+/**
+ * Staff phones (F21, D53): a new SOS press arrived with the last pull. One notification for
+ * the newest one, shown now. Best-effort: no permission or no notifications (web) = banner only.
+ */
+export async function notifySos(db: DbClient, now = Date.now()): Promise<void> {
+  try {
+    const ids = (await db.getAllAsync<{ id: string }>('SELECT id FROM patient', [])).map((r) => r.id);
+    const [latest] = await listUnseenSos(db, ids, now - 2 * 60 * 60 * 1000);
+    if (!latest || !(await ensureNotificationPermission())) return;
+    const time = formatTime(new Date(latest.createdAt), i18n.language as LanguageCode);
+    await Notifications.scheduleNotificationAsync({
+      identifier: `sos-${latest.id}`,
+      content: {
+        title: i18n.t('sos.notifTitle', { name: latest.patientName }),
+        body: i18n.t('sos.notifBody', { name: latest.patientName, time }),
+        sound: true,
+        ...(Platform.OS === 'android' ? { priority: Notifications.AndroidNotificationPriority.MAX } : {}),
+      },
+      trigger: null,
+    });
+  } catch (e) {
+    console.info('SOS notification not shown', e);
+  }
 }

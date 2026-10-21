@@ -8,17 +8,20 @@ type ScreenProps = {
   children: ReactNode;
   /** Wrap content in a ScrollView (default true). Games pass false. */
   scroll?: boolean;
+  /** Space between children (default 20; the patient home uses less to fit one screen). */
+  gap?: number;
 };
 
-export function Screen({ children, scroll = true }: ScreenProps) {
+export function Screen({ children, scroll = true, gap }: ScreenProps) {
+  const spacing = gap != null ? { gap } : null;
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom', 'left', 'right']}>
       {scroll ? (
-        <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        <ScrollView contentContainerStyle={[styles.content, spacing]} keyboardShouldPersistTaps="handled">
           {children}
         </ScrollView>
       ) : (
-        <View style={[styles.content, styles.fill]}>{children}</View>
+        <View style={[styles.content, styles.fill, spacing]}>{children}</View>
       )}
     </SafeAreaView>
   );

@@ -1,7 +1,14 @@
 import { installOutboxTriggers } from '@/sync/outbox';
 
 import { migrate } from './migrations';
-import { backfillDemoGames, backfillDemoReminders, backfillDemoVisits, isSeeded, seedDemo } from './seed/demo';
+import {
+  backfillDemoContacts,
+  backfillDemoGames,
+  backfillDemoReminders,
+  backfillDemoVisits,
+  isSeeded,
+  seedDemo,
+} from './seed/demo';
 import type { DbClient } from './types';
 
 /**
@@ -19,6 +26,7 @@ export async function initDatabase(db: DbClient): Promise<{ version: number; see
     await backfillDemoReminders(db);
     await backfillDemoGames(db);
     await backfillDemoVisits(db);
+    await backfillDemoContacts(db);
   }
   return { version, seeded };
 }

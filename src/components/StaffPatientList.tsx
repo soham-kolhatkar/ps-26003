@@ -11,6 +11,7 @@ import { Icon } from '@/components/Icon';
 import { Picture } from '@/components/Picture';
 import { VisitStatusLine } from '@/components/VisitStatusLine';
 import { Screen } from '@/components/Screen';
+import { SosBanner } from '@/components/SosBanner';
 import { StaffHeader } from '@/components/StaffHeader';
 import { STATUS, StatusLine, type Status } from '@/components/StatusLine';
 import { alertCounts, type AlertCounts } from '@/db/repos/alerts';
@@ -39,6 +40,8 @@ type StaffPatientListProps = {
   withVisits?: boolean;
   /** Show "Referred by the ASHA worker" and list referred patients first (doctor). */
   withReferrals?: boolean;
+  /** Show the patients' SOS presses on top (ASHA). */
+  withSos?: boolean;
   /** Cloud mode: where "Register a patient" (ASHA) and "Join with a code" go. */
   registerPath?: '/asha/patient-new';
   joinPath?: '/asha/join' | '/doctor/join';
@@ -54,6 +57,7 @@ export function StaffPatientList({
   patientPath,
   withVisits,
   withReferrals,
+  withSos,
   registerPath,
   joinPath,
 }: StaffPatientListProps) {
@@ -102,7 +106,8 @@ export function StaffPatientList({
   // Sections (Medic/CHT 2025: urgent first, colour + shape + word): referred (doctor), needs attention, doing well.
   type Row = (typeof data.patients)[number];
   const needsAttention = (r: Row) =>
-    r.counts.open > 0 || (r.visit != null && (r.visit.state === 'overdue' || r.visit.state === 'due' || r.visit.state === 'never'));
+    r.counts.open > 0 ||
+    (r.visit != null && (r.visit.state === 'overdue' || r.visit.state === 'due' || r.visit.state === 'never'));
   const referred = data.patients.filter((r) => r.referredAt != null);
   const attention = data.patients.filter((r) => r.referredAt == null && needsAttention(r));
   const well = data.patients.filter((r) => r.referredAt == null && !needsAttention(r));
@@ -131,6 +136,7 @@ export function StaffPatientList({
   return (
     <Screen>
       <StaffHeader user={data.user} />
+      {withSos ? <SosBanner patientIds={data.patients.map((r) => r.patient.id)} /> : null}
       {data.patients.length === 0 ? (
         <AppText tone="muted">{t('staff.noPatients')}</AppText>
       ) : (
@@ -158,10 +164,20 @@ export function StaffPatientList({
       {cloud && (registerPath || joinPath) ? (
         <View style={styles.actions}>
           {registerPath ? (
-            <BigButton kind="secondary" icon="plus" label={t('people.register')} onPress={() => router.push(registerPath)} />
+            <BigButton
+              kind="secondary"
+              icon="plus"
+              label={t('people.register')}
+              onPress={() => router.push(registerPath)}
+            />
           ) : null}
           {joinPath ? (
-            <BigButton kind="secondary" icon="key" label={t('people.joinButton')} onPress={() => router.push(joinPath)} />
+            <BigButton
+              kind="secondary"
+              icon="key"
+              label={t('people.joinButton')}
+              onPress={() => router.push(joinPath)}
+            />
           ) : null}
         </View>
       ) : null}
@@ -174,7 +190,17 @@ export function StaffPatientList({
   );
 }
 
-function Section({ status, title, count, children }: { status: Status; title: string; count: number; children: ReactNode }) {
+function Section({
+  status,
+  title,
+  count,
+  children,
+}: {
+  status: Status;
+  title: string;
+  count: number;
+  children: ReactNode;
+}) {
   const s = STATUS[status];
   return (
     <View style={styles.section}>

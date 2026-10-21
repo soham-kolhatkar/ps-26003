@@ -11,6 +11,8 @@ export type MemoryRemote = RemoteApi & {
   tables: Map<string, Map<string, CloudRow>>;
   /** Fail the next calls with this error (e.g. offline, access denied). */
   failWith: (e: unknown, times?: number) => void;
+  /** Cloud tables that don't exist yet (their SQL file has not been run). */
+  missing: Set<string>;
 };
 
 const keyOf = (spec: TableSpec, row: Record<string, unknown>) =>
@@ -26,7 +28,11 @@ export function memoryRemote(start = Date.UTC(2026, 9, 14, 8, 0, 0)): MemoryRemo
     if (!t) tables.set(name, (t = new Map()));
     return t;
   };
-  const maybeFail = () => {
+  const missing = new Set<string>();
+  const maybeFail = (spec?: TableSpec) => {
+    if (spec && missing.has(spec.cloud)) {
+      throw { code: 'PGRST205', message: `Could not find the table 'public.${spec.cloud}' in the schema cache` };
+    }
     if (failure && failure.times > 0) {
       failure.times--;
       throw failure.e;
@@ -35,11 +41,12 @@ export function memoryRemote(start = Date.UTC(2026, 9, 14, 8, 0, 0)): MemoryRemo
 
   return {
     tables,
+    missing,
     failWith: (e, times = 1) => {
       failure = { e, times };
     },
     async upsert(spec, rows) {
-      maybeFail();
+      maybeFail(spec);
       const t = table(spec.cloud);
       const at = stamp(); // one statement → one server timestamp, like Postgres now()
       for (const row of rows) {
@@ -57,7 +64,7 @@ export function memoryRemote(start = Date.UTC(2026, 9, 14, 8, 0, 0)): MemoryRemo
       }
     },
     async softDelete(spec, ids) {
-      maybeFail();
+      maybeFail(spec);
       const t = table(spec.cloud);
       const at = stamp();
       for (const id of ids) {
@@ -66,7 +73,7 @@ export function memoryRemote(start = Date.UTC(2026, 9, 14, 8, 0, 0)): MemoryRemo
       }
     },
     async pull(spec, since, after: PageAfter | null, limit) {
-      maybeFail();
+      maybeFail(spec);
       const ms = (s: string) => new Date(s).getTime();
       const rows = [...table(spec.cloud).values()]
         .filter((r) => {

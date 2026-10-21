@@ -10,7 +10,8 @@
     "signOut": "Sign out",
     "cancel": "Cancel",
     "loading": "Loading…",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "delete": "Delete"
   },
   "language": {
     "title": "Choose language"
@@ -43,7 +44,10 @@
     "greetAfternoon": "Good afternoon, {{name}}!",
     "greetEvening": "Good evening, {{name}}!",
     "todayIs": "Today is {{date}}",
-    "chooseGame": "Choose a game"
+    "chooseGame": "Choose a game",
+    "todaysGames": "Today's games",
+    "allGames": "All {{count}} games",
+    "allGamesTitle": "All games"
   },
   "staff": {
     "hello": "Hello, {{name}}",
@@ -887,5 +891,19 @@
     "confirmBody": "This deletes the demo accounts' patients and creates the story again. Real accounts are not touched.",
     "nextTitle": "Next, on each phone",
     "next": "Choose the phone's role (\"Who will use this phone?\") and sign in with the number above and PIN 123456. For Kamala's phone: Priya's phone → People → Pair Kamala's phone → type the code on Kamala's phone."
+  },
+  "sos": {
+    "call": "Call {{name}}",
+    "callFamily": "Call family",
+    "hint": "Opens the phone to call your family",
+    "chooseTitle": "Who do you want to call?",
+    "chooseSpoken": "Who do you want to call? Tap their picture.",
+    "dialFailed": "This phone cannot make calls. The number is {{phone}}.",
+    "bannerTitle": "{{name}} pressed SOS",
+    "bannerCalled": "{{time}} · calling {{called}}",
+    "bannerTime": "{{time}}",
+    "seen": "OK, seen",
+    "notifTitle": "SOS from {{name}}",
+    "notifBody": "{{name}} pressed the SOS button at {{time}}."
   }
 }

@@ -339,3 +339,14 @@
 8. **Progress (caregiver):** "Last 7 days / Last 30 days" is a two-part switch; only games played in the period get a tile, the rest are named in one line; reminder types and recent activity show pictures (a warning icon for a missed dose).
 9. **Forms:** the reminder form's type chips show pictures; times are chips with ✕; "Add time" has a +; Cancel is the top-left pill (reminder and photo forms). The ASHA visit's answer chips are pale green, filled green when chosen (amber for a worry).
 10. **Games:** no "⭐⭐⭐ Level 4" on the intro and no stars at the end (levels are for the family's phone); "You moved up a level" stays as plain text.
+
+## F21 Patient phone + SOS checklist
+> **First:** Supabase → SQL Editor → paste `supabase/migrations/006_sos.sql` → Run (the check at the end shows `sos_events`, `rls_on = true`). Without it, SOS presses wait on the patient's phone (nothing breaks) and the cloud banner can't arrive.
+1. **Demo, Kamala's home:** top left a red **Call Priya**, top right **Read aloud**; a sun / sunrise / sunset / moon picture with "Good morning, Kamala!" and the date · time; a reminder due now as a clay card (the "Later" line only when nothing is due); **Today's games** = 3 tiles; **All 7 games** (8 when there are family photos); "Hold to exit" at the bottom. Everything fits on one screen, in English and Hindi.
+2. **All games:** big picture tiles, two per row, Back top left.
+3. **Today's games** change from day to day (least recently played first), but not in the middle of the day after playing one.
+4. **SOS (demo):** tap **Call Priya** → the phone's dialer opens with **90000 10001** (don't call; it is a demo number). Back in Smriti: hold to exit → **Priya** (1234) → a red **"Kamala pressed SOS · today · time · calling Priya"** at the top → **OK, seen** removes it.
+5. **SOS (cloud, 3 windows/phones):** pair Kamala's phone (F16) with a caregiver account; an ASHA worker joined. Kamala's home shows **Call <caregiver's first name>**. Tap it → dialer. Within about 30 s the caregiver's and the ASHA worker's homes show the red banner (tap the sync chip to hurry). On the phone (APK / Expo Go), a notification "SOS from Kamala" also appears on the staff phones.
+6. Two family members (invite a second caregiver from People, or a son): the button says **Call family** → a screen "Who do you want to call?" with their pictures and names; tap one → dialer.
+7. **Reminder screen** (tap a due reminder): Home top left, Read aloud top right, a big picture in a clay circle, the name and a clock time chip, **I drank it / I took it** and **Remind me in 10 minutes**.
+8. Offline (airplane mode on the patient's phone): Call still opens the dialer; the press reaches the team when the signal is back.

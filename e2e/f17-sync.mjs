@@ -44,7 +44,7 @@ try {
   await p.tap('Pair this phone', { button: true });
   await p.see('Choose a family PIN', 30000);
   for (let k = 0; k < 2; k++) for (const d of '2468') await p.tap(d, { button: true, exact: true });
-  await p.see('Choose a game', 40000);
+  await p.see("Today's games", 40000);
   check(true, "patient's phone paired");
 
   // 1. Caregiver adds a water reminder due now.
@@ -70,13 +70,15 @@ try {
   check(arrived, "the reminder reaches the patient's phone");
   await p.tap('Drink a glass of water');
   await p.tap('I drank it', { button: true });
-  await p.see('Choose a game', 30000); // "Thank you" is spoken, then back home
+  await p.see("Today's games", 30000); // "Thank you" is spoken, then back home
   await p.page.waitForTimeout(6000);
   check(true, 'the patient marks it done on her phone');
 
   // 3. The patient plays "Find the object" (6 rounds).
   await p.open('/');
-  await p.see('Choose a game', 30000);
+  await p.see("Today's games", 30000);
+  // Today's three games change daily (F21): every game is on the "All games" page.
+  await p.tap(/^All \d+ games$/, { button: true });
   await p.tap('Find the object');
   await p.tap('Start', { button: true, exact: true });
   for (let round = 0; round < 6; round++) {

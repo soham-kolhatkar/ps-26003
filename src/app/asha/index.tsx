@@ -9,6 +9,7 @@ export default function AshaHome() {
       footer={t('visit.listHint')}
       patientPath="/asha/patient"
       withVisits
+      withSos
       registerPath="/asha/patient-new"
       joinPath="/asha/join"
     />

@@ -64,7 +64,7 @@ export function TodayReminders({ patientId, now, language }: Props) {
         </PressableScale>
       ))}
 
-      {next ? (
+      {next && due.length === 0 ? (
         <View style={styles.nextRow}>
           <Picture glyph={REMINDER_ICON[next.type]} size={44} />
           <AppText variant="body" tone="onClay" style={styles.text}>

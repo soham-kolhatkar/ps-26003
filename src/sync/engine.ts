@@ -15,7 +15,7 @@
 import type { DbClient } from '@/db/types';
 
 import { quietly, SYNCED_TABLES, type SyncedTable } from './outbox';
-import { isPermanent, type PageAfter, type RemoteApi } from './remote';
+import { isMissingTable, isPermanent, type PageAfter, type RemoteApi } from './remote';
 import { applyRows, SPECS, type CloudRow } from './tables';
 
 const PUSH_BATCH = 500;
@@ -48,6 +48,7 @@ export async function push(db: DbClient, remote: RemoteApi): Promise<PushResult>
 
   let pushed = 0;
   let dropped = 0;
+  const notInCloud: SyncedTable[] = [];
   for (const tbl of SYNCED_TABLES) {
     const spec = SPECS[tbl];
     const mine = [...latest.values()].filter((x) => x.tbl === tbl);
@@ -63,12 +64,20 @@ export async function push(db: DbClient, remote: RemoteApi): Promise<PushResult>
         pushed += deletes.length;
       }
     } catch (e) {
+      if (isMissingTable(e)) {
+        // Keep these queued until the cloud has the table (its SQL file is run).
+        if (mine.length) notInCloud.push(tbl);
+        continue;
+      }
       if (!isPermanent(e)) throw e;
       console.warn(`Sync: dropped ${mine.length} ${tbl} change(s) the cloud refused`, e);
       dropped += mine.length;
     }
   }
-  await db.runAsync('DELETE FROM sync_outbox WHERE seq <= ?', [maxSeq]);
+  await db.runAsync(
+    `DELETE FROM sync_outbox WHERE seq <= ?${notInCloud.length ? ` AND tbl NOT IN (${notInCloud.map(() => '?').join(', ')})` : ''}`,
+    [maxSeq, ...notInCloud],
+  );
   return { pushed, dropped };
 }
 
@@ -92,10 +101,17 @@ export async function resetCursors(db: DbClient): Promise<void> {
 const ms = (iso: string) => new Date(iso).getTime();
 const minus = (iso: string, d: number) => new Date(Math.max(0, ms(iso) - d)).toISOString();
 
-export type PullResult = { applied: number; held: number; remindersChanged: boolean; changed: boolean };
+export type PullResult = {
+  applied: number;
+  held: number;
+  remindersChanged: boolean;
+  changed: boolean;
+  /** New SOS presses from other phones (F21). */
+  sosArrived: number;
+};
 
 export async function pull(db: DbClient, remote: RemoteApi, now = Date.now()): Promise<PullResult> {
-  const result: PullResult = { applied: 0, held: 0, remindersChanged: false, changed: false };
+  const result: PullResult = { applied: 0, held: 0, remindersChanged: false, changed: false, sosArrived: 0 };
   const knownPatients = new Set((await db.getAllAsync<{ id: string }>('SELECT id FROM patient', [])).map((r) => r.id));
   const knownUsers = new Set((await db.getAllAsync<{ id: string }>('SELECT id FROM app_user', [])).map((r) => r.id));
 
@@ -107,15 +123,23 @@ export async function pull(db: DbClient, remote: RemoteApi, now = Date.now()): P
     let newest = cursor;
     let heldFrom: string | null = null;
 
+    let missing = false;
     for (;;) {
-      const rows: CloudRow[] = await remote.pull(spec, since, after, PULL_PAGE);
+      let rows: CloudRow[];
+      try {
+        rows = await remote.pull(spec, since, after, PULL_PAGE);
+      } catch (e) {
+        if (!isMissingTable(e)) throw e;
+        missing = true;
+        break;
+      }
       if (!rows.length) break;
       const unpushed = new Set(
         (
           await db.getAllAsync<{ k: string }>("SELECT tbl || ':' || row_id AS k FROM sync_outbox WHERE tbl = ?", [tbl])
         ).map((r) => r.k),
       );
-      let outcome = { applied: 0, held: [] as CloudRow[], remindersChanged: false };
+      let outcome = { applied: 0, held: [] as CloudRow[], remindersChanged: false, sosArrived: 0 };
       await db.withTransactionAsync(async () => {
         await db.execAsync('PRAGMA defer_foreign_keys = ON');
         outcome = await quietly(db, () => applyRows(db, spec, rows, { now, unpushed, knownUsers, knownPatients }));
@@ -123,12 +147,14 @@ export async function pull(db: DbClient, remote: RemoteApi, now = Date.now()): P
       result.applied += outcome.applied;
       result.held += outcome.held.length;
       result.remindersChanged ||= outcome.remindersChanged;
+      result.sosArrived += outcome.sosArrived;
       for (const h of outcome.held) if (!heldFrom || ms(h.updated_at) < ms(heldFrom)) heldFrom = h.updated_at;
       const last = rows[rows.length - 1];
       if (ms(last.updated_at) > ms(newest)) newest = last.updated_at;
       if (rows.length < PULL_PAGE) break;
       after = { updatedAt: last.updated_at, key: spec.pageKeyOf(last) };
     }
+    if (missing) continue;
     // Held rows must come again: stop the cursor just before the first of them.
     const next = heldFrom && ms(heldFrom) <= ms(newest) ? minus(heldFrom, 1) : newest;
     if (next !== cursor) await setCursor(db, tbl, next);

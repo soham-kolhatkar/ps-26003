@@ -6,7 +6,7 @@
  */
 import { fetchPeople } from '@/cloud/people';
 import { getDb } from '@/db/client';
-import { syncReminderNotifications } from '@/services/notifications';
+import { notifySos, syncReminderNotifications } from '@/services/notifications';
 import { useAccount } from '@/store/account';
 import { useDevice } from '@/store/device';
 import { useSyncStore } from '@/store/sync';
@@ -52,6 +52,7 @@ export function syncNow(): Promise<SyncResult | null> {
       if (pulled.remindersChanged && useDevice.getState().role === 'patient') {
         await syncReminderNotifications(db);
       }
+      if (pulled.sosArrived && useDevice.getState().role !== 'patient') await notifySos(db);
       status.set({ state: 'idle', lastSyncedAt: Date.now(), pending: await pendingChanges(db) });
       if (people.added.length || people.removed.length || pulled.changed) status.bump();
       return { people, pushed, pulled: pulled.applied };

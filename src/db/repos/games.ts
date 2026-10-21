@@ -143,3 +143,16 @@ export async function listSessions(
   );
   return rows.map(toSession);
 }
+
+/** Last start time of each game before `before` (completed or not), for "today's games". */
+export async function lastPlayedByGame(
+  db: DbClient,
+  patientId: string,
+  before: number,
+): Promise<Record<string, number>> {
+  const rows = await db.getAllAsync<{ game_id: string; at: number }>(
+    'SELECT game_id, MAX(started_at) AS at FROM game_session WHERE patient_id = ? AND started_at < ? GROUP BY game_id',
+    [patientId, before],
+  );
+  return Object.fromEntries(rows.map((r) => [r.game_id, r.at]));
+}

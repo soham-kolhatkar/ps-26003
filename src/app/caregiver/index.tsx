@@ -8,6 +8,7 @@ import { BigButton } from '@/components/BigButton';
 import { ListGroup, ListRow } from '@/components/List';
 import { PatientCard } from '@/components/PatientCard';
 import { Screen } from '@/components/Screen';
+import { SosBanner } from '@/components/SosBanner';
 import { StaffHeader } from '@/components/StaffHeader';
 import { getDb } from '@/db/client';
 import { alertCounts, type AlertCounts } from '@/db/repos/alerts';
@@ -79,13 +80,19 @@ export default function CaregiverHome() {
   return (
     <Screen>
       <StaffHeader user={data.user} />
+      <SosBanner patientIds={data.patients.map((p) => p.id)} />
       {data.patients.map((p) => {
         const counts = data.alerts[p.id];
         const today = data.reminderToday[p.id] ?? { done: 0, total: 0 };
         const photos = data.photoCounts[p.id] ?? 0;
         return (
           <View key={p.id} style={styles.patient}>
-            <PatientCard patient={p} showNotes showRelation footer={t('progress.weekGames', { count: data.gamesThisWeek[p.id] ?? 0 })} />
+            <PatientCard
+              patient={p}
+              showNotes
+              showRelation
+              footer={t('progress.weekGames', { count: data.gamesThisWeek[p.id] ?? 0 })}
+            />
             <ListGroup>
               {counts?.open ? (
                 <ListRow

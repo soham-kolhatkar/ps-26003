@@ -30,15 +30,46 @@ export function isPermanent(e: unknown): boolean {
   );
 }
 
+/**
+ * The cloud doesn't have this table yet (a newer app before its SQL file was run, e.g.
+ * SQL 006 for SOS). Skip it and keep its changes queued; the rest of sync carries on.
+ */
+export function isMissingTable(e: unknown): boolean {
+  const err = (e ?? {}) as { code?: string; message?: string };
+  return (
+    err.code === 'PGRST205' ||
+    err.code === '42P01' ||
+    /could not find the table|does not exist/i.test(err.message ?? '')
+  );
+}
+
+/** A table found missing is not asked for again for a while (one 404, not one per sync). */
+const RECHECK_MISSING_MS = 10 * 60_000;
+const missingUntil = new Map<string, number>();
+
+function skipIfMissing(spec: TableSpec): void {
+  const until = missingUntil.get(spec.cloud);
+  if (until != null && Date.now() < until) {
+    throw { code: 'PGRST205', message: `Could not find the table 'public.${spec.cloud}' (checked recently)` };
+  }
+}
+
+function check(spec: TableSpec, error: unknown): void {
+  if (!error) return;
+  if (isMissingTable(error)) missingUntil.set(spec.cloud, Date.now() + RECHECK_MISSING_MS);
+  throw error;
+}
+
 const q = (v: string) => `"${v.replace(/"/g, '\\"')}"`;
 
 export const supabaseRemote: RemoteApi = {
   async upsert(spec, rows) {
     if (!rows.length) return;
+    skipIfMissing(spec);
     const { error } = await supabase()
       .from(spec.cloud)
       .upsert(rows, { onConflict: spec.onConflict, ignoreDuplicates: spec.insertOnly === true });
-    if (error) throw error;
+    check(spec, error);
   },
   async softDelete(spec, ids) {
     if (!ids.length) return;
@@ -46,6 +77,7 @@ export const supabaseRemote: RemoteApi = {
     if (error) throw error;
   },
   async pull(spec, since, after, limit) {
+    skipIfMissing(spec);
     let query = supabase().from(spec.cloud).select('*');
     query = after
       ? query.or(
@@ -56,7 +88,7 @@ export const supabaseRemote: RemoteApi = {
       .order('updated_at', { ascending: true })
       .order(spec.pageKey, { ascending: true })
       .limit(limit);
-    if (error) throw error;
+    check(spec, error);
     return (data ?? []) as CloudRow[];
   },
 };
