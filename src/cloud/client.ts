@@ -14,6 +14,28 @@ const key = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
 export const cloudConfigured = Boolean(url && key);
 
+/**
+ * A second, throw-away client with its own in-memory session (Demo tools sign in
+ * as several demo accounts in turn without touching this phone's own sign-in).
+ */
+export function isolatedClient(): SupabaseClient {
+  if (!url || !key) throw new Error('Supabase is not configured: add EXPO_PUBLIC_SUPABASE_URL/ANON_KEY to .env');
+  const memory = new Map<string, string>();
+  return createClient(url, key, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+      storageKey: 'smriti-demo-tools',
+      storage: {
+        getItem: (k) => memory.get(k) ?? null,
+        setItem: (k, v) => void memory.set(k, v),
+        removeItem: (k) => void memory.delete(k),
+      },
+    },
+  });
+}
+
 let client: SupabaseClient | null = null;
 
 export function supabase(): SupabaseClient {

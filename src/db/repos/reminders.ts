@@ -1,4 +1,10 @@
-import { normalizeTimes, occurrencesBetween, type EventStatus, type ReminderSchedule } from '@/engine/reminders';
+import {
+  DUE_SOON_MS,
+  normalizeTimes,
+  occurrencesBetween,
+  type EventStatus,
+  type ReminderSchedule,
+} from '@/engine/reminders';
 
 import { newId } from '../ids';
 import type { Reminder, ReminderOccurrence, ReminderType } from '../models';
@@ -112,11 +118,18 @@ export async function deleteReminder(db: DbClient, id: string): Promise<void> {
  */
 export const eventIdFor = (reminderId: string, dueAt: number) => `${reminderId}:${dueAt}`;
 
-/** Creates (idempotently) the occurrence rows for [from, to) for a patient's enabled reminders. */
+/**
+ * Creates (idempotently) the occurrence rows for [from, to) for a patient's
+ * enabled reminders. Screens that show adherence over a period call it for that
+ * period: on a synced phone only taken doses arrive, so a dose that never got a
+ * row here would not count as missed.
+ */
 export async function ensureEvents(db: DbClient, patientId: string, from: number, to: number): Promise<void> {
   const reminders = (await listReminders(db, patientId)).filter((r) => r.enabled);
   for (const r of reminders) {
-    for (const dueAt of occurrencesBetween(r.schedule, from, to)) {
+    // Never long before the reminder existed (a reminder added today has no missed doses last week).
+    // A dose set "for now" (or up to 30 min ago, the due window) still counts.
+    for (const dueAt of occurrencesBetween(r.schedule, Math.max(from, r.createdAt - DUE_SOON_MS), to)) {
       await db.runAsync(
         'INSERT OR IGNORE INTO reminder_event (id, reminder_id, patient_id, due_at, status) VALUES (?, ?, ?, ?, ?)',
         [eventIdFor(r.id, dueAt), r.id, patientId, dueAt, 'pending'],

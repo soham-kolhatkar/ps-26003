@@ -28,5 +28,11 @@ Demo PIN for caregiver / ASHA / doctor: **1234**.
 - **ASHA mode**: triage list, patient page, a 5-minute home visit with a fixed check-up, observations and referral.
 - **Doctor view**: a read-only 30-day report (abilities, weekly trend, per game, reaction time, reminders, check-ups), shared as text.
 
+## Tier 3 (v0.3.0): one phone per person
+- **Who will use this phone?** Patient's phone (paired with a code, no login), family caregiver, ASHA worker or doctor (mobile number + 6-digit PIN).
+- **Supabase** sync: games, doses, reminders, visits and doctor's notes move between phones; everything still works offline and catches up later. Access rules: each person sees only the patients they were invited to.
+- People and codes: invite the ASHA worker, the doctor or family; pair the patient's phone; PIN reset through a family manager.
+- Demo tools load the full story into the cloud for the 4-phone demo ([docs/DEMO.md](docs/DEMO.md)).
+
 ## Docs
 [Demo script](docs/DEMO.md) · [Progress](docs/PROGRESS.md) · [Architecture](docs/ARCHITECTURE.md) · [Decisions](docs/DECISIONS.md) · [Testing](docs/TESTING.md)

@@ -49,7 +49,7 @@ export default function ProgressDashboard() {
     async (db) => {
       const now = Date.now();
       const today = startOfDay(now);
-      await ensureEvents(db, patientId, today, today + DAY);
+      await ensureEvents(db, patientId, today - 60 * DAY, today + DAY);
       // Two windows of the longest period, so "vs previous period" always has data.
       const since = today - 60 * DAY;
       const sessions: SessionPoint[] = (await listSessions(db, patientId, { since, limit: 2000 })).map((s) => ({

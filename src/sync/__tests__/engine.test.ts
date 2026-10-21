@@ -15,6 +15,9 @@ import { insertVisit, listVisits } from '@/db/repos/visits';
 import { createTestDb } from '@/db/testing/nodeDb';
 import type { DbClient } from '@/db/types';
 
+import { listAlerts } from '@/db/repos/alerts';
+import { refreshAlerts } from '@/services/alerts';
+
 import { pull, push, PULL_PAGE } from '../engine';
 import { pendingChanges } from '../outbox';
 import { applyPeople } from '../people';
@@ -158,6 +161,25 @@ describe('sync engine (two phones through the cloud)', () => {
     await push(doctor, cloud);
     await pull(carer, cloud, now);
     expect(await listDoctorNotes(carer, P)).toEqual([]);
+  });
+
+  it('another phone counts untaken doses as missed (only taken doses travel), never before the reminder existed', async () => {
+    const cloud = memoryRemote();
+    const patient = await phone();
+    const created = now - 10 * DAY;
+    await saveReminder(patient, { ...metformin, schedule: { kind: 'daily', times: ['09:00'] } }, created);
+    // The patient took the medicine on 2 of the last 7 days.
+    await ensureEvents(patient, P, today - 7 * DAY, today);
+    const week = await listOccurrences(patient, P, today - 7 * DAY, today);
+    for (const o of week.slice(0, 2)) await markOccurrence(patient, o.eventId, 'taken', o.dueAt + 6e5);
+    await push(patient, cloud);
+
+    const carer = await phone();
+    await pull(carer, cloud, now);
+    expect(await listOccurrences(carer, P, today - 30 * DAY, today)).toHaveLength(2); // only what travelled
+    await refreshAlerts(carer, P, now); // fills in the scheduled doses for its window
+    expect(await listOccurrences(carer, P, today - 30 * DAY, today)).toHaveLength(10); // 10 days since created, not 30
+    expect((await listAlerts(carer, P)).map((a) => a.kind)).toContain('adherence_low');
   });
 
   it('a local edit made before the pull is not overwritten, and wins on the next push', async () => {

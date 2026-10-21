@@ -1,6 +1,6 @@
 import { syncAlerts } from '@/db/repos/alerts';
 import { listSessions } from '@/db/repos/games';
-import { listOccurrences } from '@/db/repos/reminders';
+import { ensureEvents, listOccurrences } from '@/db/repos/reminders';
 import type { DbClient } from '@/db/types';
 import { detectAlerts, windows } from '@/engine/trends';
 
@@ -30,6 +30,7 @@ async function refreshNow(db: DbClient, patientId: string, now: number): Promise
     score: s.stats.score,
     completed: s.completed,
   }));
+  await ensureEvents(db, patientId, baselineFrom, now + DAY);
   const occurrences = (await listOccurrences(db, patientId, baselineFrom, now + DAY)).map((o) => ({
     dueAt: o.dueAt,
     status: o.status,

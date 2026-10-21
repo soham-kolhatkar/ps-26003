@@ -845,5 +845,17 @@
     "make": "Reset PIN",
     "codeTitle": "PIN reset code for {{name}}",
     "codeHow": "Tell {{name}} this code in person or on a call (not by message). On their phone: Sign in → \"Forgot your PIN?\" → their number, this code and a new PIN."
+  },
+  "demoTools": {
+    "title": "Demo tools",
+    "intro": "For the presenter: puts the full demo story in the cloud (30 days of games, doses, ASHA visits, alerts, a referral and a doctor's note), so each phone can sign in as one person. Running it again resets the story.",
+    "patients": "Patients: Kamala Sharma (managed by Priya), Lakshmi Iyer and Ramesh Kumar (registered by Sunita). Dr. Anjali follows all three.",
+    "load": "Load / reset the cloud demo",
+    "loading": "Loading… (about a minute)",
+    "lastLoaded": "Last loaded on this phone: {{at}}",
+    "confirmTitle": "Load the cloud demo?",
+    "confirmBody": "This deletes the demo accounts' patients and creates the story again. Real accounts are not touched.",
+    "nextTitle": "Next, on each phone",
+    "next": "Choose the phone's role (\"Who will use this phone?\") and sign in with the number above and PIN 123456. For Kamala's phone: Priya's phone → People → Pair Kamala's phone → type the code on Kamala's phone."
   }
 }
