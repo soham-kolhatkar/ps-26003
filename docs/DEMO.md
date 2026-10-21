@@ -45,7 +45,7 @@
 ### Close (30 s)
 - Built for NER realities: patchy networks (offline-first), ASHA-led care, family on another phone, Hindi + English (Assamese next).
 - Privacy: family photos never leave Kamala's phone; each person only sees patients they were invited to; PINs and codes, no passwords to remember.
-- Next (Tier 4): Assamese and NE languages with recorded voices, real SMS OTP, PDF reports.
+- Next: a calmer, cleaner redesign (Tier 4), then Assamese and NE languages with recorded voices, real SMS OTP, PDF reports (Tier 5).
 
 ## Plan B: one phone, offline
 Use this if there is no internet. On "Who will use this phone?" hold the 🌼 for 2 s → **Open demo**: today's single-phone app with all four roles and the demo story, fully offline.

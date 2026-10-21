@@ -1,7 +1,7 @@
 # Progress
 
 **Current feature:** none. Tier 3 is complete and tagged `v0.3.0` (2026-10-21).
-**Next:** Tier 4, once planned with the user.
+**Next:** Tier 4 UI redesign: research, then a plan for the user to approve (2026-10-21).
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -37,8 +37,11 @@ Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync
 | F18 | Role extras: ASHA edits reminders, doctor's notes, PIN reset via manager (Edge Function) | ✅ done (d471b47) |
 | F19 | Cloud demo story (Demo tools), 4-phone demo script, APK v0.3.0, tag v0.3.0 | ✅ done (9cae723), tagged v0.3.0 |
 
-## Tier 4: later (moved from Tier 3 by the user)
-F14 Assamese pack · low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report export · real SMS OTP (MSG91 + DLT) + login lockout · realtime updates · accessibility/animation polish · Play Store signing.
+## Tier 4: UI redesign, target v0.4.0
+The user found the UI cluttered and messy (2026-10-21). Redesign every screen (patient, games, caregiver, ASHA, doctor, setup) from research on dementia-friendly and older-adult design: palette, type, illustrations, animation. Plan to follow in `docs/plans/tier4-ui-redesign.md`. Accessibility and animation polish move here from the old Tier 4.
+
+## Tier 5: later (the old Tier 4, moved by the user on 2026-10-21)
+F14 Assamese pack · low-resource language (Manipuri/Khasi/Mizo) + recorded audio · PDF report export · real SMS OTP (MSG91 + DLT) + login lockout · realtime updates · Play Store signing.
 
 ## Known issues / notes
 - `expo-doctor`'s React Native Directory check sometimes fails (reactnative.directory unreachable from the corporate network, HTTP 000; seen 2026-10-14, passed again later the same day). Retry; it is not a project problem.
