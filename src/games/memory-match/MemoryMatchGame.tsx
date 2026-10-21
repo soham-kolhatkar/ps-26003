@@ -3,8 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Icon } from '@/components/Icon';
+import { Picture } from '@/components/Picture';
 import { nowMs } from '@/engine/clock';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
 import { hapticGentle, hapticSuccess, randomPraise } from '../feedback';
 import { afterSpeech, useAlive } from '../pacing';
@@ -125,8 +127,8 @@ export function MemoryMatchGame({ level, onTrial, onProgress, onComplete, say }:
   return (
     <View style={styles.wrap}>
       <View style={[styles.status, phase !== 'play' && phase !== 'finishing' && styles.statusActive]}>
-        <AppText variant="large" bold center>
-          {phase === 'preview' ? '👀 ' : phase === 'peek' ? '💡 ' : ''}
+        <Icon name={phase === 'preview' || phase === 'peek' ? 'eye' : 'grid'} size={24} color={colors.onPrimarySoft} />
+        <AppText variant="large" weight="bold" tone="onPrimarySoft" center accessibilityLiveRegion="polite">
           {status}
         </AppText>
       </View>
@@ -150,15 +152,13 @@ export function MemoryMatchGame({ level, onTrial, onProgress, onComplete, say }:
                     isMatched && styles.matched,
                   ]}
                 >
-                  <AppText
-                    style={[
-                      faceUp ? styles.faceEmoji : styles.backMotif,
-                      { fontSize: size * (faceUp ? 0.5 : 0.36), lineHeight: size * (faceUp ? 0.62 : 0.46) },
-                    ]}
-                    importantForAccessibility="no"
-                  >
-                    {faceUp ? card.item.emoji : '✿'}
-                  </AppText>
+                  {faceUp ? (
+                    <Picture glyph={card.item.emoji} size={Math.round(size * 0.66)} />
+                  ) : (
+                    <View style={styles.backLeaf}>
+                      <Picture glyph="🍃" size={Math.round(size * 0.4)} />
+                    </View>
+                  )}
                 </Pressable>
               );
             })}
@@ -172,20 +172,29 @@ export function MemoryMatchGame({ level, onTrial, onProgress, onComplete, say }:
 const styles = StyleSheet.create({
   wrap: { flex: 1, gap: space.md },
   status: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: space.sm,
+    minHeight: 64,
     borderRadius: radius.md,
-    padding: space.sm,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
+    paddingHorizontal: space.md,
+    backgroundColor: colors.primaryWash,
   },
-  statusActive: { backgroundColor: colors.warningSoft, borderColor: colors.warning },
+  statusActive: { backgroundColor: colors.primarySoft },
   board: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: GAP },
-  card: { borderRadius: radius.md, alignItems: 'center', justifyContent: 'center', borderWidth: 3 },
-  face: { backgroundColor: colors.surface, borderColor: colors.border },
-  // Gamosa-inspired back: cream cloth, red border and motif.
-  back: { backgroundColor: colors.background, borderColor: colors.accent, borderWidth: 4 },
-  matched: { backgroundColor: colors.successSoft, borderColor: colors.success },
-  faceEmoji: {},
-  backMotif: { color: colors.accent },
+  card: {
+    borderRadius: radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 4,
+    borderColor: 'transparent',
+    boxShadow: shadow.card,
+  },
+  face: { backgroundColor: colors.surface },
+  // Neutral back (D50): leaf green with a tea leaf, the same for every card.
+  back: { backgroundColor: colors.primarySoft },
+  backLeaf: { opacity: 0.55 },
+  matched: { backgroundColor: colors.primarySoft, borderColor: colors.primary },
 });

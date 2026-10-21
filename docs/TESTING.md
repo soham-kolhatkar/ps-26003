@@ -350,3 +350,20 @@
 6. Two family members (invite a second caregiver from People, or a son): the button says **Call family** → a screen "Who do you want to call?" with their pictures and names; tap one → dialer.
 7. **Reminder screen** (tap a due reminder): Home top left, Read aloud top right, a big picture in a clay circle, the name and a clock time chip, **I drank it / I took it** and **Remind me in 10 minutes**.
 8. Offline (airplane mode on the patient's phone): Call still opens the dialer; the press reaches the team when the signal is back.
+
+## F22 Games checklist
+> Demo → Kamala → **All games** (each game is there). Play each one at least a few rounds; on the phone too (`npm run usb`).
+1. **Intro:** Home pill top left, the game's picture in a soft circle, its name and one instruction, **Start** and **Hear again**. No "⭐ Level".
+2. **While playing:** **✕ Stop** top left, "2 of 6" top right, a slim green bar that fills as you go (no dots wrapping onto two lines). The question is large text with a **Hear again** pill; the pictures fill the screen (no empty bottom half).
+3. **Errorless:** tap a wrong picture → it fades, the right one gets a **green ring** (never red or amber) and the hint is spoken. Tap the right one → green with a ✓ and its name, and one line under the board: "Yes, that's the key." The phone gives a soft tick on a wrong tap, a gentle buzz on a right one.
+4. **Find the object:** five pictures two per row, big. **Odd one out:** names under the pictures; after solving, "This one is an animal: the cow. The others are all fruits." under the board.
+5. **Memory pairs:** card backs are pale green with a leaf (no red border); matched pairs turn green with a ring. The status line says "Remember the pictures…" / "Now find the pairs" with an icon, no emoji.
+6. **Daily routines:** routine picture + name on top, numbered slots that fill with pictures, the last step named under them, the remaining steps as picture tiles with names.
+7. **Complete the pattern:** big row pictures, the gap a dashed green box with "?", the answers as tiles below.
+8. **Catch the fish:** a soft pond, Fluent fish/frog/duck/leaf, "Caught it!" with a green tick.
+9. **Remember and find:** big picture + name to remember; the break is **"Tap all the flowers"** (not stars); finding uses the same tiles (found = green with the name).
+10. **Who is this?** (needs 2+ family photos): photos with a soft shadow, names as white buttons; green ring for the hint, green + tick when right ("Yes, this is Priya.").
+11. **End of a game:** a slow flower **bloom** (petals drift out, then still), "Well done, Kamala" and "You finished Find the object.", then **Home** (main) and **Play again**. No stars, no "new level".
+12. **Hindi:** the same screens read naturally ("हाँ, यह चाबी है।", "बहुत अच्छा, Kamala", "सारे फूल छुएँ"); no "शाबाश".
+13. **ASHA check-up** (home visit → start the check-up): the task intro shows a Fluent picture; while playing, **Skip** is a top-left pill; the date questions use the same big question style.
+14. Phone: Settings → Accessibility → **Remove animations** on → the bloom simply appears, buttons don't shrink when pressed.

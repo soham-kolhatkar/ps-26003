@@ -2,11 +2,12 @@ import { router } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
 import { Picture } from '@/components/Picture';
-import { TopBar } from '@/components/TopBar';
+import { TopBar, TopBarButton } from '@/components/TopBar';
 import { nowMs } from '@/engine/clock';
 import { Screen } from '@/components/Screen';
 import { getDb } from '@/db/client';
@@ -16,7 +17,8 @@ import { speak, stopSpeaking } from '@/services/tts';
 import { useSettings } from '@/store/settings';
 import { colors, radius, space } from '@/theme/tokens';
 
-import { finishSession, loadLevel, type FinishedSession } from './session';
+import { finishSession, loadLevel } from './session';
+import { Bloom } from './ui/Bloom';
 import type { GameDefinition } from './types';
 
 type Phase = 'intro' | 'play' | 'saving' | 'done';
@@ -41,7 +43,6 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
   const [done, setDone] = useState(0);
   /** Set when the game reports its own progress (e.g. pairs found); else trials vs trialsPerSession. */
   const [custom, setCustom] = useState<{ done: number; total: number } | null>(null);
-  const [result, setResult] = useState<FinishedSession | null>(null);
   const trials = useRef<Trial[]>([]);
   const startedAt = useRef(0);
 
@@ -62,7 +63,6 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
     startedAt.current = nowMs();
     setDone(0);
     setCustom(null);
-    setResult(null);
     setPhase('play');
   };
 
@@ -76,7 +76,7 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
   const onComplete = useCallback(async () => {
     if (level == null) return;
     setPhase('saving');
-    const finished = await finishSession(getDb(), {
+    await finishSession(getDb(), {
       game,
       patientId,
       level,
@@ -84,9 +84,8 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
       trials: trials.current,
       completed: true,
     });
-    setResult(finished);
     setPhase('done');
-    say(t('game.doneSpoken', { name: patientName }));
+    say(t('game.doneSpoken', { name: patientName, game: t(`games.${game.id}.title`) }));
   }, [game, level, patientId, patientName, say, t]);
 
   const stop = () => {
@@ -143,13 +142,14 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
     const Game = game.Component;
     const progress = custom ?? { done, total: game.trialsPerSession };
     return (
-      <Screen scroll={false}>
+      <Screen scroll={false} gap={space.md}>
         <View style={styles.topBar}>
-          <View style={styles.stop}>
-            <BigButton kind="secondary" icon="x" label={t('game.stop')} onPress={stop} />
-          </View>
-          <Progress done={progress.done} total={progress.total} label={t('game.progress', progress)} />
+          <TopBarButton icon="x" label={t('game.stop')} onPress={stop} />
+          <AppText variant="body" weight="semibold" tone="muted">
+            {t('game.progress', progress)}
+          </AppText>
         </View>
+        <ProgressBar done={progress.done} total={progress.total} />
         <Game
           key={run}
           patientId={patientId}
@@ -164,36 +164,37 @@ export function GameShell({ game, patientId, patientName }: GameShellProps) {
     );
   }
 
+  // Levels are for the family's phone (D50): the patient hears a calm, specific "well done".
   return (
     <Screen>
-      <View style={[styles.center, styles.celebrate]}>
-        <View style={styles.iconCircle}>
-          <Picture glyph="🌼" size={104} />
-        </View>
+      <View style={styles.fill} />
+      <View style={styles.center}>
+        <Bloom />
         <AppText variant="hero" center>
           {t('game.doneTitle', { name: patientName })}
         </AppText>
-        {result?.decision?.change === 'up' ? (
-          <View style={[styles.chip, styles.chipAccent]}>
-            <AppText variant="large" tone="primary" bold>
-              {t('game.levelUp')}
-            </AppText>
-          </View>
-        ) : null}
+        <AppText variant="large" tone="muted" center>
+          {t('game.doneLine', { game: title })}
+        </AppText>
       </View>
       <View style={styles.fill} />
-      <BigButton size="large" icon="redo" label={t('game.playAgain')} onPress={playAgain} />
-      <BigButton kind="secondary" icon="house" label={t('game.home')} onPress={() => router.back()} />
+      <BigButton size="large" icon="house" label={t('game.home')} onPress={() => router.back()} />
+      <BigButton kind="secondary" icon="redo" label={t('game.playAgain')} onPress={playAgain} />
     </Screen>
   );
 }
 
-function Progress({ done, total, label }: { done: number; total: number; label: string }) {
+/** A slim bar instead of a row of dots (dots wrapped onto two lines on long games). */
+function ProgressBar({ done, total }: { done: number; total: number }) {
+  const ratio = total > 0 ? Math.min(1, done / total) : 0;
+  const width = useSharedValue(ratio);
+  useEffect(() => {
+    width.set(withTiming(ratio, { duration: 400 }));
+  }, [ratio, width]);
+  const fill = useAnimatedStyle(() => ({ width: `${width.get() * 100}%` }));
   return (
-    <View style={styles.progress} accessibilityLabel={label}>
-      {Array.from({ length: total }, (_, i) => (
-        <View key={i} style={[styles.dot, i < done && styles.dotDone]} />
-      ))}
+    <View style={styles.track} importantForAccessibility="no-hide-descendants">
+      <Animated.View style={[styles.bar, fill]} />
     </View>
   );
 }
@@ -201,7 +202,6 @@ function Progress({ done, total, label }: { done: number; total: number; label: 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
   center: { alignItems: 'center', gap: space.md },
-  celebrate: { marginTop: space.xl },
   iconCircle: {
     width: 140,
     height: 140,
@@ -210,16 +210,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  chip: {
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.pill,
-    paddingHorizontal: space.md,
-    paddingVertical: space.xs,
-  },
-  chipAccent: { backgroundColor: colors.warningSoft },
-  topBar: { flexDirection: 'row', alignItems: 'center', gap: space.md },
-  stop: { flexShrink: 0 },
-  progress: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, justifyContent: 'flex-end' },
-  dot: { width: 18, height: 18, borderRadius: radius.pill, borderWidth: 2, borderColor: colors.primary },
-  dotDone: { backgroundColor: colors.primary },
+  topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: space.md },
+  track: { height: 10, borderRadius: radius.pill, backgroundColor: colors.surfaceMuted, overflow: 'hidden' },
+  bar: { height: 10, borderRadius: radius.pill, backgroundColor: colors.primary },
 });

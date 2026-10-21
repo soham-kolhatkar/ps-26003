@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
-import { AppText } from '@/components/AppText';
 import { BigButton } from '@/components/BigButton';
 import { nowMs } from '@/engine/clock';
 import { LANGUAGES } from '@/i18n';
@@ -12,6 +11,7 @@ import { colors, radius, space } from '@/theme/tokens';
 import { hapticGentle, hapticSuccess, randomPraise } from '../feedback';
 import { afterSpeech, useAlive } from '../pacing';
 import type { GameProps } from '../types';
+import { Prompt } from '../ui/Prompt';
 import { makeQuestions, optionLabel } from './rounds';
 
 const NEXT_DELAY_MS = 1200;
@@ -61,12 +61,7 @@ export function OrientationGame({ onTrial, onComplete, say }: GameProps) {
 
   return (
     <View style={styles.wrap}>
-      <View style={styles.prompt}>
-        <AppText variant="title" center>
-          {prompt}
-        </AppText>
-        <BigButton kind="ghost" icon="speaker" label={t('game.hearAgain')} onPress={() => say(prompt)} />
-      </View>
+      <Prompt text={prompt} onHear={() => say(prompt)} />
       {q.options.map((value) => {
         const isAnswer = value === q.answer;
         const show = picked != null && (isAnswer || value === picked);
@@ -91,16 +86,7 @@ export function OrientationGame({ onTrial, onComplete, say }: GameProps) {
 
 const styles = StyleSheet.create({
   wrap: { flex: 1, gap: space.md },
-  prompt: {
-    alignItems: 'center',
-    gap: space.xs,
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    padding: space.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  option: { borderRadius: radius.lg, borderWidth: 3, borderColor: 'transparent' },
-  optionRight: { borderColor: colors.success, backgroundColor: colors.successSoft },
-  optionPicked: { opacity: 0.5 },
+  option: { borderRadius: radius.lg + 4, borderWidth: 4, borderColor: 'transparent' },
+  optionRight: { borderColor: colors.primary },
+  optionPicked: { opacity: 0.45 },
 });

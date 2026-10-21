@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** none (F21 merged 2026-10-21; the user asked to stop before F22).
-**Next:** F22 games.
+**Current feature:** F22 games, on `feat/f22-games`: pushed, **waiting for the user's test** (checklist at the end of TESTING.md).
+**Next:** F23 family caregiver.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -43,7 +43,7 @@ The user found the UI cluttered and messy (2026-10-21). Full plan and research: 
 |---|---|---|
 | F20 | Design foundation: tokens v2, fonts per language, icons (Phosphor), pictures (Fluent 3D), shared components, motion, haptics; review fixes (D52) | ✅ done (f22e68f) |
 | F21 | Patient phone: SOS call family (D53, SQL 006), home (today's 3 games + all games), reminder screen | ✅ done (3c5df28) |
-| F22 | Games: shell, boards, prompts, end-of-game bloom, all 8 games | ⏳ |
+| F22 | Games: shell, boards, prompts, end-of-game bloom, all 8 games (D54) | 🧪 testing |
 | F23 | Family caregiver: home, progress dashboard, reminders, photos, people, settings | ⏳ |
 | F24 | ASHA and doctor: triage home, patient page, visit form, report, alerts, notes | ⏳ |
 | F25 | Assamese pack (was F14, moved here by the user) | ⏳ |

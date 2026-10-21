@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Picture } from '@/components/Picture';
 import { nowMs } from '@/engine/clock';
 import { colors, radius, space } from '@/theme/tokens';
 
@@ -10,6 +11,9 @@ import { hapticGentle, hapticSuccess, randomPraise } from '../feedback';
 import { afterSpeech, useAlive, wait } from '../pacing';
 import type { GameProps } from '../types';
 import type { RoutineStep } from './content';
+import { Board } from '../ui/Board';
+import { PictureTile } from '../ui/PictureTile';
+import { Feedback } from '../ui/Prompt';
 import { decisionsIn, makeRounds } from './rounds';
 
 /** Pause after a step is spoken before the last card drops in. */
@@ -129,12 +133,10 @@ export function RoutineSequenceGame({ level, onTrial, onProgress, onComplete, sa
   return (
     <View style={styles.wrap}>
       <View style={styles.header}>
-        <AppText style={styles.headerEmoji} importantForAccessibility="no">
-          {round.routine.emoji}
-        </AppText>
+        <Picture glyph={round.routine.emoji} size={56} />
         <View style={styles.headerText}>
           <AppText variant="title">{title}</AppText>
-          <AppText variant="body" tone="muted">
+          <AppText variant="body" tone="muted" accessibilityLiveRegion="polite">
             {complete
               ? t('games.routine_sequence.done', { routine: title })
               : t(placed.length === 0 ? 'games.routine_sequence.whatFirst' : 'games.routine_sequence.whatNext')}
@@ -152,95 +154,53 @@ export function RoutineSequenceGame({ level, onTrial, onProgress, onComplete, sa
               style={[styles.slot, step && styles.slotFilled, isNext && !complete && styles.slotNext]}
               accessibilityLabel={step ? `${i + 1}. ${stepText(step)}` : `${i + 1}`}
             >
-              <AppText variant="caption" tone="muted" bold>
+              <AppText variant="caption" tone="muted" weight="bold">
                 {i + 1}
               </AppText>
-              <AppText style={styles.slotEmoji} importantForAccessibility="no">
-                {step ? step.emoji : ' '}
-              </AppText>
+              {step ? <Picture glyph={step.emoji} size={34} /> : <View style={styles.slotEmpty} />}
             </View>
           );
         })}
       </View>
 
-      {placed.length > 0 ? (
-        <AppText variant="body" tone="primary" bold center>
-          ✓ {stepText(placed[placed.length - 1])}
-        </AppText>
-      ) : null}
+      <Feedback text={placed.length > 0 ? stepText(placed[placed.length - 1]) : null} />
 
-      <ScrollView contentContainerStyle={styles.options}>
-        {remaining.map((step) => (
-          <Pressable
-            key={`${roundIdx}-${step.id}`}
-            accessibilityRole="button"
-            accessibilityLabel={stepText(step)}
-            onPress={() => onPick(step)}
-            style={({ pressed }) => [
-              styles.option,
-              pressed && styles.optionPressed,
-              hintId === step.id && styles.optionHint,
-              wrongId === step.id && styles.optionWrong,
-            ]}
-          >
-            <AppText style={styles.optionEmoji} importantForAccessibility="no">
-              {step.emoji}
-            </AppText>
-            <AppText variant="body" bold center>
-              {stepText(step)}
-            </AppText>
-          </Pressable>
-        ))}
-      </ScrollView>
+      <Board count={Math.max(1, remaining.length)} columns={2} maxSize={190}>
+        {(size) =>
+          remaining.map((step) => (
+            <PictureTile
+              key={`${roundIdx}-${step.id}`}
+              glyph={step.emoji}
+              label={stepText(step)}
+              showLabel
+              size={size}
+              state={hintId === step.id ? 'hint' : wrongId === step.id ? 'dimmed' : 'idle'}
+              onPress={() => onPick(step)}
+            />
+          ))
+        }
+      </Board>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   wrap: { flex: 1, gap: space.md },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.md,
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: space.md,
-  },
-  headerEmoji: { fontSize: 48, lineHeight: 58 },
+  header: { flexDirection: 'row', alignItems: 'center', gap: space.md },
   headerText: { flex: 1 },
   slots: { flexDirection: 'row', gap: space.sm },
   slot: {
     flex: 1,
-    aspectRatio: 0.8,
-    maxHeight: 88,
+    height: 72,
+    gap: 2,
     borderRadius: radius.md,
-    borderWidth: 2,
-    borderColor: colors.border,
+    borderWidth: 3,
+    borderColor: 'transparent',
     backgroundColor: colors.surfaceMuted,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  slotFilled: { backgroundColor: colors.successSoft, borderColor: colors.success },
-  slotNext: { borderColor: colors.primary, borderStyle: 'dashed', borderWidth: 3, backgroundColor: colors.surface },
-  slotEmoji: { fontSize: 30, lineHeight: 38 },
-  options: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md, paddingBottom: space.lg },
-  option: {
-    flexBasis: '46%',
-    flexGrow: 1,
-    minHeight: 120,
-    padding: space.sm,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: space.xs,
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    borderWidth: 3,
-    borderColor: colors.border,
-  },
-  optionPressed: { backgroundColor: colors.surfaceMuted },
-  optionHint: { borderColor: colors.warning, backgroundColor: colors.warningSoft },
-  optionWrong: { opacity: 0.45 },
-  optionEmoji: { fontSize: 44, lineHeight: 54 },
+  slotFilled: { backgroundColor: colors.primarySoft },
+  slotNext: { borderColor: colors.primary, borderStyle: 'dashed', backgroundColor: colors.surface },
+  slotEmpty: { height: 34 },
 });

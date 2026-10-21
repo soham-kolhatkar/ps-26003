@@ -1,21 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { BigButton } from '@/components/BigButton';
+import { Picture } from '@/components/Picture';
 import { nowMs } from '@/engine/clock';
-import { colors, radius, space } from '@/theme/tokens';
+import { colors, radius, shadow, space } from '@/theme/tokens';
 
-import { hapticGentle, hapticSuccess, randomPraise } from '../feedback';
+import { hapticGentle, hapticSuccess } from '../feedback';
 import type { Item } from '../items';
 import { afterSpeech, useAlive } from '../pacing';
 import type { GameProps } from '../types';
+import { Board } from '../ui/Board';
+import { PictureTile, type TileState } from '../ui/PictureTile';
+import { Feedback, Prompt } from '../ui/Prompt';
 import { makeRounds } from './rounds';
 
 /** Minimum time the completed row stays on screen. */
 const NEXT_ROUND_DELAY_MS = 1500;
-const SLOT = 68;
 
 /**
  * "Complete the pattern": a row of pictures repeats (banana, cup, banana,
@@ -25,6 +27,7 @@ const SLOT = 68;
  */
 export function PatternGame({ level, totalTrials, onTrial, onComplete, say }: GameProps) {
   const { t } = useTranslation();
+  const { width } = useWindowDimensions();
   const [rounds] = useState(() => makeRounds(level, totalTrials));
   const [index, setIndex] = useState(0);
   const [missed, setMissed] = useState(false);
@@ -67,7 +70,7 @@ export function PatternGame({ level, totalTrials, onTrial, onComplete, say }: Ga
     if (!missed) onTrial({ correct: true, reactionMs });
     hapticSuccess();
     setSolved(true);
-    await afterSpeech(say(randomPraise(t)), NEXT_ROUND_DELAY_MS);
+    await afterSpeech(say(t('feedback.rightItem', { item: answerName })), NEXT_ROUND_DELAY_MS);
     if (!alive.current) return;
     if (index + 1 >= rounds.length) {
       onComplete();
@@ -82,14 +85,16 @@ export function PatternGame({ level, totalTrials, onTrial, onComplete, say }: Ga
   const lines: Item[][] = [];
   for (let i = 0; i < round.row.length; i += round.unit) lines.push(round.row.slice(i, i + round.unit));
 
+  const tileState = (item: Item): TileState => {
+    if (item.id === round.answer.id) return solved ? 'solved' : missed ? 'hint' : 'idle';
+    return wrongId === item.id ? 'dimmed' : 'idle';
+  };
+  // One repeat per line, so the rule lines up vertically; slots as big as the width allows.
+  const slot = Math.min(96, Math.floor((width - space.lg * 2 - space.sm * (round.unit - 1)) / round.unit));
+
   return (
     <View style={styles.wrap}>
-      <View style={styles.prompt}>
-        <AppText variant="title" center>
-          {question}
-        </AppText>
-        <BigButton kind="ghost" icon="speaker" label={t('game.hearAgain')} onPress={() => say(prompt)} />
-      </View>
+      <Prompt text={question} onHear={() => say(prompt)} />
 
       <View style={styles.row} accessible accessibilityLabel={spokenRow}>
         {lines.map((line, li) => (
@@ -98,10 +103,21 @@ export function PatternGame({ level, totalTrials, onTrial, onComplete, say }: Ga
               const i = li * round.unit + j;
               const isGap = i === round.gap;
               return (
-                <View key={i} style={[styles.slot, isGap && (solved ? styles.slotSolved : styles.slotGap)]}>
-                  <AppText style={isGap && !solved ? styles.gapMark : styles.slotEmoji}>
-                    {isGap && !solved ? '?' : it.emoji}
-                  </AppText>
+                <View
+                  key={i}
+                  style={[
+                    styles.slot,
+                    { width: slot, height: slot },
+                    isGap && (solved ? styles.slotSolved : styles.slotGap),
+                  ]}
+                >
+                  {isGap && !solved ? (
+                    <AppText variant="title" tone="primary">
+                      ?
+                    </AppText>
+                  ) : (
+                    <Picture glyph={it.emoji} size={Math.round(slot * 0.66)} />
+                  )}
                 </View>
               );
             })}
@@ -109,75 +125,43 @@ export function PatternGame({ level, totalTrials, onTrial, onComplete, say }: Ga
         ))}
       </View>
 
-      <View style={styles.options}>
-        {round.options.map((item) => {
-          const isAnswer = item.id === round.answer.id;
-          return (
-            <Pressable
+      <Board count={round.options.length} columns={round.options.length} maxSize={150}>
+        {(size) =>
+          round.options.map((item) => (
+            <PictureTile
               key={`${index}-${item.id}`}
-              accessibilityRole="button"
-              accessibilityLabel={t(`items.${item.id}`)}
+              glyph={item.emoji}
+              label={t(`items.${item.id}`)}
+              size={size}
+              state={tileState(item)}
               onPress={() => onPick(item)}
-              style={({ pressed }) => [
-                styles.option,
-                pressed && styles.optionPressed,
-                isAnswer && (missed || solved) && (solved ? styles.optionSolved : styles.optionHint),
-                wrongId === item.id && !isAnswer && styles.optionWrong,
-              ]}
-            >
-              <AppText style={styles.optionEmoji} importantForAccessibility="no">
-                {item.emoji}
-              </AppText>
-            </Pressable>
-          );
-        })}
-      </View>
+            />
+          ))
+        }
+      </Board>
+      <Feedback text={solved ? t('feedback.rightItem', { item: answerName }) : null} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, gap: space.lg },
-  prompt: {
-    alignItems: 'center',
-    gap: space.xs,
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    padding: space.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
+  wrap: { flex: 1, gap: space.md },
   row: { alignItems: 'center', gap: space.sm },
   line: { flexDirection: 'row', gap: space.sm },
   slot: {
-    width: SLOT,
-    height: SLOT,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: radius.md,
     backgroundColor: colors.surface,
-    borderWidth: 2,
-    borderColor: colors.border,
-  },
-  slotGap: { borderStyle: 'dashed', borderWidth: 3, borderColor: colors.primary, backgroundColor: colors.primarySoft },
-  slotSolved: { borderWidth: 3, borderColor: colors.success, backgroundColor: colors.successSoft },
-  slotEmoji: { fontSize: 42, lineHeight: 52 },
-  gapMark: { fontSize: 40, lineHeight: 50, fontWeight: '700', color: colors.primary },
-  options: { flexDirection: 'row', gap: space.md, justifyContent: 'center' },
-  option: {
-    flex: 1,
-    maxWidth: 120,
-    minHeight: 96,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
     borderWidth: 3,
-    borderColor: colors.border,
+    borderColor: 'transparent',
+    boxShadow: shadow.card,
   },
-  optionPressed: { backgroundColor: colors.surfaceMuted },
-  optionHint: { borderColor: colors.warning, backgroundColor: colors.warningSoft },
-  optionSolved: { borderColor: colors.success, backgroundColor: colors.successSoft },
-  optionWrong: { opacity: 0.45 },
-  optionEmoji: { fontSize: 52, lineHeight: 62 },
+  slotGap: {
+    borderStyle: 'dashed',
+    borderColor: colors.primary,
+    backgroundColor: colors.primaryWash,
+    boxShadow: 'none',
+  },
+  slotSolved: { borderColor: colors.primary, backgroundColor: colors.primarySoft },
 });

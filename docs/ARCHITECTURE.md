@@ -55,3 +55,5 @@ Tier 4 (F20, D50/D51): `theme/tokens` v2 (warm ground, tea-green primary, tonal 
 
 F21: schema v9 `sos_event` (+ insert-only sync spec, SQL 006), `db/repos/sos` (family contacts, record, unseen, mark seen), `services/sos` (`dial` = `tel:` link, `callForHelp` = record + sync now + dial), `components/SosBanner` (caregiver + ASHA homes), `notifySos` after a pull. Routes `patient/call` (family picker) and `patient/games` (all games). `engine/todaysGames` picks the patient home's three games (least recently played before today, daily tie-break). `sync/remote.isMissingTable`: a cloud table that doesn't exist yet is skipped on pull and its changes stay queued on push.
 
+F22: `games/ui/` (`Prompt` + `Feedback`, `Board` with `bestColumns`/`tileSize`, `PictureTile`, `Bloom`); every game renders through them, game rules unchanged. GameShell: `TopBarButton` Stop, text progress + animated bar, bloom ending (no level chip).
+

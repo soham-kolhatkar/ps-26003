@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { AppText } from '@/components/AppText';
-import { BigButton } from '@/components/BigButton';
 import { nowMs } from '@/engine/clock';
-import { colors, radius, space } from '@/theme/tokens';
+import { space } from '@/theme/tokens';
 
 import { hapticGentle, hapticSuccess, randomPraise } from '../feedback';
 import type { Item } from '../items';
 import { afterSpeech, useAlive } from '../pacing';
 import type { GameProps } from '../types';
+import { Board } from '../ui/Board';
+import { PictureTile, type TileState } from '../ui/PictureTile';
+import { Feedback, Prompt } from '../ui/Prompt';
 import { makeRounds } from './rounds';
 
 /** Minimum time the solved round stays on screen (the explanation is always heard in full). */
@@ -77,83 +78,34 @@ export function OddOneOutGame({ level, totalTrials, onTrial, onComplete, say }: 
     setSolved(false);
   };
 
+  const tileState = (item: Item): TileState => {
+    if (item.id === round.odd.id) return solved ? 'solved' : missed ? 'hint' : 'idle';
+    return wrongId === item.id && !solved ? 'dimmed' : 'idle';
+  };
+
   return (
     <View style={styles.wrap}>
-      <View style={styles.prompt}>
-        {/* After solving, the card explains why (no extra height: play screens don't scroll). */}
-        <AppText variant={solved ? 'large' : 'title'} bold={solved} center accessibilityLiveRegion="polite">
-          {solved ? explain : prompt}
-        </AppText>
-        <BigButton
-          kind="ghost"
-          icon="speaker"
-          label={t('game.hearAgain')}
-          onPress={() => say(solved ? explain : prompt)}
-        />
-      </View>
-
-      <View style={styles.grid}>
-        {round.options.map((item) => {
-          const isOdd = item.id === round.odd.id;
-          const highlight = isOdd && (missed || solved);
-          const name = t(`items.${item.id}`);
-          return (
-            <Pressable
+      <Prompt text={prompt} onHear={() => say(solved ? explain : prompt)} />
+      <Board count={round.options.length} columns={2}>
+        {(size) =>
+          round.options.map((item) => (
+            <PictureTile
               key={`${index}-${item.id}`}
-              accessibilityRole="button"
-              accessibilityLabel={name}
+              glyph={item.emoji}
+              label={t(`items.${item.id}`)}
+              showLabel
+              size={size}
+              state={tileState(item)}
               onPress={() => onPick(item)}
-              style={({ pressed }) => [
-                styles.tile,
-                pressed && styles.tilePressed,
-                highlight && (solved ? styles.tileSolved : styles.tileHint),
-                solved && !isOdd && styles.tileGroup,
-                wrongId === item.id && !solved && styles.tileWrong,
-              ]}
-            >
-              <AppText style={styles.tileEmoji} importantForAccessibility="no">
-                {item.emoji}
-              </AppText>
-              <AppText variant="body" center bold={solved && isOdd} tone={solved && isOdd ? 'primary' : 'default'}>
-                {solved && isOdd ? `✓ ${name}` : name}
-              </AppText>
-            </Pressable>
-          );
-        })}
-      </View>
+            />
+          ))
+        }
+      </Board>
+      <Feedback text={solved ? explain : null} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, gap: space.lg },
-  prompt: {
-    alignItems: 'center',
-    gap: space.xs,
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    padding: space.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  // Always two columns so names fit at 22sp; an odd last tile stays centred, same width.
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md, justifyContent: 'center' },
-  tile: {
-    width: '46%',
-    minHeight: 112,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: space.xs,
-    padding: space.sm,
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    borderWidth: 3,
-    borderColor: colors.border,
-  },
-  tilePressed: { backgroundColor: colors.surfaceMuted },
-  tileHint: { borderColor: colors.warning, backgroundColor: colors.warningSoft },
-  tileSolved: { borderColor: colors.success, backgroundColor: colors.successSoft },
-  tileGroup: { opacity: 0.6 },
-  tileWrong: { opacity: 0.45 },
-  tileEmoji: { fontSize: 52, lineHeight: 62 },
+  wrap: { flex: 1, gap: space.md },
 });

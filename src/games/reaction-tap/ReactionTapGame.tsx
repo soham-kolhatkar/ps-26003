@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Icon } from '@/components/Icon';
+import { Picture } from '@/components/Picture';
 import { nowMs } from '@/engine/clock';
 import { colors, radius, space } from '@/theme/tokens';
 
@@ -125,13 +127,20 @@ export function ReactionTapGame({ level, totalTrials, onTrial, onComplete, say }
         : t('games.reaction_tap.watch');
 
   const showing = phase === 'shown' || (phase === 'feedback' && (feedback === 'hit' || feedback === 'tappedNoGo'));
-  const emojiSize = cells === 1 ? 120 : cells <= 4 ? 84 : 64;
+  const emojiSize = cells === 1 ? 150 : cells <= 4 ? 100 : 76;
+  const good = feedback === 'hit' || feedback === 'waited';
 
   return (
     <View style={styles.wrap}>
-      <View style={[styles.status, feedback === 'hit' || feedback === 'waited' ? styles.statusGood : null]}>
-        <AppText variant="large" bold center accessibilityLiveRegion="polite">
-          {feedback === 'hit' || feedback === 'waited' ? '✓ ' : ''}
+      <View style={[styles.status, good && styles.statusGood]}>
+        {good ? <Icon name="check-circle" size={28} weight="fill" color={colors.primary} /> : null}
+        <AppText
+          variant="large"
+          weight="bold"
+          center
+          tone={good ? 'primary' : 'default'}
+          accessibilityLiveRegion="polite"
+        >
           {status}
         </AppText>
       </View>
@@ -150,14 +159,7 @@ export function ReactionTapGame({ level, totalTrials, onTrial, onComplete, say }
                   onPressIn={() => onCellPress(cell)}
                   style={[styles.cell, here && feedback === 'hit' && styles.cellHit]}
                 >
-                  {here ? (
-                    <AppText
-                      style={{ fontSize: emojiSize, lineHeight: emojiSize * 1.2 }}
-                      importantForAccessibility="no"
-                    >
-                      {plan.shown.emoji}
-                    </AppText>
-                  ) : null}
+                  {here ? <Picture glyph={plan.shown.emoji} size={emojiSize} /> : null}
                 </Pressable>
               );
             })}
@@ -171,23 +173,21 @@ export function ReactionTapGame({ level, totalTrials, onTrial, onComplete, say }
 const styles = StyleSheet.create({
   wrap: { flex: 1, gap: space.md },
   status: {
-    minHeight: 88,
+    minHeight: 72,
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    padding: space.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    gap: space.sm,
+    paddingHorizontal: space.md,
+    borderRadius: radius.md,
   },
-  statusGood: { borderColor: colors.success, backgroundColor: colors.successSoft },
+  statusGood: { backgroundColor: colors.primarySoft },
   pond: {
     flex: 1,
     gap: space.sm,
-    padding: space.sm,
+    padding: space.sm + 4,
     backgroundColor: colors.water,
-    borderRadius: radius.lg,
-    borderWidth: 3,
-    borderColor: colors.waterEdge,
+    borderRadius: radius.lg + 8,
   },
   pondRow: { flex: 1, flexDirection: 'row', gap: space.sm },
   cell: {
@@ -198,5 +198,5 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     backgroundColor: colors.waterLight,
   },
-  cellHit: { backgroundColor: colors.successSoft },
+  cellHit: { backgroundColor: colors.primarySoft },
 });
