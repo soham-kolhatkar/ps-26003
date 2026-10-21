@@ -1,7 +1,7 @@
 # Progress
 
-**Current feature:** F20 design foundation + the user's review fixes (D52), on `feat/f20-design-foundation`: pushed, **waiting for the user's test** ("F20 review fixes" checklist at the end of TESTING.md).
-**Next:** F21 patient phone.
+**Current feature:** F21 patient phone (starting with the SOS "Call family" button, the user's priority).
+**Next:** F22 games.
 
 ## Tier 1: core demo
 | ID | Feature | Status | Branch | Merged |
@@ -41,7 +41,7 @@ Full plan: [docs/plans/tier3-multi-device.md](plans/tier3-multi-device.md) (sync
 The user found the UI cluttered and messy (2026-10-21). Full plan and research: [docs/plans/tier4-ui-redesign.md](plans/tier4-ui-redesign.md); visual direction: https://claude.ai/artifact/4uM8m3uXX8ikDJt35m2Wqt
 | ID | Feature | Status |
 |---|---|---|
-| F20 | Design foundation: tokens v2, fonts per language, icons (Phosphor), pictures (Fluent 3D), shared components, motion, haptics | 🧪 testing |
+| F20 | Design foundation: tokens v2, fonts per language, icons (Phosphor), pictures (Fluent 3D), shared components, motion, haptics; review fixes (D52) | ✅ done (f22e68f) |
 | F21 | Patient phone: setup, pairing, PIN, home (today's 3 games + all games + SOS call family), reminder, family corner | ⏳ |
 | F22 | Games: shell, boards, prompts, end-of-game bloom, all 8 games | ⏳ |
 | F23 | Family caregiver: home, progress dashboard, reminders, photos, people, settings | ⏳ |
